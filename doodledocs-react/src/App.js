@@ -21,7 +21,7 @@ class App extends Component {
     this.context = this.canvas.getContext('2d')
     this.canvas.addEventListener('mousedown', (event) => {
       let mousePos = this.getMousePos(this.canvas, event)
-      this.context.beginPath()
+      this.context.beginPath() //begins path
       this.context.moveTo(mousePos.x, mousePos.y)
       this.isPainting = true
     }, false)
@@ -29,21 +29,13 @@ class App extends Component {
       if (this.isPainting) {
         let mousePos = this.getMousePos(this.canvas, event)
         this.context.lineTo(mousePos.x, mousePos.y)
-        this.context.stroke()
+        this.context.stroke() //path gets a stroke
       }
     })
     this.canvas.addEventListener('mouseup', (event) => {
       this.isPainting = false
       //this.context.clearRect(0, 0, 1000, 1000)
     }, false)
-    // this.canvas.addEventListener('mousemove', (event) => {
-    //   let mousePos = this.getMousePos(this.canvas, event);
-    //   let message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
-    //   let context = this.canvas.getContext('2d')
-    //   //context.strokeText('YOOOO', mousePos.x, mousePos.y)
-    //   this.writeMessage(this.canvas, message);
-    // }, false);
-    // let ctx = this.canvas.getContext('2d')
   }
 
   writeMessage(canvas, message) {
@@ -65,7 +57,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-      <canvas id="app-canvas" width={1000} height={1000} />
+      <canvas tabIndex='1' id="app-canvas" width={1000} height={1000} />
       </div>
       );
   }
