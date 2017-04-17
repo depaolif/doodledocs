@@ -13,9 +13,6 @@ class App extends Component {
       this.isPainting = false
   }
 
-  componentWillMount() {
-  }
-
   componentDidMount() {
     this.canvas = document.getElementById('app-canvas');
     this.context = this.canvas.getContext('2d')
@@ -34,7 +31,6 @@ class App extends Component {
     })
     this.canvas.addEventListener('mouseup', (event) => {
       this.isPainting = false
-      //this.context.clearRect(0, 0, 1000, 1000)
     }, false)
   }
 
