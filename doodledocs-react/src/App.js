@@ -4,13 +4,13 @@ import './App.css';
 class App extends Component {
 
   constructor() {
-      super()
+    super()
 
-      this.canvas = null
-      this.context = null
-      this.getMousePos = this.getMousePos.bind(this)
-      this.writeMessage = this.writeMessage.bind(this)
-      this.isPainting = false
+    this.canvas = null
+    this.context = null
+    this.isPainting = false
+    this.history = []
+    this.count = 0
   }
 
   componentDidMount() {
@@ -20,6 +20,7 @@ class App extends Component {
       let mousePos = this.getMousePos(this.canvas, event)
       this.context.beginPath() //begins path
       this.context.moveTo(mousePos.x, mousePos.y)
+      this.history.push({start: {x: mousePos.x, y: mousePos.y}, line: new Array()})
       this.isPainting = true
     }, false)
     this.canvas.addEventListener('mousemove', (event) => {
@@ -27,11 +28,30 @@ class App extends Component {
         let mousePos = this.getMousePos(this.canvas, event)
         this.context.lineTo(mousePos.x, mousePos.y)
         this.context.stroke() //path gets a stroke
+        this.history[this.history.length-1].line.push({x: mousePos.x, y: mousePos.y})
       }
     })
     this.canvas.addEventListener('mouseup', (event) => {
       this.isPainting = false
+      console.log(this.history)
+      this.count = this.count + 1
     }, false)
+    
+    // undo feature
+    document.addEventListener('keydown', (event) => {
+      if (!this.isPainting && this.history.length > 0) { 
+        this.context.clearRect(0,0,1500,1500)
+        this.history = this.history.slice(0, -1)
+        for (let i = 0; i < this.history.length; i++) {
+          this.context.beginPath()
+          this.context.moveTo(this.history[i].start.x, this.history[i].start.y)
+          for (let j = 0; j < this.history[i].line.length; j++) {
+            this.context.lineTo(this.history[i].line[j].x, this.history[i].line[j].y)
+            this.context.stroke()
+          }
+        }
+      }
+    })
   }
 
   writeMessage(canvas, message) {
