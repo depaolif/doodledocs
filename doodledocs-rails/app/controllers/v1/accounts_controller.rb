@@ -11,7 +11,8 @@ class V1::AccountsController < ApplicationController
   end
 
   def show
-    account = Account.find(1)
+    id = Auth.decode(request.headers["bearer"])[0]["account_id"]
+    account = Account.find(id)
     render json: account, serializer: AccountSerializer
   end
 
