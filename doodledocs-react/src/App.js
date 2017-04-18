@@ -4,6 +4,7 @@ import './App.css';
 import { SketchPicker } from 'react-color'
 import { bindActionCreators } from 'redux';
 import { color_change } from './actions/color_change'
+import Login from './components/Login'
 
 class App extends Component {
 
@@ -93,6 +94,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <Login />
         <SketchPicker
           color={this.props.color}
           onChangeComplete={this.handleChangeComplete} />
