@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import { ColorPicker } from 'react-color'
 
 class App extends Component {
 
@@ -53,7 +54,8 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-      <canvas tabIndex='1' id="app-canvas" width={1000} height={1000} />
+        <ColorPicker />
+        <canvas tabIndex='1' id="app-canvas" width={1000} height={1000} />
       </div>
       );
   }
