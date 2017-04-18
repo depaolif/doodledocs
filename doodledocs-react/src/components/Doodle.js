@@ -21,7 +21,7 @@ class Doodle extends Component {
 		event.preventDefault()
 		axios({
 			method: 'GET',
-			url: 'http://localhost:3001/v1/accounts/1/images/1',
+			url: `http://localhost:3001/v1/accounts/${this.props.account.id}/images/1`,
 		})
 		.then(resp => {
 			let imageData = JSON.parse(resp.data.image_data)
@@ -47,7 +47,7 @@ class Doodle extends Component {
 		event.preventDefault()
 		axios({
 			method: 'POST',
-			url: 'http://localhost:3001/v1/accounts/1/images',
+			url: `http://localhost:3001/v1/accounts/${this.props.account.id}/images/${this.props.image.id}`,
 			headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
 			data: JSON.stringify(this.history)
 		})
@@ -60,7 +60,7 @@ class Doodle extends Component {
   	componentDidMount() {
   		this.canvas = document.getElementById('app-canvas');
     	this.context = this.canvas.getContext('2d')
-    	
+
     	this.canvas.addEventListener('mousedown', (event) => {
       		this.context.strokeStyle=this.props.color
       		let mousePos = this.getMousePos(this.canvas, event)
@@ -135,7 +135,8 @@ class Doodle extends Component {
 }
 
 const mapStateToProps = (state) => ({
-	color: state.color
+	color: state.color,
+	account: state.account
 })
 
 const mapDispatchToProps = (dispatch) => ({

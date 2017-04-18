@@ -33,6 +33,12 @@ class Login extends Component {
 			this.props.setToken(resp.data.token)
 			this.props.setUsername(resp.data.username)
 		})
+		.then({
+			return axios({
+				method: 'GET',
+				 
+			})
+		})
 	}
 
 	render() {
