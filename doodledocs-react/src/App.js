@@ -23,6 +23,7 @@ class App extends Component {
     this.canvas = document.getElementById('app-canvas');
     this.context = this.canvas.getContext('2d')
     this.canvas.addEventListener('mousedown', (event) => {
+      this.context.strokeStyle=this.props.color
       let mousePos = this.getMousePos(this.canvas, event)
       this.context.beginPath() //begins path
       this.context.moveTo(mousePos.x, mousePos.y)
@@ -60,6 +61,11 @@ class App extends Component {
         }
       }
     })
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    this.canvas = document.getElementById('app-canvas');
+    this.context = this.canvas.getContext('2d')
   }
 
   writeMessage(canvas, message) {
