@@ -9,7 +9,8 @@ class ImageItem extends Component {
 		this.handleClick = this.handleClick.bind(this)
 	}
 
-	handleClick() {
+	handleClick(evt) {
+		evt.preventDefault()
 		this.props.setCurrentImage(this.props.imageId)
 		this.props.history.push('/')
 	}
