@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
-import ImageItem from './ImageItem'
+import ConnectedImageItem from './ImageItem'
 
 class Profile extends Component {
 
 	render() {
 		const images = this.props.imageList.map((el, i) => {
-			return <ImageItem key={i} imageId={el.id} imageTitle={el.title} />
+			return <ConnectedImageItem key={i} imageId={el.id} imageTitle={el.title} />
 		})
 		return (
 			<div className="profile">

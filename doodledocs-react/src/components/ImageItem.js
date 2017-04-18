@@ -1,14 +1,32 @@
 import React, {Component} from 'react'
+import { connect } from 'react-redux'
+import { setCurrentImage } from '../actions/image'
 
 class ImageItem extends Component {
+	constructor(props) {
+		super(props);
+
+		this.handleClick = this.handleClick.bind(this)
+	}
+
+	handleClick() {
+		this.props.setCurrentImage(this.props.imageId)
+		this.props.history.push('/')
+	}
 
 	render() {
 		return (
 			<li>
-				{this.props.imageTitle}
+				<a href='#' onClick={this.handleClick}>{this.props.imageTitle}</a>
 			</li>
 		)
 	}
 }
 
-export default ImageItem
+const mapDispatchToProps = (dispatch) => {
+	setCurrentImage: (imageId) => {
+		dispatch(setCurrentImage(imageId))
+	}
+}
+const ConnectedImageItem = connect(mapDispatchToProps)(ImageItem)
+export default ConnectedImageItem
