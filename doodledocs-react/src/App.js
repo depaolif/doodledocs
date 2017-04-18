@@ -41,6 +41,7 @@ class App extends Component {
     this.canvas.addEventListener('mouseup', (event) => {
       this.isPainting = false
       console.log(this.history)
+      console.log(this.history.reduce((sum, val) => { return val.line.length + sum},0))
       this.count = this.count + 1
     }, false)
 

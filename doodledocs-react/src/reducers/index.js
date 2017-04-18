@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
-import colorsReducer from './colors'
+import colorReducer from './color'
+import accountReducer from './account'
 
 export default combineReducers({
-  color: colorsReducer
+  color: colorReducer,
+  account: accountReducer
 });
