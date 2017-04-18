@@ -18,7 +18,6 @@ class App extends Component {
               <Route path="/" component={ConnectedNavBar}/>
               <Switch>
                 <Route exact path="/" component={ConnectedDoodle} />
-                <Route path="/profile" component={ConnectedProfile} />
                 <Route path="/login" component={Login} />
                 <Route path="/register" component={Register} />
                 <PrivateRoute path="/profile" component={ConnectedProfile} />
