@@ -27,7 +27,7 @@ class App extends Component {
       let mousePos = this.getMousePos(this.canvas, event)
       this.context.beginPath() //begins path
       this.context.moveTo(mousePos.x, mousePos.y)
-      this.history.push({start: {x: mousePos.x, y: mousePos.y}, line: new Array()})
+      this.history.push({start: {x: mousePos.x, y: mousePos.y, color: this.props.color}, line: new Array()})
       this.isPainting = true
     }, false)
     this.canvas.addEventListener('mousemove', (event) => {
@@ -53,6 +53,7 @@ class App extends Component {
           for (let i = 0; i < this.history.length; i++) {
             this.context.beginPath()
             this.context.moveTo(this.history[i].start.x, this.history[i].start.y)
+            this.context.strokeStyle = this.history[i].start.color
             for (let j = 0; j < this.history[i].line.length; j++) {
               this.context.lineTo(this.history[i].line[j].x, this.history[i].line[j].y)
               this.context.stroke()
