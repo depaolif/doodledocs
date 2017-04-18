@@ -1,19 +1,15 @@
 import './App.css';
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { BrowserRouter as Router, Route, browserHistory, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route, browserHistory, Switch, Redirect } from 'react-router-dom'
 import Login from './components/Login'
 import Register from './components/Register'
 import ConnectedDoodle from './components/Doodle'
 import Profile from './components/Profile'
 import NavBar from './components/NavBar'
+import PrivateRoute from './components/PrivateRoute'
 
 class App extends Component {
-  requireAuth(nextState, replace, callback) {
-    console.log("hey")
-    debugger
-  }
-
   render() {
     return (
         <div className="App">
@@ -22,9 +18,9 @@ class App extends Component {
               <Route path="/" component={NavBar}/>
               <Switch>
                 <Route exact path="/" component={ConnectedDoodle} />
-                <Route path="/profile" component={Profile} />
                 <Route path="/login" component={Login} />
                 <Route path="/register" component={Register} />
+                <PrivateRoute path="/profile" component={Profile} />
               </Switch>
             </div>
           </Router>
