@@ -4,25 +4,21 @@ import { connect } from 'react-redux'
 
 class NavBar extends Component {
 	render() {
-		let loggedIn
-		if (this.props.isLoggedIn.length) {
-			loggedIn = <NavLink to="/profile">Profile</NavLink>
-		} else {
-			loggedIn = <NavLink to="/login">Log In</NavLink>
-		}
 		return (
 			<div className="navbar">
-        		<NavLink to="/">Doodle</NavLink>
-						{loggedIn}
+				<NavLink to="/">Doodle</NavLink>
+				<NavLink to="/profile">Profile</NavLink>
+				{!this.props.token ? <NavLink to="/login">Login</NavLink> : false}
+				{!this.props.token ? <NavLink to="/register">Register</NavLink> : false}
 			</div>
 		)
 	}
 }
 
 const mapStateToProps = (state) => ({
-	isLoggedIn: state.account
+	token: state.account.token
 })
 
-const ConnectedNavBar = connect(mapStateToProps)(NavBar)
+const ConnectedNavBar = connect(mapStateToProps, null)(NavBar)
 
 export default ConnectedNavBar

@@ -11,6 +11,7 @@ class Doodle extends Component {
 		this.context = null
 		this.isPainting = false
 		this.history = []
+    this.redoHistory = []
 
 		this.handleChangeComplete = this.handleChangeComplete.bind(this)
 		this.handleSave = this.handleSave.bind(this)
@@ -47,7 +48,7 @@ class Doodle extends Component {
 		event.preventDefault()
 		axios({
 			method: 'POST',
-			url: `http://localhost:3001/v1/accounts/${this.props.account.id}/images/${this.props.image.id}`,
+			url: `http://localhost:3001/v1/accounts/${this.props.account.id}/images/${this.props.images.current.image.id}`,
 			headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
 			data: JSON.stringify(this.history)
 		})
@@ -66,6 +67,7 @@ class Doodle extends Component {
       		let mousePos = this.getMousePos(this.canvas, event)
       		this.context.beginPath() //begins path
       		this.context.moveTo(mousePos.x, mousePos.y)
+          this.redoHistory = []
       		this.history.push({start: {x: mousePos.x, y: mousePos.y, color: this.props.color}, line: new Array()})
       		this.isPainting = true
     	}, false)
@@ -89,9 +91,17 @@ class Doodle extends Component {
     	document.addEventListener('keydown', (event) => {
       		if (event.keyCode == 90 && event.ctrlKey && 
       		    !this.isPainting && this.history.length > 0) {
+            this.redoHistory.push(this.history[this.history.length-1])
+            console.log(this.redoHistory.length)
       			this.history = this.history.slice(0, -1)
-				this.drawImage(this.context, this.history)
-      		}
+				    this.drawImage(this.context, this.history)
+      		} else if (event.keyCode == 82 && event.ctrlKey && 
+            !this.isPainting && this.redoHistory.length > 0) {
+            console.log('redoing')
+            this.history.push(this.redoHistory[this.redoHistory.length-1])
+            this.redoHistory = this.redoHistory.slice(0, -1)
+            this.drawImage(this.context, this.history)
+          }
     	})
   	}
 
@@ -136,7 +146,8 @@ class Doodle extends Component {
 
 const mapStateToProps = (state) => ({
 	color: state.color,
-	account: state.account
+	account: state.account,
+  images: state.images
 })
 
 const mapDispatchToProps = (dispatch) => ({
