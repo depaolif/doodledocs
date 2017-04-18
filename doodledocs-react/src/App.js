@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { BrowserRouter as Router, Route, browserHistory, Switch } from 'react-router-dom'
 import Login from './components/Login'
 import ConnectedDoodle from './components/Doodle'
-import Profile from './components/Profile'
+import ConnectedProfile from './components/Profile'
 import NavBar from './components/NavBar'
 
 class App extends Component {
@@ -16,7 +16,7 @@ class App extends Component {
               <Route path="/" component={NavBar}/>
               <Switch>
                 <Route exact path="/" component={ConnectedDoodle} />
-                <Route path="/profile" component={Profile} />
+                <Route path="/profile" component={ConnectedProfile} />
               </Switch>
             </div>
           </Router>
