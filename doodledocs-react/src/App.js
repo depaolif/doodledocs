@@ -1,14 +1,25 @@
+import './App.css';
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import './App.css';
+import { BrowserRouter as Router, Route, browserHistory, Switch } from 'react-router-dom'
 import Login from './components/Login'
-import Doodle from './components/Doodle'
+import ConnectedDoodle from './components/Doodle'
+import Profile from './components/Profile'
+import NavBar from './components/NavBar'
 
 class App extends Component {
   render() {
     return (
         <div className="App">
-          {this.props.account.token ? <Doodle /> : <Login />}
+          <Router history={browserHistory}>
+            <div>
+              <Route path="/" component={NavBar}/>
+              <Switch>
+                <Route exact path="/" component={ConnectedDoodle} />
+                <Route path="/profile" component={Profile} />
+              </Switch>
+            </div>
+          </Router>
         </div>
       );
   }
