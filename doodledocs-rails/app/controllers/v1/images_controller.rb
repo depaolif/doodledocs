@@ -4,38 +4,36 @@ class V1::ImagesController < ApplicationController
     image_data = request.raw_post
     image = Image.new(title: "Test image", account_id: 1, image_data: image_data)
     if image.save
-      render json: "Nice"
+      render json: {id: image.id}
     else
       render json: "Error - Unable to save image", status: 401
     end
   end
 
   def index
-    images=Image.all
-    render json: images
+    account = Account.find(params[:account_id])
+    images = Image.where(account_id: account.id)
+    render json: images, each_serializer: ImageIndexSerializer
   end
 
   def show
-    image = setImage
-    render json: image
+    image = Image.find(params[:id])
+    render json: image, serializer: ImageSerializer
   end
 
   def update
-    image=setImage
-    image.update(params)
+    image_data = request.raw_post
+    image = Image.find(params[:id])
+    if image.update(image_data: image_data)
+      render json: "nice"
+    else
+      render json: "Error - Unable to update image", status: 401
+    end
   end
 
   def destroy
-    image=setImage
+    image = Image.find(image_params)
     Image.destroy(image)
   end
-
-  private
-
-  def setImage
-    Image.find(params[:id])
-  end
-
-
 
 end

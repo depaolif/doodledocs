@@ -15,9 +15,9 @@ class V1::AccountsController < ApplicationController
     render json: account, serializer: AccountSerializer
   end
 
-private
-def account_params
-  params.require(:account).permit(:username, :password)
-end
+  private
+  def account_params
+    params.require(:account).permit(:username, :password)
+  end
 
 end

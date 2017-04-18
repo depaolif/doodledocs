@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import { SketchPicker } from 'react-color'
 import { setColor } from '../actions/color_change'
+import { setCurrentImage } from '../actions/image'
 import { connect } from 'react-redux'
 import axios from 'axios'
 
@@ -15,47 +16,6 @@ class Doodle extends Component {
 
 		this.handleChangeComplete = this.handleChangeComplete.bind(this)
 		this.handleSave = this.handleSave.bind(this)
-		this.handleRestore = this.handleRestore.bind(this)
-	}
-
-	handleRestore(event) {
-		event.preventDefault()
-		axios({
-			method: 'GET',
-			url: `http://localhost:3001/v1/accounts/${this.props.account.id}/images/1`,
-		})
-		.then(resp => {
-			let imageData = JSON.parse(resp.data.image_data)
-			this.history = imageData
-			this.drawImage(this.context, this.history)
-		})
-	}
-
-	drawImage(context, history) {
-		context.clearRect(0, 0, 1500, 1500)
-		for (let i = 0; i < history.length; i++) {
-			this.context.beginPath()
-			this.context.moveTo(history[i].start.x, history[i].start.y)
-			this.context.strokeStyle = history[i].start.color
-			for (let j = 0; j < history[i].line.length; j++) {
-				this.context.lineTo(history[i].line[j].x, history[i].line[j].y)
-				this.context.stroke()
-			}
-		}
-	}
-
-	handleSave(event) {
-		event.preventDefault()
-		axios({
-			method: 'POST',
-			url: `http://localhost:3001/v1/accounts/${this.props.account.id}/images/${this.props.images.current.image.id}`,
-			headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-			data: JSON.stringify(this.history)
-		})
-		.then(resp => {
-			console.log("Saved...")
-	      	//response is 'Nice'
-  		})
 	}
 
   	componentDidMount() {
@@ -110,6 +70,55 @@ class Doodle extends Component {
     	this.context = this.canvas.getContext('2d')
   	}
 
+    componentWillMount() {
+      // if currentImage is something, restore it
+      if (this.props.images.current)
+        this.restoreImage()
+    }
+
+  restoreImage() {
+    axios({
+      method: 'GET',
+      url: `http://localhost:3001/v1/accounts/${this.props.account.id}/images/${this.props.images.current}`,
+    })
+    .then(resp => {
+      let imageData = JSON.parse(resp.data.image_data)
+      this.history = imageData
+      this.drawImage(this.context, this.history)
+    })
+  }
+
+  handleSave(event) {
+    event.preventDefault()
+    let url = `http://localhost:3001/v1/accounts/${this.props.account.id}/images`
+    if (this.props.images.current) {
+      url = url + `/${this.props.images.current}`
+    }
+    axios({
+      method: 'POST',
+      url: url,
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      data: JSON.stringify(this.history)
+    })
+    .then(resp => {
+        console.log("Saved...")
+        this.props.setCurrentImage(resp.data.id)
+      })
+  }
+
+  drawImage(context, history) {
+    context.clearRect(0, 0, 1500, 1500)
+    for (let i = 0; i < history.length; i++) {
+      this.context.beginPath()
+      this.context.moveTo(history[i].start.x, history[i].start.y)
+      this.context.strokeStyle = history[i].start.color
+      for (let j = 0; j < history[i].line.length; j++) {
+        this.context.lineTo(history[i].line[j].x, history[i].line[j].y)
+        this.context.stroke()
+      }
+    }
+  }
+
   	writeMessage(canvas, message) {
     	let context = this.canvas.getContext('2d');
     	context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -136,8 +145,7 @@ class Doodle extends Component {
 				<SketchPicker
       			  color={this.props.color}
       			  onChangeComplete={this.handleChangeComplete} />
-      			<input onClick={this.handleSave} type="submit" value="Save" />
-      			<input onClick={this.handleRestore} type="submit" value="Restore" />
+      			{this.props.account.token ? <input onClick={this.handleSave} type="submit" value="Save" /> : false }
       			<canvas tabIndex='1' id="app-canvas" width={1000} height={1000} />
       		</div>
 		)
@@ -153,7 +161,10 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
 	setColor: (color) => {
 		dispatch(setColor(color))
-	}
+	},
+  setCurrentImage: (image) => {
+    dispatch(setCurrentImage(image))
+  }
 })
 
 const ConnectedDoodle = connect(mapStateToProps, mapDispatchToProps)(Doodle);
