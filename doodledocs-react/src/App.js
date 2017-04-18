@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import './App.css';
 import { SketchPicker } from 'react-color'
 import { bindActionCreators } from 'redux';
-import { colorChange } from './actions/color_change'
+import { color_change } from './actions/color_change'
 
 class App extends Component {
 
@@ -15,6 +15,8 @@ class App extends Component {
     this.isPainting = false
     this.history = []
     this.count = 0
+
+    this.handleChangeComplete = this.handleChangeComplete.bind(this)
   }
 
   componentDidMount() {
@@ -77,7 +79,7 @@ class App extends Component {
   }
 
   handleChangeComplete(color) {
-    this.props.color_change(color)
+    this.props.color_change(color.hex)
   }
 
   render() {
@@ -102,4 +104,4 @@ const mapDispatchToProps = (dispatch) => {
   }, dispatch);
 }
 
-export default const ConnectedApp = connect(mapStateToProps)(App);
+export const ConnectedApp = connect(mapStateToProps,mapDispatchToProps)(App);

@@ -1,6 +1,6 @@
 export function color_change(color) {
   return {
-    type: 'COLOR_CHANGE',
+    type: 'CHANGE_COLOR',
     color_change: color
   }
 }
