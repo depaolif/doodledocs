@@ -5,6 +5,7 @@ import { SketchPicker } from 'react-color'
 import { bindActionCreators } from 'redux';
 import { color_change } from './actions/color_change'
 import Login from './components/Login'
+import axios from 'axios'
 
 class App extends Component {
 
@@ -18,6 +19,45 @@ class App extends Component {
     this.count = 0
 
     this.handleChangeComplete = this.handleChangeComplete.bind(this)
+    this.handleSave = this.handleSave.bind(this)
+    this.handleRestore = this.handleRestore.bind(this)
+  }
+
+  handleRestore(event) {
+    event.preventDefault()
+    axios({
+      method: 'GET',
+      url: 'http://localhost:3001/v1/accounts/1/images/1',
+    })
+    .then(resp => {
+      let imageData = JSON.parse(resp.data.image_data)
+      this.history = imageData
+      this.context.clearRect(0,0,1500,1500)
+      for (let i = 0; i < imageData.length; i++) {
+        this.context.beginPath()
+        this.context.moveTo(imageData[i].start.x, imageData[i].start.y)
+        this.context.strokeStyle = imageData[i].start.color
+        for (let j = 0; j < imageData[i].line.length; j++) {
+          this.context.lineTo(imageData[i].line[j].x, imageData[i].line[j].y)
+          this.context.stroke()
+        }
+      }
+    })
+  }
+
+  handleSave(event) {
+    event.preventDefault()
+    axios({
+      method: 'POST',
+      url: 'http://localhost:3001/v1/accounts/1/images',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      data: JSON.stringify(this.history)
+    })
+    .then(resp => {
+      console.log("Saved...")
+      //response is 'Nice'
+      // print out Saved...
+    })
   }
 
   componentDidMount() {
@@ -94,11 +134,13 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Login />
-        <SketchPicker
-          color={this.props.color}
-          onChangeComplete={this.handleChangeComplete} />
-        <canvas tabIndex='1' id="app-canvas" width={1000} height={1000} />
+      <Login />
+      <SketchPicker
+      color={this.props.color}
+      onChangeComplete={this.handleChangeComplete} />
+      <input onClick={this.handleSave} type="submit" value="Save" /> 
+      <input onClick={this.handleRestore} type="submit" value="Restore" /> 
+      <canvas tabIndex='1' id="app-canvas" width={1000} height={1000} />
       </div>
       );
   }
