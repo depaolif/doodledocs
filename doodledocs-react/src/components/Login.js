@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
-import { setToken, setUsername } from '../actions/account'
+import { setToken, setUsername, setId } from '../actions/account'
+import { setImageList } from '../actions/image'
 import axios from 'axios'
 
 class Login extends Component {
@@ -31,12 +32,18 @@ class Login extends Component {
 		})
 		.then(resp => {
 			this.props.setToken(resp.data.token)
-			this.props.setUsername(resp.data.username)
+			return resp.data.token
 		})
-		.then({
-			return axios({
+		.then((token) => {
+			axios({
 				method: 'GET',
-				 
+				url: 'http://localhost:3001/v1/me',
+				data: {bearer: token} 
+			})
+			.then(resp => {
+				this.props.setUsername(resp.data.username)
+				this.props.setId(resp.data.id)
+				this.props.setImageList(resp.data.images)
 			})
 		})
 	}
@@ -58,6 +65,12 @@ const mapDispatchToProps = (dispatch) => ({
 	},
 	setUsername: (username) => {
 		dispatch(setUsername(username))
+	},
+	setId: (id) => {
+		dispatch(setId(id))
+	},
+	setImageList: (imageList) => {
+		dispatch(setImageList(imageList))
 	}
 })
 

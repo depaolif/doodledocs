@@ -17,6 +17,7 @@ class App extends Component {
               <Switch>
                 <Route exact path="/" component={ConnectedDoodle} />
                 <Route path="/profile" component={Profile} />
+                <Route path="/login" component={Login} />
               </Switch>
             </div>
           </Router>
