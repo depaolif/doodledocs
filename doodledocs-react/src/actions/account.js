@@ -5,3 +5,7 @@ export const setToken = (token) => ({
 export const setUsername = (username) => ({
   type: 'SET_USERNAME', payload: username
 })
+
+export const setId = (id) => ({
+  type: 'SET_ID', payload: id
+})

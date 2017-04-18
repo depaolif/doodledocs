@@ -1,7 +1,13 @@
 class V1::ImagesController < ApplicationController
 
   def create
-    image= Image.new(title: params[:title], user_id: user_id: "?")
+    image_data = request.raw_post
+    image = Image.new(title: "Test image", account_id: 1, image_data: image_data)
+    if image.save
+      render json: "Nice"
+    else
+      render json: "Error - Unable to save image", status: 401
+    end
   end
 
   def index
@@ -10,7 +16,7 @@ class V1::ImagesController < ApplicationController
   end
 
   def show
-    image= setImage
+    image = setImage
     render json: image
   end
 

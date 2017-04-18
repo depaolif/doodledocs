@@ -4,7 +4,7 @@ class V1::SessionsController < ApplicationController
   	account = Account.find_by(username: params[:username])
   	if (account && account.authenticate(params[:password]))
   		token = Auth.issue({account_id: account.id})
-  		render json: {token: token, "username": account.username}
+  		render json: {token: token}
   	else
   		render json: "Error - Unable to login.", status: 401
   	end
