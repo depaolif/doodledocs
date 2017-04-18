@@ -5,19 +5,19 @@ import Login from './components/Login'
 import Doodle from './components/Doodle'
 
 class App extends Component {
-
-  constructor() {
-    super()
-  }
-
   render() {
     return (
         <div className="App">
-          <Login />
-          <Doodle />
+          {this.props.account.token ? <Doodle /> : <Login />}
         </div>
       );
   }
 }
 
-export default App
+const mapStateToProps = (state) => ({
+  account: state.account
+})
+
+const ConnectedApp = connect(mapStateToProps, null)(App)
+
+export default ConnectedApp

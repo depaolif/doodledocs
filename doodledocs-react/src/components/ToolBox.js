@@ -12,7 +12,7 @@ class ToolBox extends Component {
 	render() {
 		return (
 			<div className="toolbox">
-				 
+					 
 			</div>
 		)
 	}
