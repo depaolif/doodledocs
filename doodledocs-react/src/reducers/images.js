@@ -1,12 +1,14 @@
-export default function imagesReducer(state = [], action) {
+export default function imagesReducer(state = {}, action) {
   switch (action.type) {
     case "SET_IMAGE_LIST":
-      return action.payload
+      return {list: action.payload}
     case "ADD_IMAGE":
-   	  return [...state, action.payload]
+   	  return {list: [...state.images, action.payload]}
    	case "REMOVE_IMAGE":
    	  let filteredImageList = state.filter(i => i.id != action.playload)
-   	  return filteredImageList
+   	  return {list: filteredImageList}
+   	case "SET_CURRENT_IMAGE":
+   	  return {current: action.payload}
     default:
       return state
   }
