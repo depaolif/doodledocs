@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, browserHistory, Switch } from 'react-ro
 import Login from './components/Login'
 import ConnectedDoodle from './components/Doodle'
 import ConnectedProfile from './components/Profile'
-import NavBar from './components/NavBar'
+import ConnectedNavBar from './components/NavBar'
 
 class App extends Component {
   render() {
@@ -13,7 +13,7 @@ class App extends Component {
         <div className="App">
           <Router history={browserHistory}>
             <div>
-              <Route path="/" component={NavBar}/>
+              <Route path="/" component={ConnectedNavBar}/>
               <Switch>
                 <Route exact path="/" component={ConnectedDoodle} />
                 <Route path="/profile" component={ConnectedProfile} />

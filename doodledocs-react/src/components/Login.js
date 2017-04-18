@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { setToken, setUsername, setId } from '../actions/account'
 import { setImageList } from '../actions/image'
 import axios from 'axios'
+import { Router, browserHistory } from 'react-router'
 
 class Login extends Component {
 	constructor() {
@@ -38,7 +39,7 @@ class Login extends Component {
 			axios({
 				method: 'GET',
 				url: 'http://localhost:3001/v1/me',
-				data: {bearer: token} 
+				data: {bearer: token}
 			})
 			.then(resp => {
 				this.props.setUsername(resp.data.username)

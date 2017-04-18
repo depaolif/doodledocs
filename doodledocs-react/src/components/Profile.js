@@ -25,4 +25,6 @@ const mapStateToProps = (state) => ({
 	imageList: state.imageList
 })
 
-export default const ConnectedProfile = connect(mapStateToProps)(Profile)
+const ConnectedProfile = connect(mapStateToProps)(Profile)
+
+export default ConnectedProfile
