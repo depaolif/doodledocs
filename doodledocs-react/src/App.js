@@ -39,15 +39,17 @@ class App extends Component {
     
     // undo feature
     document.addEventListener('keydown', (event) => {
-      if (!this.isPainting && this.history.length > 0) { 
-        this.context.clearRect(0,0,1500,1500)
-        this.history = this.history.slice(0, -1)
-        for (let i = 0; i < this.history.length; i++) {
-          this.context.beginPath()
-          this.context.moveTo(this.history[i].start.x, this.history[i].start.y)
-          for (let j = 0; j < this.history[i].line.length; j++) {
-            this.context.lineTo(this.history[i].line[j].x, this.history[i].line[j].y)
-            this.context.stroke()
+      if (event.keyCode == 90 && event.ctrlKey) {
+        if (!this.isPainting && this.history.length > 0) { 
+          this.context.clearRect(0,0,1500,1500)
+          this.history = this.history.slice(0, -1)
+          for (let i = 0; i < this.history.length; i++) {
+            this.context.beginPath()
+            this.context.moveTo(this.history[i].start.x, this.history[i].start.y)
+            for (let j = 0; j < this.history[i].line.length; j++) {
+              this.context.lineTo(this.history[i].line[j].x, this.history[i].line[j].y)
+              this.context.stroke()
+            }
           }
         }
       }
