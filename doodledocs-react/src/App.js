@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
 import './App.css';
-import { ColorPicker } from 'react-color'
+import { SketchPicker } from 'react-color'
+import { bindActionCreators } from 'redux';
+import { colorChange } from './actions/color_change'
 
 class App extends Component {
 
@@ -37,11 +40,11 @@ class App extends Component {
       console.log(this.history)
       this.count = this.count + 1
     }, false)
-    
+
     // undo feature
     document.addEventListener('keydown', (event) => {
       if (event.keyCode == 90 && event.ctrlKey) { // ctrl + z
-        if (!this.isPainting && this.history.length > 0) { 
+        if (!this.isPainting && this.history.length > 0) {
           this.context.clearRect(0,0,1500,1500)
           this.history = this.history.slice(0, -1)
           for (let i = 0; i < this.history.length; i++) {
@@ -73,14 +76,30 @@ class App extends Component {
     };
   }
 
+  handleChangeComplete(color) {
+    this.props.color_change(color)
+  }
+
   render() {
     return (
       <div className="App">
-        <ColorPicker />
+        <SketchPicker
+          color={this.props.color}
+          onChangeComplete={this.handleChangeComplete} />
         <canvas tabIndex='1' id="app-canvas" width={1000} height={1000} />
       </div>
       );
   }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return { color: state.color }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+    color_change: color_change
+  }, dispatch);
+}
+
+export default const ConnectedApp = connect(mapStateToProps)(App);
