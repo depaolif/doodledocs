@@ -39,7 +39,7 @@ class App extends Component {
     
     // undo feature
     document.addEventListener('keydown', (event) => {
-      if (event.keyCode == 90 && event.ctrlKey) {
+      if (event.keyCode == 90 && event.ctrlKey) { // ctrl + z
         if (!this.isPainting && this.history.length > 0) { 
           this.context.clearRect(0,0,1500,1500)
           this.history = this.history.slice(0, -1)
