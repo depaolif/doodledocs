@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
-import { setToken, setUsername } from '../actions/account'
+import { setToken, setUsername, setId } from '../actions/account'
+import { setImageList } from '../actions/image'
 import axios from 'axios'
 
 class Register extends Component {
@@ -27,11 +28,24 @@ class Register extends Component {
 		axios({
 			method: 'POST',
 			url: 'http://localhost:3001/v1/accounts',
-			data: {username: this.state.username, password: this.state.password}
+			data: {account: {username: this.state.username, password: this.state.password}}
 		})
 		.then(resp => {
 			this.props.setToken(resp.data.token)
-			this.props.setUsername(resp.data.username)
+			return resp.data.token
+		})
+		.then((token) => {
+			axios({
+				method: 'GET',
+				url: 'http://localhost:3001/v1/me',
+				data: {bearer: token} 
+			})
+			.then(resp => {
+				this.props.setUsername(resp.data.username)
+				this.props.setId(resp.data.id)
+				this.props.setImageList(resp.data.images)
+				this.props.history.push('/')
+			})
 		})
 	}
 
@@ -52,9 +66,15 @@ const mapDispatchToProps = (dispatch) => ({
 	},
 	setUsername: (username) => {
 		dispatch(setUsername(username))
+	},
+	setId: (id) => {
+		dispatch(setId(id))
+	},
+	setImageList: (imageList) => {
+		dispatch(setImageList(imageList))
 	}
 })
 
-const ConnectedRegister = connect(null, mapDispatchToProps)(Login)
+const ConnectedRegister = connect(null, mapDispatchToProps)(Register)
 
 export default ConnectedRegister

@@ -44,6 +44,7 @@ class Login extends Component {
 				this.props.setUsername(resp.data.username)
 				this.props.setId(resp.data.id)
 				this.props.setImageList(resp.data.images)
+				this.props.history.push('/')
 			})
 		})
 	}
