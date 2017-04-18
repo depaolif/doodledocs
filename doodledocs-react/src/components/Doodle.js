@@ -41,7 +41,7 @@ class Doodle extends Component {
 				this.context.lineTo(history[i].line[j].x, history[i].line[j].y)
 				this.context.stroke()
 			}
-		}	
+		}
 	}
 
 	handleSave(event) {
@@ -89,13 +89,13 @@ class Doodle extends Component {
 
     	// undo feature
     	document.addEventListener('keydown', (event) => {
-      		if (event.keyCode == 90 && event.ctrlKey && 
+      		if (event.keyCode == 90 && event.ctrlKey &&
       		    !this.isPainting && this.history.length > 0) {
             this.redoHistory.push(this.history[this.history.length-1])
             console.log(this.redoHistory.length)
       			this.history = this.history.slice(0, -1)
 				    this.drawImage(this.context, this.history)
-      		} else if (event.keyCode == 82 && event.ctrlKey && 
+      		} else if (event.keyCode == 82 && event.ctrlKey &&
             !this.isPainting && this.redoHistory.length > 0) {
             console.log('redoing')
             this.history.push(this.redoHistory[this.redoHistory.length-1])
@@ -136,8 +136,8 @@ class Doodle extends Component {
 				<SketchPicker
       			  color={this.props.color}
       			  onChangeComplete={this.handleChangeComplete} />
-      			<input onClick={this.handleSave} type="submit" value="Save" /> 
-      			<input onClick={this.handleRestore} type="submit" value="Restore" /> 
+      			<input onClick={this.handleSave} type="submit" value="Save" />
+      			<input onClick={this.handleRestore} type="submit" value="Restore" />
       			<canvas tabIndex='1' id="app-canvas" width={1000} height={1000} />
       		</div>
 		)
@@ -152,7 +152,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
 	setColor: (color) => {
-		dispatch(setColor(color))		
+		dispatch(setColor(color))
 	}
 })
 

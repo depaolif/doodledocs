@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
-import axios from 'axios'
 import ImageItem from './ImageItem'
 
 class Profile extends Component {
@@ -22,9 +21,8 @@ class Profile extends Component {
 
 const mapStateToProps = (state) => ({
 	username: state.account.username,
-	imageList: state.imageList
+	imageList: state.images.list
 })
 
 const ConnectedProfile = connect(mapStateToProps)(Profile)
-
 export default ConnectedProfile
