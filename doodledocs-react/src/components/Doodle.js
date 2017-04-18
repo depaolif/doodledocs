@@ -47,7 +47,7 @@ class Doodle extends Component {
 		event.preventDefault()
 		axios({
 			method: 'POST',
-			url: `http://localhost:3001/v1/accounts/${this.props.account.id}/images/1`,
+			url: `http://localhost:3001/v1/accounts/${this.props.account.id}/images/${this.props.images.current.image.id}`,
 			headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
 			data: JSON.stringify(this.history)
 		})
@@ -137,7 +137,7 @@ class Doodle extends Component {
 const mapStateToProps = (state) => ({
 	color: state.color,
 	account: state.account,
-  image: state.image
+  images: state.images
 })
 
 const mapDispatchToProps = (dispatch) => ({
