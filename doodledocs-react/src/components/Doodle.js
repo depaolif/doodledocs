@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import { SketchPicker } from 'react-color'
-import { setColor } from '../actions/color_change'
+import { setColor, setTool } from '../actions/doodle'
 import { setCurrentImage, addImage } from '../actions/image'
 import { connect } from 'react-redux'
 import axios from 'axios'
@@ -27,21 +27,33 @@ class Doodle extends Component {
     	this.context = this.canvas.getContext('2d')
 
     	this.canvas.addEventListener('mousedown', (event) => {
-      		this.context.strokeStyle=this.props.color
-      		let mousePos = this.getMousePos(this.canvas, event)
-      		this.context.beginPath() //begins path
-      		this.context.moveTo(mousePos.x, mousePos.y)
           this.redoHistory = []
-      		this.history.push({start: {x: mousePos.x, y: mousePos.y, color: this.props.color}, line: new Array()})
-      		this.isPainting = true
+      		this.context.strokeStyle=this.props.doodle.color
+      		let mousePos = this.getMousePos(this.canvas, event)
+          switch (this.props.doodle.type) {
+            case "free":
+              this.context.beginPath() //begins path
+              this.context.moveTo(mousePos.x, mousePos.y)
+              this.history.push({[this.props.doodle.tool]: {start: {x: mousePos.x, y: mousePos.y, color: this.props.doodle.color}, line: new Array()}})
+              break
+            case "line"
+              break
+            case "rect":
+              break
+            case "circle":
+              break
+            default:
+              break
+          }
+          this.isPainting = true
     	}, false)
 
     	this.canvas.addEventListener('mousemove', (event) => {
       		if (this.isPainting) {
- 	    		let mousePos = this.getMousePos(this.canvas, event)
+ 	    		  let mousePos = this.getMousePos(this.canvas, event)
         		this.context.lineTo(mousePos.x, mousePos.y)
         		this.context.stroke() //path gets a stroke
-        		this.history[this.history.length-1].line.push({x: mousePos.x, y: mousePos.y})
+        		this.history[this.history.length-1].free.line.push({x: mousePos.x, y: mousePos.y})
       		}
     	})
 
@@ -60,7 +72,7 @@ class Doodle extends Component {
       			this.history = this.history.slice(0, -1)
 				    this.drawImage(this.context, this.history)
       		} else if (event.keyCode == 82 && event.ctrlKey &&
-            !this.isPainting && this.redoHistory.length > 0) {
+              !this.isPainting && this.redoHistory.length > 0) {
             console.log('redoing')
             this.history.push(this.redoHistory[this.redoHistory.length-1])
             this.redoHistory = this.redoHistory.slice(0, -1)
@@ -168,7 +180,7 @@ class Doodle extends Component {
 }
 
 const mapStateToProps = (state) => ({
-	color: state.color,
+	doodle: state.doodle,
 	account: state.account,
   images: state.images
 })
@@ -177,6 +189,9 @@ const mapDispatchToProps = (dispatch) => ({
 	setColor: (color) => {
 		dispatch(setColor(color))
 	},
+  setTool: (tool) => {
+    dispatch(setTool(tool))
+  }
   setCurrentImage: (image) => {
     dispatch(setCurrentImage(image))
   },

@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
-import colorReducer from './color'
+import doodleReducer from './color'
 import accountReducer from './account'
 import imagesReducer from './images'
 
 export default combineReducers({
-  color: colorReducer,
+  doodle: doodleReducer,
   account: accountReducer,
   images: imagesReducer
 });
