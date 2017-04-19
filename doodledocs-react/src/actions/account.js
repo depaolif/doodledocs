@@ -9,3 +9,7 @@ export const setUsername = (username) => ({
 export const setId = (id) => ({
   type: 'SET_ID', payload: id
 })
+
+export const logOut = () => ({
+  type: 'USER_LOGOUT'
+})

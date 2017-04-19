@@ -9,8 +9,9 @@ import ConnectedDoodle from './components/Doodle'
 import ConnectedProfile from './components/Profile'
 import ConnectedNavBar from './components/NavBar'
 import PrivateRoute from './components/PrivateRoute'
-import { setToken, setUsername, setId } from '../actions/account'
-import { setImageList } from '../actions/image'
+import { setToken, setUsername, setId } from './actions/account'
+import { setImageList } from './actions/image'
+import axios from 'axios'
 
 class App extends Component {
   componentDidMount() {
