@@ -18,7 +18,7 @@ class ImageItem extends Component {
 	render() {
 		return (
 			<li>
-				<a href='#' onClick={this.handleClick}>{this.props.imageTitle}</a>
+				<a href='#' onClick={this.handleClick}>Image {this.props.imageId}</a>
 			</li>
 		)
 	}

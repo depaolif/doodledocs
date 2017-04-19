@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import { SketchPicker } from 'react-color'
 import { setColor } from '../actions/color_change'
-import { setCurrentImage } from '../actions/image'
+import { setCurrentImage, addImage } from '../actions/image'
 import { connect } from 'react-redux'
 import axios from 'axios'
 
@@ -108,7 +108,10 @@ class Doodle extends Component {
       })
       .then(resp => {
           console.log("Saved...")
-          this.props.setCurrentImage(resp.data.id)
+					if (this.props.images.current !== resp.data.id) {
+						this.props.setCurrentImage(resp.data.id)
+						this.props.addImage({id: resp.data.id, title: "Test image"})
+					}
         })
     }
 
@@ -176,7 +179,10 @@ const mapDispatchToProps = (dispatch) => ({
 	},
   setCurrentImage: (image) => {
     dispatch(setCurrentImage(image))
-  }
+  },
+	addImage: (image) => {
+		dispatch(addImage(image))
+	}
 })
 
 const ConnectedDoodle = connect(mapStateToProps, mapDispatchToProps)(Doodle);
