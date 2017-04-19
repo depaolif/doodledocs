@@ -22,11 +22,11 @@ class Doodle extends Component {
 
 		this.handleChangeComplete = this.handleChangeComplete.bind(this)
 		this.handleSave = this.handleSave.bind(this)
+		this.updateCanvas = this.updateCanvas.bind(this)
 	}
 
   	componentDidMount() {
-  		this.canvas = document.getElementById('app-canvas');
-    	this.context = this.canvas.getContext('2d')
+			this.updateCanvas()
 
     	this.canvas.addEventListener('mousedown', (event) => {
           this.redoHistory = []
@@ -104,8 +104,8 @@ class Doodle extends Component {
   	}
 
   	componentDidUpdate(prevProps, prevState) {
-    	this.canvas = document.getElementById('app-canvas');
-    	this.context = this.canvas.getContext('2d')
+			this.updateCanvas()
+
   	}
 
     componentWillMount() {
@@ -113,6 +113,17 @@ class Doodle extends Component {
       if (this.props.images.current)
         this.restoreImage()
     }
+
+		updateCanvas() {
+			this.canvas = document.getElementById('app-canvas');
+    	this.context = this.canvas.getContext('2d')
+			if (!this.props.images.current) {
+				this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
+				this.history = []
+				this.redoHistory = []
+				this.props.setCurrentImage('new')
+			}
+		}
 
     restoreImage() {
       axios({
@@ -130,7 +141,7 @@ class Doodle extends Component {
       event.preventDefault()
       let url = `http://localhost:3001/v1/accounts/${this.props.account.id}/images`
       let method = 'POST'
-      if (this.props.images.current) {
+      if (typeof this.props.images.current === 'number') {
         url = url + `/${this.props.images.current}`
         method = 'PATCH'
       }

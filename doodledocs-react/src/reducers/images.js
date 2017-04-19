@@ -9,6 +9,8 @@ export default function imagesReducer(state = {}, action) {
       return Object.assign({}, state, {list: filteredImageList})
    	case "SET_CURRENT_IMAGE":
    	  return Object.assign({}, state, {current: action.payload})
+    case "RESET_IMAGE":
+      return Object.assign({}, state, {current: null})
     default:
       return state
   }
