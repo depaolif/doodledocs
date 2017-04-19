@@ -2,7 +2,6 @@ class V1::ImagesController < ApplicationController
 
   def create
     image_data = request.raw_post
-    byebug
     image = Image.new(title: "Test image", account_id: params[:account_id], image_data: image_data)
     if image.save
       render json: {id: image.id}
