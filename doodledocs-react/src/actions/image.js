@@ -13,3 +13,7 @@ export const setCurrentImage = (image) => ({
 export const removeImage = (image) => ({
   type: 'REMOVE_IMAGE', payload: image
 })
+
+export const resetImage = () => ({
+  type: 'RESET_IMAGE'
+})
