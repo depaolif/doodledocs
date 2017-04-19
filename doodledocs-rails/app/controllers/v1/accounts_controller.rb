@@ -11,6 +11,7 @@ class V1::AccountsController < ApplicationController
   end
 
   def show
+    byebug
     account = Account.find(1)
     render json: account, serializer: AccountSerializer
   end

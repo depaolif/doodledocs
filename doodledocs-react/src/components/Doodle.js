@@ -8,6 +8,10 @@ import axios from 'axios'
 class Doodle extends Component {
 	constructor() {
 		super()
+		this.state = {
+			height: window.innerHeight,
+			width: window.innerWidth
+		}
 		this.canvas = null
 		this.context = null
 		this.isPainting = false
@@ -146,7 +150,7 @@ class Doodle extends Component {
       			  color={this.props.color}
       			  onChangeComplete={this.handleChangeComplete} />
       			{this.props.account.token ? <input onClick={this.handleSave} type="submit" value="Save" /> : false }
-      			<canvas tabIndex='1' id="app-canvas" width={1000} height={1000} />
+      			<canvas tabIndex='1' id="app-canvas" width={this.state.width} height={this.state.height} />
       		</div>
 		)
 	}
