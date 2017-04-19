@@ -1,15 +1,14 @@
 import React, {Component} from 'react'
-import { NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 class NavBar extends Component {
 	render() {
 		return (
 			<div className="navbar">
-				<NavLink to="/">Doodle</NavLink>
-				<NavLink to="/profile">Profile</NavLink>
-				{!this.props.token ? <NavLink to="/login">Login</NavLink> : <NavLink to='/logout'>Logout</NavLink>}
-				{!this.props.token ? <NavLink to="/register">Register</NavLink> : false}
+				<Link to="/">Doodle</Link>
+				{!this.props.token ? <Link to="/login">Login</Link> : <Link to="/profile">Profile</Link>}
+				{!this.props.token ? <Link to="/register">Register</Link> : <Link to='/logout'>Logout</Link>}
 			</div>
 		)
 	}
