@@ -95,11 +95,13 @@ class Doodle extends Component {
     handleSave(event) {
       event.preventDefault()
       let url = `http://localhost:3001/v1/accounts/${this.props.account.id}/images`
+      let method = 'POST'
       if (this.props.images.current) {
         url = url + `/${this.props.images.current}`
+        method = 'PATCH'
       }
       axios({
-        method: 'PATCH',
+        method: method,
         url: url,
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         data: JSON.stringify(this.history)
@@ -112,10 +114,7 @@ class Doodle extends Component {
 
     drawImage(context, history) {
       context.clearRect(0, 0, 1500, 1500)
-      let amount = 0
       for (let i = 0; i < history.length; i++) {
-        amount = amount + 25
-        setTimeout(() => {
           this.context.beginPath()
           this.context.moveTo(history[i].start.x, history[i].start.y)
           this.context.strokeStyle = history[i].start.color
@@ -123,13 +122,12 @@ class Doodle extends Component {
               this.context.lineTo(history[i].line[j].x, history[i].line[j].y)
               this.context.stroke()
           }
-        }, amount)
       }
     }
 
     drawAnimatedLine(line1, line2) {
       let animation = setInterval(() => {
-        
+
       }, 10)
     }
 
