@@ -235,7 +235,6 @@ class Doodle extends Component {
 	render() {
 		return (
 			<div className="doodle">
-
 				    <SketchPicker
       			  color={this.props.doodle.color}
       			  onChangeComplete={this.handleChangeComplete} />
