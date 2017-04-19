@@ -38,7 +38,7 @@ class Register extends Component {
 			axios({
 				method: 'GET',
 				url: `http://localhost:3001/v1/me`,
-				data: {bearer: token}
+				headers: {bearer: token}
 			})
 			.then(resp => {
 				this.props.setUsername(resp.data.username)
