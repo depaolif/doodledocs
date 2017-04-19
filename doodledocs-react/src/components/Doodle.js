@@ -1,7 +1,9 @@
+import './Doodle.css'
 import React, {Component} from 'react'
 import { SketchPicker } from 'react-color'
-import { setColor, setTool } from '../actions/doodle'
+import { setColor } from '../actions/doodle'
 import { setCurrentImage, addImage } from '../actions/image'
+import ConnectedToolBox from './ToolBox'
 import { connect } from 'react-redux'
 import axios from 'axios'
 
@@ -28,17 +30,21 @@ class Doodle extends Component {
 
     	this.canvas.addEventListener('mousedown', (event) => {
           this.redoHistory = []
-      		this.context.strokeStyle=this.props.doodle.color
+      		this.context.strokeStyle = this.props.doodle.color
+          this.context.fillStyle = this.props.doodle.color
+          this.context.lineWidth = this.props.doodle.lineWidth
       		let mousePos = this.getMousePos(this.canvas, event)
-          switch (this.props.doodle.type) {
+          switch (this.props.doodle.tool) {
             case "free":
               this.context.beginPath() //begins path
               this.context.moveTo(mousePos.x, mousePos.y)
-              this.history.push({[this.props.doodle.tool]: {start: {x: mousePos.x, y: mousePos.y, color: this.props.doodle.color}, line: new Array()}})
+              this.history.push({[this.props.doodle.tool]: {start: {x: mousePos.x, y: mousePos.y, color: this.props.doodle.color, lineWidth: this.context.lineWidth}, lines: new Array()}})
               break
-            case "line"
-              break
-            case "rect":
+            case "line":
+              break 
+            case "rectangle":
+              this.context.beginPath()
+              this.history.push({[this.props.doodle.tool]: {x1: mousePos.x, y1: mousePos.y, x2: 0, y2: 0, color: this.props.doodle.color, lineWidth: this.context.lineWidth}})
               break
             case "circle":
               break
@@ -51,16 +57,32 @@ class Doodle extends Component {
     	this.canvas.addEventListener('mousemove', (event) => {
       		if (this.isPainting) {
  	    		  let mousePos = this.getMousePos(this.canvas, event)
-        		this.context.lineTo(mousePos.x, mousePos.y)
-        		this.context.stroke() //path gets a stroke
-        		this.history[this.history.length-1].free.line.push({x: mousePos.x, y: mousePos.y})
+            switch (this.props.doodle.tool) {
+              case "free":
+                  this.context.lineTo(mousePos.x, mousePos.y)
+                  this.context.stroke() //path gets a stroke
+                  this.history[this.history.length-1].free.lines.push({x: mousePos.x, y: mousePos.y})
+                break
+              case "line":
+                break   
+              case "rectangle":
+                  this.context.rect(this.history[this.history.length-1].rectangle.x1, this.history[this.history.length-1].rectangle.y1, mousePos.x - this.history[this.history.length-1].rectangle.x1, mousePos.y - this.history[this.history.length-1].rectangle.y1)
+                  this.history[this.history.length-1].rectangle.x2 = mousePos.x - this.history[this.history.length-1].rectangle.x1
+                  this.history[this.history.length-1].rectangle.y2 = mousePos.y - this.history[this.history.length-1].rectangle.y1
+                  this.context.fill()
+                break
+              case "circle":
+                break
+              default:
+                break
+            }
       		}
     	})
 
     	this.canvas.addEventListener('mouseup', (event) => {
       		this.isPainting = false
       		console.log(this.history)
-      		console.log(this.history.reduce((sum, val) => { return val.line.length + sum},0))
+      		// console.log(this.history.reduce((sum, val) => { return val.free.lines.length + sum},0))
     	}, false)
 
     	// undo feature
@@ -130,14 +152,47 @@ class Doodle extends Component {
     drawImage(context, history) {
       context.clearRect(0, 0, 1500, 1500)
       for (let i = 0; i < history.length; i++) {
-          this.context.beginPath()
-          this.context.moveTo(history[i].start.x, history[i].start.y)
-          this.context.strokeStyle = history[i].start.color
-          for (let j = 0; j < history[i].line.length; j++) {
-              this.context.lineTo(history[i].line[j].x, history[i].line[j].y)
-              this.context.stroke()
-          }
+        switch (Object.keys(history[i])[0]) {
+          case "free":
+            this.drawFree(context, history[i])
+            break
+          case "rectangle":
+            this.drawRect(context, history[i].rectangle)
+            break
+          case "circle":
+            break
+          case "line":
+            break
+          default:
+            break
+        }
       }
+    }
+
+    drawFree(context, picture, undo) {
+        context.beginPath()
+        context.moveTo(picture.free.start.x, picture.free.start.y)
+        context.strokeStyle = picture.free.start.color
+        context.lineWidth = picture.free.start.lineWidth
+        for (let j = 0; j < picture.free.lines.length; j++) {
+            context.lineTo(picture.free.lines[j].x, picture.free.lines[j].y)
+            context.stroke()
+        }
+    }
+
+    drawRect(context, rect) {
+      this.context.beginPath()
+      this.context.fillStyle = rect.color
+      this.context.rect(rect.x1, rect.y1, rect.x2, rect.y2)
+      this.context.fill()
+    }
+
+    drawCircle(context, rect) {
+
+    }
+
+    drawLine(context, line) {
+
     }
 
     drawAnimatedLine(line1, line2) {
@@ -169,9 +224,11 @@ class Doodle extends Component {
 	render() {
 		return (
 			<div className="doodle">
-				<SketchPicker
-      			  color={this.props.color}
+
+				    <SketchPicker
+      			  color={this.props.doodle.color}
       			  onChangeComplete={this.handleChangeComplete} />
+            <ConnectedToolBox />
       			{this.props.account.token ? <input onClick={this.handleSave} type="submit" value="Save" /> : false }
       			<canvas tabIndex='1' id="app-canvas" width={this.state.width} height={this.state.height} />
       		</div>
@@ -189,9 +246,6 @@ const mapDispatchToProps = (dispatch) => ({
 	setColor: (color) => {
 		dispatch(setColor(color))
 	},
-  setTool: (tool) => {
-    dispatch(setTool(tool))
-  }
   setCurrentImage: (image) => {
     dispatch(setCurrentImage(image))
   },
