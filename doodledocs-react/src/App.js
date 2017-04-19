@@ -3,13 +3,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { BrowserRouter as Router, Route, browserHistory, Switch, Redirect } from 'react-router-dom'
 import ConnectedLogin from './components/Login'
+import ConnectedLogout from './components/Logout'
 import ConnectedRegister from './components/Register'
 import ConnectedDoodle from './components/Doodle'
 import ConnectedProfile from './components/Profile'
 import ConnectedNavBar from './components/NavBar'
 import PrivateRoute from './components/PrivateRoute'
-import { setToken, setUsername, setId } from '../actions/account'
-import { setImageList } from '../actions/image'
+import { setToken, setUsername, setId } from './actions/account'
+import { setImageList } from './actions/image'
+import axios from 'axios'
 
 class App extends Component {
   componentDidMount() {
@@ -27,7 +29,7 @@ class App extends Component {
         this.props.setImageList(resp.data.images)
       })
     }
-  } 
+  }
 
   render() {
     return (
@@ -38,6 +40,7 @@ class App extends Component {
               <Switch>
                 <Route exact path="/" component={ConnectedDoodle} />
                 <Route path="/login" component={ConnectedLogin} />
+                <Route path="/logout" component={ConnectedLogout} />
                 <Route path="/register" component={ConnectedRegister} />
                 <PrivateRoute path="/profile" component={ConnectedProfile} />
               </Switch>
