@@ -2,7 +2,8 @@ import './App.css';
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { BrowserRouter as Router, Route, browserHistory, Switch, Redirect } from 'react-router-dom'
-import Login from './components/Login'
+import ConnectedLogin from './components/Login'
+import ConnectedLogout from './components/Logout'
 import Register from './components/Register'
 import ConnectedDoodle from './components/Doodle'
 import ConnectedProfile from './components/Profile'
@@ -18,8 +19,9 @@ class App extends Component {
               <Route path="/" component={ConnectedNavBar}/>
               <Switch>
                 <Route exact path="/" component={ConnectedDoodle} />
-                <Route path="/login" component={Login} />
+                <Route path="/login" component={ConnectedLogin} />
                 <Route path="/register" component={Register} />
+                <Route path="/logout" component={ConnectedLogout} />
                 <PrivateRoute path="/profile" component={ConnectedProfile} />
               </Switch>
             </div>

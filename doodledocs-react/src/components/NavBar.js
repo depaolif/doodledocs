@@ -8,7 +8,7 @@ class NavBar extends Component {
 			<div className="navbar">
 				<NavLink to="/">Doodle</NavLink>
 				<NavLink to="/profile">Profile</NavLink>
-				{!this.props.token ? <NavLink to="/login">Login</NavLink> : false}
+				{!this.props.token ? <NavLink to="/login">Login</NavLink> : <NavLink to='/logout'>Logout</NavLink>}
 				{!this.props.token ? <NavLink to="/register">Register</NavLink> : false}
 			</div>
 		)
