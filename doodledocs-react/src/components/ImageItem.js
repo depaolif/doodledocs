@@ -18,6 +18,7 @@ class ImageItem extends Component {
 	render() {
 		return (
 			<li>
+				<img src={this.props.preview} width='50' height='50'></img>
 				<a href='#' onClick={this.handleClick}>Image {this.props.imageId}</a>
 			</li>
 		)

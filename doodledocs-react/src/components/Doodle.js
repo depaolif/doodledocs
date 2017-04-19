@@ -29,6 +29,7 @@ class Doodle extends Component {
 			this.updateCanvas()
 
     	this.canvas.addEventListener('mousedown', (event) => {
+        if (event.button === 0) {
           this.redoHistory = []
       		this.context.strokeStyle = this.props.doodle.color
           this.context.fillStyle = this.props.doodle.color
@@ -52,6 +53,7 @@ class Doodle extends Component {
               break
           }
           this.isPainting = true
+        }
     	}, false)
 
     	this.canvas.addEventListener('mousemove', (event) => {
@@ -105,7 +107,6 @@ class Doodle extends Component {
 
   	componentDidUpdate(prevProps, prevState) {
 			this.updateCanvas()
-
   	}
 
     componentWillMount() {
@@ -131,7 +132,7 @@ class Doodle extends Component {
         url: `http://localhost:3001/v1/accounts/${this.props.account.id}/images/${this.props.images.current}`,
       })
       .then(resp => {
-        let imageData = JSON.parse(resp.data.image_data)
+        let imageData = resp.data.image_data
         this.history = imageData
         this.drawImage(this.context, this.history)
       })
@@ -145,11 +146,11 @@ class Doodle extends Component {
         url = url + `/${this.props.images.current}`
         method = 'PATCH'
       }
+      let lowQualityImage = this.canvas.toDataURL('image/png', 0.1)
       axios({
         method: method,
         url: url,
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        data: JSON.stringify(this.history)
+        data: JSON.stringify({image: this.history, preview: lowQualityImage})
       })
       .then(resp => {
           console.log("Saved...")
@@ -157,7 +158,7 @@ class Doodle extends Component {
 						this.props.setCurrentImage(resp.data.id)
 						this.props.addImage({id: resp.data.id, title: "Test image"})
 					}
-        })
+      })
     }
 
     drawImage(context, history) {

@@ -1,8 +1,8 @@
 class V1::ImagesController < ApplicationController
 
   def create
-    image_data = request.raw_post
-    image = Image.new(title: "Test image", account_id: params[:account_id], image_data: image_data)
+    image_data = JSON.parse(request.raw_post)
+    image = Image.new(title: "Test image", account_id: params[:account_id], image_data: image_data["image"], data_url: image_data["preview"])
     if image.save
       render json: {id: image.id}
     else
@@ -22,9 +22,9 @@ class V1::ImagesController < ApplicationController
   end
 
   def update
-    image_data = request.raw_post
+    image_data = JSON.parse(request.raw_post)
     image = Image.find(params[:id])
-    if image.update(image_data: image_data)
+    if image.update(image_data: image_data["image"], data_url: image_data["preview"])
       render json: {id: image.id}
     else
       render json: "Error - Unable to update image", status: 401

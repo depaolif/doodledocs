@@ -1,18 +1,43 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import ConnectedImageItem from './ImageItem'
+import axios from 'axios'
 
 class Profile extends Component {
 
-	render() {
-		const images = this.props.imageList.map((el, i) => {
-			return <ConnectedImageItem key={i} imageId={el.id} imageTitle={el.title} history={this.props.history} />
+	constructor() {
+		super()
+		this.state = {
+			imagePreviewList: [],
+			loadedImages: false
+		}
+		this.images = null
+	}
+
+	componentDidMount() {
+		axios({
+			method: 'GET',
+			url: `http://localhost:3001/v1/accounts/${this.props.account.id}/images`
 		})
+		.then(resp => {
+			this.setState({
+				imagePreviewList: resp.data,
+				loadedImages: true
+			})
+		})
+	}
+
+	render() {
+		if (this.state.loadedImages) {
+			this.images = this.props.imageList.map((el, i) => {
+				return <ConnectedImageItem key={this.state.imagePreviewList[i].id} imageId={this.state.imagePreviewList[i].id} imageTitle={this.state.imagePreviewList[i].title} history={this.props.history} preview={this.state.imagePreviewList[i].data_url} />
+			})
+		}
 		return (
 			<div className="profile">
-					<h1>{this.props.username}</h1>
+					<h1>{this.props.account.username}</h1>
 					<ul>
-						{images}
+						{this.state.loadedImages ? this.images : false}
 					</ul>
 			</div>
 		)
@@ -20,7 +45,7 @@ class Profile extends Component {
 }
 
 const mapStateToProps = (state) => ({
-	username: state.account.username,
+	account: state.account,
 	imageList: state.images.list
 })
 
