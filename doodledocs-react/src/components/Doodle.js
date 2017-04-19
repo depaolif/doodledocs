@@ -41,7 +41,7 @@ class Doodle extends Component {
               this.history.push({[this.props.doodle.tool]: {start: {x: mousePos.x, y: mousePos.y, color: this.props.doodle.color, lineWidth: this.context.lineWidth}, lines: new Array()}})
               break
             case "line":
-              break 
+              break
             case "rectangle":
               this.context.beginPath()
               this.history.push({[this.props.doodle.tool]: {x1: mousePos.x, y1: mousePos.y, x2: 0, y2: 0, color: this.props.doodle.color, lineWidth: this.context.lineWidth}})
@@ -64,7 +64,7 @@ class Doodle extends Component {
                   this.history[this.history.length-1].free.lines.push({x: mousePos.x, y: mousePos.y})
                 break
               case "line":
-                break   
+                break
               case "rectangle":
                   this.context.rect(this.history[this.history.length-1].rectangle.x1, this.history[this.history.length-1].rectangle.y1, mousePos.x - this.history[this.history.length-1].rectangle.x1, mousePos.y - this.history[this.history.length-1].rectangle.y1)
                   this.history[this.history.length-1].rectangle.x2 = mousePos.x - this.history[this.history.length-1].rectangle.x1
@@ -233,13 +233,23 @@ class Doodle extends Component {
   	}
 
 	render() {
+		let saving = null
+		if (this.props.account.token && typeof this.props.images.current !== 'number') {
+			saving =
+				<form onSubmit={this.handleSave}>
+					<label>Title: </label><input type="text" placeholder="title"/>
+					<input type="submit" value="Save" />
+				</form>
+		} else if (this.props.account.token && typeof this.props.images.current === 'number') {
+			saving = <input onClick={this.handleSave} type="submit" value="Save" />
+		}
 		return (
 			<div className="doodle">
 				    <SketchPicker
       			  color={this.props.doodle.color}
       			  onChangeComplete={this.handleChangeComplete} />
             <ConnectedToolBox />
-      			{this.props.account.token ? <input onClick={this.handleSave} type="submit" value="Save" /> : false }
+      			{saving}
       			<canvas tabIndex='1' id="app-canvas" width={this.state.width} height={this.state.height} />
       		</div>
 		)
