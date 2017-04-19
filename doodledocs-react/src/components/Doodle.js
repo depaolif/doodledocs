@@ -80,48 +80,58 @@ class Doodle extends Component {
         this.restoreImage()
     }
 
-  restoreImage() {
-    axios({
-      method: 'GET',
-      url: `http://localhost:3001/v1/accounts/${this.props.account.id}/images/${this.props.images.current}`,
-    })
-    .then(resp => {
-      let imageData = JSON.parse(resp.data.image_data)
-      this.history = imageData
-      this.drawImage(this.context, this.history)
-    })
-  }
-
-  handleSave(event) {
-    event.preventDefault()
-    let url = `http://localhost:3001/v1/accounts/${this.props.account.id}/images`
-    if (this.props.images.current) {
-      url = url + `/${this.props.images.current}`
-    }
-    axios({
-      method: 'PATCH',
-      url: url,
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      data: JSON.stringify(this.history)
-    })
-    .then(resp => {
-        console.log("Saved...")
-        this.props.setCurrentImage(resp.data.id)
+    restoreImage() {
+      axios({
+        method: 'GET',
+        url: `http://localhost:3001/v1/accounts/${this.props.account.id}/images/${this.props.images.current}`,
       })
-  }
+      .then(resp => {
+        let imageData = JSON.parse(resp.data.image_data)
+        this.history = imageData
+        this.drawImage(this.context, this.history)
+      })
+    }
 
-  drawImage(context, history) {
-    context.clearRect(0, 0, 1500, 1500)
-    for (let i = 0; i < history.length; i++) {
-      this.context.beginPath()
-      this.context.moveTo(history[i].start.x, history[i].start.y)
-      this.context.strokeStyle = history[i].start.color
-      for (let j = 0; j < history[i].line.length; j++) {
-        this.context.lineTo(history[i].line[j].x, history[i].line[j].y)
-        this.context.stroke()
+    handleSave(event) {
+      event.preventDefault()
+      let url = `http://localhost:3001/v1/accounts/${this.props.account.id}/images`
+      if (this.props.images.current) {
+        url = url + `/${this.props.images.current}`
+      }
+      axios({
+        method: 'PATCH',
+        url: url,
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        data: JSON.stringify(this.history)
+      })
+      .then(resp => {
+          console.log("Saved...")
+          this.props.setCurrentImage(resp.data.id)
+        })
+    }
+
+    drawImage(context, history) {
+      context.clearRect(0, 0, 1500, 1500)
+      let amount = 0
+      for (let i = 0; i < history.length; i++) {
+        amount = amount + 25
+        setTimeout(() => {
+          this.context.beginPath()
+          this.context.moveTo(history[i].start.x, history[i].start.y)
+          this.context.strokeStyle = history[i].start.color
+          for (let j = 0; j < history[i].line.length; j++) {
+              this.context.lineTo(history[i].line[j].x, history[i].line[j].y)
+              this.context.stroke()
+          }
+        }, amount)
       }
     }
-  }
+
+    drawAnimatedLine(line1, line2) {
+      let animation = setInterval(() => {
+        
+      }, 10)
+    }
 
   	writeMessage(canvas, message) {
     	let context = this.canvas.getContext('2d');
