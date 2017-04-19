@@ -2,7 +2,8 @@ class V1::ImagesController < ApplicationController
 
   def create
     image_data = request.raw_post
-    image = Image.new(title: "Test image", account_id: 1, image_data: image_data)
+    byebug
+    image = Image.new(title: "Test image", account_id: params[:account_id], image_data: image_data)
     if image.save
       render json: {id: image.id}
     else
@@ -25,14 +26,14 @@ class V1::ImagesController < ApplicationController
     image_data = request.raw_post
     image = Image.find(params[:id])
     if image.update(image_data: image_data)
-      render json: "nice"
+      render json: {id: image.id}
     else
       render json: "Error - Unable to update image", status: 401
     end
   end
 
   def destroy
-    image = Image.find(image_params)
+    image = Image.find(params[:id])
     Image.destroy(image)
   end
 
