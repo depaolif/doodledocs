@@ -6,7 +6,7 @@ class Profile extends Component {
 
 	render() {
 		const images = this.props.imageList.map((el, i) => {
-			return <ConnectedImageItem key={i} imageId={el.id} imageTitle={el.title} />
+			return <ConnectedImageItem key={i} imageId={el.id} imageTitle={el.title} history={this.props.history} />
 		})
 		return (
 			<div className="profile">

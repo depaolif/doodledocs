@@ -24,10 +24,12 @@ class ImageItem extends Component {
 	}
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch) => ({
 	setCurrentImage: (imageId) => {
 		dispatch(setCurrentImage(imageId))
 	}
-}
-const ConnectedImageItem = connect(mapDispatchToProps)(ImageItem)
+})
+
+const ConnectedImageItem = connect(null, mapDispatchToProps)(ImageItem)
+
 export default ConnectedImageItem

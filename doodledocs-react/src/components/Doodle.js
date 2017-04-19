@@ -9,7 +9,7 @@ class Doodle extends Component {
 	constructor() {
 		super()
 		this.state = {
-			height: window.innerHeight,
+			height: 1000,
 			width: window.innerWidth
 		}
 		this.canvas = null
@@ -99,7 +99,7 @@ class Doodle extends Component {
       url = url + `/${this.props.images.current}`
     }
     axios({
-      method: 'POST',
+      method: 'PATCH',
       url: url,
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       data: JSON.stringify(this.history)
