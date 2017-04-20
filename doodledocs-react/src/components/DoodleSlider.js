@@ -1,40 +1,49 @@
 import React, {Component} from 'react'
+import { connect } from 'react-redux'
+import { setSliderValue } from '../actions/slider'
 import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css'
 import '../css/Slider.css'
 
-
-class DoodleSlider extends Component{
-  constructor(){
-    super()
+class DoodleSlider extends Component {
+  constructor(props) {
+    super(props)
     this.state={
-      sliding: false,
-      value: 0
+      sliding: false
     }
     this.handleChange=this.handleChange.bind(this)
   }
 
-  handleChange(value){
-    this.setState({
-      value
-    })
-    this.props.handleSlide(value)
+  handleChange(value) {
+    this.props.setSliderValue(value)
+    this.props.handleSlide(value, value === this.props.max)
   }
 
-
-  render(){
+  render() {
     return(
       <Slider
-      className="slider"
-      min={0}
-      max={this.props.max}
-      defaultValue={0}
-      value={this.state.value}
-      onChange={this.handleChange}
-       />
+        className="slider"
+        min={0}
+        max={this.props.max}
+        disabled={false}
+        defaultValue={0}
+        value={this.props.slider.value}
+        onChange={this.handleChange}
+      />
     )
   }
-
 }
 
-export default DoodleSlider
+const mapStateToProps = (state) => ({
+  slider: state.slider
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  setSliderValue: (value) => {
+    dispatch(setSliderValue(value))
+  }
+})
+
+const ConnectedSlider = connect(mapStateToProps, mapDispatchToProps)(DoodleSlider)
+
+export default ConnectedSlider
