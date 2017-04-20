@@ -19,7 +19,8 @@ class Doodle extends Component {
 		this.isPainting = false
 		this.history = []
     this.redoHistory = []
-
+    this.image = new Image()
+    this.image.src = "http://cdn.bulbagarden.net/upload/thumb/0/0d/025Pikachu.png/250px-025Pikachu.png"
 		this.handleChangeComplete = this.handleChangeComplete.bind(this)
 		this.handleSave = this.handleSave.bind(this)
 		this.updateCanvas = this.updateCanvas.bind(this)
@@ -48,6 +49,13 @@ class Doodle extends Component {
               this.history.push({[this.props.doodle.tool]: {x1: mousePos.x, y1: mousePos.y, x2: 0, y2: 0, color: this.props.doodle.color, lineWidth: this.context.lineWidth}})
               break
             case "circle":
+              break
+            case "image":
+              this.image.src = this.props.doodle.imageSrc
+              if (this.image.src && this.image.src != 'http://localhost:3000/') {
+                this.context.drawImage(this.image, mousePos.x - this.image.width / 2, mousePos.y - this.image.height / 2)
+                this.history.push({[this.props.doodle.tool]: {x: mousePos.x - this.image.width / 2, y: mousePos.y - this.image.height / 2, image: this.image}})
+              }
               break
             default:
               break
@@ -175,6 +183,8 @@ class Doodle extends Component {
             break
           case "line":
             break
+          case "image":
+            this.context.drawImage(history[i].image.image, history[i].image.x, history[i].image.y)
           default:
             break
         }
