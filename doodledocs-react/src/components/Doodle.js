@@ -221,7 +221,7 @@ class Doodle extends Component {
 
 
 		renderHistory(value){
-			let tempHistory= this.history.slice(0, value)
+			let tempHistory = this.history.slice(0, value)
 				this.drawImage(this.context, tempHistory)
 		}
 

@@ -1,0 +1,11 @@
+.navbar {
+  font-family: 'Montserrat', sans-serif;
+  padding: 1em 0em 1em 0em;
+}
+
+.nav-links {
+  padding-left:1.5em;
+  font-size: 22px;
+  color: red;
+  text-decoration: none;
+}
