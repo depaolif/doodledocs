@@ -177,7 +177,6 @@ class Doodle extends Component {
         let imageData = resp.data.image_data
         this.history = imageData
 				var self=this
-				debugger
 				this.setState({
 					historyLength:this.history.length
 				})
