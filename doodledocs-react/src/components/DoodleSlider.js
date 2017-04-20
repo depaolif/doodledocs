@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import Slider from 'rc-slider'
 import 'rc-slider/assets/index.css'
+import '../css/Slider.css'
 
 
 class DoodleSlider extends Component{
@@ -17,12 +18,14 @@ class DoodleSlider extends Component{
     this.setState({
       value
     })
+    this.props.handleSlide(value)
   }
 
 
   render(){
     return(
       <Slider
+      className="slider"
       min={0}
       max={this.props.max}
       defaultValue={0}
