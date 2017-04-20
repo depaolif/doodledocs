@@ -1,18 +1,27 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
-import { setTool, setLineWidth, setImageSrc } from '../actions/doodle'
+import { setTool, setLineWidth, setImageSrc, setColor } from '../actions/doodle'
+import { SketchPicker } from 'react-color'
+
 
 class ToolBox extends Component {
 	constructor() {
 		super()
 
 		this.state = {
-			focusedItem: null
+			focusedItem: null,
+			showColor: false
 		}
 
 		this.handleChange = this.handleChange.bind(this)
 		this.handleClick = this.handleClick.bind(this)
 		this.handleImageClick = this.handleImageClick.bind(this)
+		this.handleChangeComplete = this.handleChangeComplete.bind(this)
+		this.showOrHideColor = this.showOrHideColor.bind(this)
+	}
+
+	handleChangeComplete(color) {
+		this.props.setColor(color.hex)
 	}
 
 	handleChange(event) {
@@ -41,9 +50,20 @@ class ToolBox extends Component {
 		this.props.setImageSrc(src)
 	}
 
+	showOrHideColor() {
+		const show = this.state.showColor ? false : true
+		this.setState({
+			showColor: show
+		});
+	}
+
 	render() {
 		return (
 			<div className="toolbox">
+				{this.state.showColor ? <SketchPicker
+					color={this.props.doodle.color}
+					onChangeComplete={this.handleChangeComplete} /> : false}
+				<button name="color" onClick={this.showOrHideColor}>Color</button>
 				<input type="text" name="width" placeholder="Line Width" onChange={this.handleChange} />
 				<button name="free" onClick={this.handleClick}>Free</button>
 				<button name="line" onClick={this.handleClick}>Line</button>
@@ -55,6 +75,10 @@ class ToolBox extends Component {
 	}
 }
 
+const mapStateToProps = (state) => ({
+	doodle: state.doodle
+})
+
 const mapDispatchToProps = (dispatch) => ({
 	setTool: (tool) => {
 		dispatch(setTool(tool))
@@ -64,9 +88,12 @@ const mapDispatchToProps = (dispatch) => ({
 	},
 	setImageSrc: (src) => {
 		dispatch(setImageSrc(src))
-	}
+	},
+	setColor: (color) => {
+		dispatch(setColor(color))
+	},
 })
 
-const ConnectedToolBox = connect(null, mapDispatchToProps)(ToolBox)
+const ConnectedToolBox = connect(mapStateToProps, mapDispatchToProps)(ToolBox)
 
 export default ConnectedToolBox

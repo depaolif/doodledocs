@@ -1,7 +1,5 @@
 import './Doodle.css'
 import React, {Component} from 'react'
-import { SketchPicker } from 'react-color'
-import { setColor } from '../actions/doodle'
 import { setCurrentImage, addImage } from '../actions/image'
 import ConnectedToolBox from './ToolBox'
 import { connect } from 'react-redux'
@@ -23,7 +21,6 @@ class Doodle extends Component {
     this.image.src = "http://cdn.bulbagarden.net/upload/thumb/0/0d/025Pikachu.png/250px-025Pikachu.png"
     this.radius = 1
 
-		this.handleChangeComplete = this.handleChangeComplete.bind(this)
 		this.handleSave = this.handleSave.bind(this)
 		this.updateCanvas = this.updateCanvas.bind(this)
 	}
@@ -267,10 +264,6 @@ class Doodle extends Component {
     	};
   	}
 
-  	handleChangeComplete(color) {
-    	this.props.setColor(color.hex)
-  	}
-
 	render() {
 		let saving = null
 		if (this.props.account.token && typeof this.props.images.current !== 'number') {
@@ -284,9 +277,6 @@ class Doodle extends Component {
 		}
 		return (
 			<div className="doodle">
-				    <SketchPicker
-      			  color={this.props.doodle.color}
-      			  onChangeComplete={this.handleChangeComplete} />
             <ConnectedToolBox />
       			{saving}
       			<canvas tabIndex='1' id="app-canvas" width={this.state.width} height={this.state.height} />
@@ -302,9 +292,6 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-	setColor: (color) => {
-		dispatch(setColor(color))
-	},
   setCurrentImage: (image) => {
     dispatch(setCurrentImage(image))
   },
