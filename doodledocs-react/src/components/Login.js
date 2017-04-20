@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { setToken, setUsername, setId } from '../actions/account'
 import { setImageList } from '../actions/image'
 import axios from 'axios'
-import { Router, browserHistory } from 'react-router'
 
 class Login extends Component {
 	constructor() {

@@ -53,9 +53,9 @@ class Doodle extends Component {
               break
             case "image":
               this.image.src = this.props.doodle.imageSrc
-              if (this.image.src && this.image.src != 'http://localhost:3000/') {
+              if (this.image.src) {
                 this.context.drawImage(this.image, mousePos.x - this.image.width / 2, mousePos.y - this.image.height / 2)
-                this.history.push({[this.props.doodle.tool]: {x: mousePos.x - this.image.width / 2, y: mousePos.y - this.image.height / 2, image: this.image}})
+                this.history.push({[this.props.doodle.tool]: {x: mousePos.x - this.image.width / 2, y: mousePos.y - this.image.height / 2, src: this.image.src}})
               }
               break
             default:
@@ -114,13 +114,13 @@ class Doodle extends Component {
 
     	// undo feature
     	document.addEventListener('keydown', (event) => {
-      		if (event.keyCode == 90 && event.ctrlKey &&
+      		if (event.keyCode === 90 && event.ctrlKey &&
       		    !this.isPainting && this.history.length > 0) {
             this.redoHistory.push(this.history[this.history.length-1])
             console.log(this.redoHistory.length)
       			this.history = this.history.slice(0, -1)
 				    this.drawImage(this.context, this.history)
-      		} else if (event.keyCode == 82 && event.ctrlKey &&
+      		} else if (event.keyCode === 82 && event.ctrlKey &&
               !this.isPainting && this.redoHistory.length > 0) {
             console.log('redoing')
             this.history.push(this.redoHistory[this.redoHistory.length-1])
@@ -167,7 +167,7 @@ class Doodle extends Component {
       event.preventDefault()
       let url = `http://localhost:3001/v1/accounts/${this.props.account.id}/images`
       let title = 'Test Image'
-      if (event.target[0] && event.target[0].name == "title")
+      if (event.target[0] && event.target[0].name === "title")
         title = event.target[0].value
       let method = 'POST'
       if (typeof this.props.images.current === 'number') {
@@ -205,7 +205,9 @@ class Doodle extends Component {
           case "line":
             break
           case "image":
-            this.context.drawImage(history[i].image.image, history[i].image.x, history[i].image.y)
+            let image = new Image()
+            image.src = history[i].image.src
+            this.context.drawImage(image, history[i].image.x, history[i].image.y)
           default:
             break
         }

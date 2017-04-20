@@ -1,10 +1,8 @@
 import React, {Component} from 'react'
-import axios from 'axios'
 import { connect } from 'react-redux'
-import { Router, browserHistory } from 'react-router'
 import { logOut } from '../actions/account'
 
-class Logout extends React.Component {
+class Logout extends Component {
 
   componentDidMount() {
     this.props.logOut()
