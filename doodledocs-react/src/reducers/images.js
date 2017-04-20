@@ -11,6 +11,8 @@ export default function imagesReducer(state = {}, action) {
    	  return Object.assign({}, state, {current: action.payload})
     case "RESET_IMAGE":
       return Object.assign({}, state, {current: null})
+    case "SET_AUTO_SAVE":
+      return Object.assign({}, state, {autoSave: action.payload})
     default:
       return state
   }

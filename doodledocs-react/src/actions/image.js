@@ -17,3 +17,7 @@ export const removeImage = (image) => ({
 export const resetImage = () => ({
   type: 'RESET_IMAGE'
 })
+
+export const setAutoSave = (bool) => ({
+	type: 'SET_AUTO_SAVE', payload: bool
+})

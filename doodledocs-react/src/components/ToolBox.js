@@ -45,17 +45,6 @@ class ToolBox extends Component {
 	    	this.props.setImageSrc(event.target.result)
 	    }
 	    reader.readAsDataURL(event.target.files[0]);
-		// let reader = new FileReader();
-  //       reader.onload = imageIsLoaded;
-  //       reader.readAsDataURL(this.files[0]);
-		// let src = window.prompt("Enter image source:", "http://cdn.bulbagarden.net/upload/thumb/0/0d/025Pikachu.png/250px-025Pikachu.png");
-		// let tempImage = new Image()
-		// tempImage.src = src
-		// if (tempImage.height > 500 || tempImage.width > 500 || tempImage.height == 0 || tempImage.width == 0) {
-		// 	window.alert("No images bigger than 500x500")
-		// 	src = "http://cdn.bulbagarden.net/upload/thumb/0/0d/025Pikachu.png/250px-025Pikachu.png"
-		// }
-		// this.props.setImageSrc(src)
 	}
 
 	showOrHideColor() {

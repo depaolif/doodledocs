@@ -1,6 +1,6 @@
 import '../css/Doodle.css'
 import React, {Component} from 'react'
-import { setCurrentImage, addImage } from '../actions/image'
+import { setCurrentImage, addImage, setAutoSave } from '../actions/image'
 import ConnectedToolBox from './ToolBox'
 import { connect } from 'react-redux'
 import axios from 'axios'
@@ -10,7 +10,7 @@ class Doodle extends Component {
 		super()
 		this.state = {
 			height: 1000,
-			width: 1000
+			width: window.innerWidth
 		}
 		this.canvas = null
 		this.context = null
@@ -21,11 +21,18 @@ class Doodle extends Component {
     this.image.src = "http://cdn.bulbagarden.net/upload/thumb/0/0d/025Pikachu.png/250px-025Pikachu.png"
     this.radius = 1
 
+    this.autoSave = null
+    this.handleAutoSave = this.handleAutoSave.bind(this)
 		this.handleSave = this.handleSave.bind(this)
 		this.updateCanvas = this.updateCanvas.bind(this)
 	}
 
   	componentDidMount() {
+      this.autoSave = setInterval(() => {
+        if (this.props.images.autoSave)
+          this.save('PATCH', `http://localhost:3001/v1/accounts/${this.props.account.id}/images/${this.props.images.current.id}`, this.props.images.current.title)
+      }, 3000)
+
 			this.updateCanvas()
 
     	this.canvas.addEventListener('mousedown', (event) => {
@@ -130,6 +137,11 @@ class Doodle extends Component {
     	})
   	}
 
+    componentWillUnmount() {
+      clearInterval(this.autoSave)
+      this.props.setAutoSave(false)
+    }
+
   	componentDidUpdate(prevProps, prevState) {
 			this.updateCanvas()
   	}
@@ -154,7 +166,7 @@ class Doodle extends Component {
     restoreImage() {
       axios({
         method: 'GET',
-        url: `http://localhost:3001/v1/accounts/${this.props.account.id}/images/${this.props.images.current}`,
+        url: `http://localhost:3001/v1/accounts/${this.props.account.id}/images/${this.props.images.current.id}`,
       })
       .then(resp => {
         let imageData = resp.data.image_data
@@ -170,11 +182,16 @@ class Doodle extends Component {
       if (event.target[0] && event.target[0].name === "title")
         title = event.target[0].value
       let method = 'POST'
-      if (typeof this.props.images.current === 'number') {
-        url = url + `/${this.props.images.current}`
+      if (this.props.images.current) {
+        url = url + `/${this.props.images.current.id}`
         method = 'PATCH'
+        title = this.props.images.current.title
       }
-      let lowQualityImage = this.canvas.toDataURL('image/png', 0.1)
+      this.save(method, url, title)
+    }
+
+    save(method, url, title) {
+      let lowQualityImage = this.canvas.toDataURL('image/png', 0.01)
       axios({
         method: method,
         url: url,
@@ -182,11 +199,15 @@ class Doodle extends Component {
       })
       .then(resp => {
           console.log("Saved...")
-					if (this.props.images.current !== resp.data.id) {
-						this.props.setCurrentImage(resp.data.id)
-						this.props.addImage({id: resp.data.id, title: title, data_url: lowQualityImage})
-					}
+          if (this.props.images.current.id !== resp.data.id) {
+            this.props.setCurrentImage(resp.data.id)
+            this.props.addImage({id: resp.data.id, title: title, data_url: lowQualityImage})
+          }
       })
+    }
+
+    handleAutoSave(event) {
+      this.props.setAutoSave(event.target.checked)
     }
 
     drawImage(context, history) {
@@ -206,7 +227,7 @@ class Doodle extends Component {
             break
           case "image":
             let image = new Image()
-            image.src = history[i].image.src
+            image.src = this.history[i].image.src
             this.context.drawImage(image, history[i].image.x, history[i].image.y)
           default:
             break
@@ -268,14 +289,14 @@ class Doodle extends Component {
 
 	render() {
 		let saving = null
-		if (this.props.account.token && typeof this.props.images.current !== 'number') {
+		if (this.props.account.token && typeof this.props.images.current.id !== 'number') {
 			saving =
 				<form onSubmit={this.handleSave}>
 					<label>Title: </label><input type="text" name="title" placeholder="title"/>
 					<input type="submit" value="Save" />
 				</form>
-		} else if (this.props.account.token && typeof this.props.images.current === 'number') {
-			saving = <input onClick={this.handleSave} type="submit" value="Save" />
+		} else if (this.props.account.token && typeof this.props.images.current.id === 'number') {
+			saving = <div> <input onClick={this.handleSave} type="submit" value="Save" /> <label>AutoSave</label> <input type="checkbox" name="autosave" onClick={this.handleAutoSave} /> </div>
 		}
 		return (
 			<div className="doodle">
@@ -299,7 +320,10 @@ const mapDispatchToProps = (dispatch) => ({
   },
 	addImage: (image) => {
 		dispatch(addImage(image))
-	}
+	},
+  setAutoSave: (bool) => {
+    dispatch(setAutoSave(bool))
+  }
 })
 
 const ConnectedDoodle = connect(mapStateToProps, mapDispatchToProps)(Doodle);
