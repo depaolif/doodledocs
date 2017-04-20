@@ -282,7 +282,7 @@ class Doodle extends Component {
             break
           case "circle":
             this.drawCircle(context, history[i].circle)
-            break 
+            break
           case "line":
             this.drawLine(context, history[i].line)
             break
@@ -337,14 +337,6 @@ class Doodle extends Component {
       }, 10)
     }
 
-  	writeMessage(canvas, message) {
-    	let context = this.canvas.getContext('2d')
-    	context.clearRect(0, 0, this.canvas.width, this.canvas.height)
-    	context.font = '18pt Calibri'
-    	context.fillStyle = 'black'
-    	context.fillText(message, 10, 25)
-  	}
-
   	getMousePos(canvas, evt) {
     	let rect = this.canvas.getBoundingClientRect()
     	return {
@@ -362,7 +354,13 @@ class Doodle extends Component {
 					<input type="submit" value="Save" />
 				</form>
 		} else if (this.props.account.token && this.props.images.current && typeof this.props.images.current.id === 'number') {
-			saving = <div> <input onClick={this.handleSave} type="submit" value="Save" /> <label>AutoSave</label> <input type="checkbox" name="autosave" onClick={this.handleAutoSave} /> </div>
+			saving =
+			<div>
+				<h1>{this.props.images.current.title}</h1>
+				<input onClick={this.handleSave} type="submit" value="Save" />
+				<label>AutoSave</label>
+				<input type="checkbox" name="autosave" onClick={this.handleAutoSave} />
+			</div>
 		}
 		return (
 			<div className="doodle">
