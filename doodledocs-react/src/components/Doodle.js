@@ -289,7 +289,7 @@ class Doodle extends Component {
 
 	render() {
 		let saving = null
-		if (this.props.account.token && typeof this.props.images.current.id !== 'number') {
+		if (this.props.account.token && typeof !this.props.images.current) {
 			saving =
 				<form onSubmit={this.handleSave}>
 					<label>Title: </label><input type="text" name="title" placeholder="title"/>
