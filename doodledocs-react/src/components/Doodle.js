@@ -4,13 +4,14 @@ import { setCurrentImage, addImage, setAutoSave } from '../actions/image'
 import ConnectedToolBox from './ToolBox'
 import { connect } from 'react-redux'
 import axios from 'axios'
+import DoodleSlider from './DoodleSlider'
 
 class Doodle extends Component {
 	constructor() {
 		super()
 		this.state = {
 			height: 1000,
-			width: window.innerWidth
+			width: window.innerWidth,
 		}
 		this.canvas = null
 		this.context = null
@@ -20,6 +21,7 @@ class Doodle extends Component {
     this.image = new Image()
     this.image.src = "http://cdn.bulbagarden.net/upload/thumb/0/0d/025Pikachu.png/250px-025Pikachu.png"
     this.radius = 1
+
 
     this.autoSave = null
     this.handleAutoSave = this.handleAutoSave.bind(this)
@@ -303,6 +305,7 @@ class Doodle extends Component {
             <ConnectedToolBox />
       			{saving}
       			<canvas tabIndex='1' id="app-canvas" width={this.state.width} height={this.state.height} />
+						<DoodleSlider max={this.history.length} />
       		</div>
 		)
 	}
