@@ -182,7 +182,7 @@ class Doodle extends Component {
       if (event.target[0] && event.target[0].name === "title")
         title = event.target[0].value
       let method = 'POST'
-      if (this.props.images.current) {
+      if (this.props.images.current !== 'new') {
         url = url + `/${this.props.images.current.id}`
         method = 'PATCH'
         title = this.props.images.current.title
@@ -200,7 +200,7 @@ class Doodle extends Component {
       .then(resp => {
           console.log("Saved...")
           if (this.props.images.current.id !== resp.data.id) {
-            this.props.setCurrentImage(resp.data.id)
+            this.props.setCurrentImage({id: resp.data.id, title: title})
             this.props.addImage({id: resp.data.id, title: title, data_url: lowQualityImage})
           }
       })
@@ -289,7 +289,7 @@ class Doodle extends Component {
 
 	render() {
 		let saving = null
-		if (this.props.account.token && typeof !this.props.images.current) {
+		if (this.props.account.token && this.props.images.current === 'new') {
 			saving =
 				<form onSubmit={this.handleSave}>
 					<label>Title: </label><input type="text" name="title" placeholder="title"/>
