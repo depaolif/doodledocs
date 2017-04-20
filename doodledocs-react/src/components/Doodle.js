@@ -9,14 +9,16 @@ import DoodleSlider from './DoodleSlider'
 class Doodle extends Component {
 	constructor() {
 		super()
+		this.history = []
 		this.state = {
 			height: 1000,
 			width: window.innerWidth,
+			historyLength:this.history.length
 		}
 		this.canvas = null
 		this.context = null
 		this.isPainting = false
-		this.history = []
+
     this.redoHistory = []
     this.image = new Image()
     this.image.src = "http://cdn.bulbagarden.net/upload/thumb/0/0d/025Pikachu.png/250px-025Pikachu.png"
@@ -173,6 +175,9 @@ class Doodle extends Component {
       .then(resp => {
         let imageData = resp.data.image_data
         this.history = imageData
+				this.setState({
+					historyLength:this.history.length
+				})
         this.drawImage(this.context, this.history)
       })
     }
@@ -297,16 +302,16 @@ class Doodle extends Component {
 					<label>Title: </label><input type="text" name="title" placeholder="title"/>
 					<input type="submit" value="Save" />
 				</form>
-		} else if (this.props.account.token && typeof this.props.images.current.id === 'number') {
+		} else if (this.props.account.token && this.props.images.current && typeof this.props.images.current.id === 'number') {
 			saving = <div> <input onClick={this.handleSave} type="submit" value="Save" /> <label>AutoSave</label> <input type="checkbox" name="autosave" onClick={this.handleAutoSave} /> </div>
 		}
 		return (
 			<div className="doodle">
             <ConnectedToolBox />
       			{saving}
+						<DoodleSlider max={this.state.historyLength} />
       			<canvas tabIndex='1' id="app-canvas" width={this.state.width} height={this.state.height} />
-						<DoodleSlider max={this.history.length} />
-      		</div>
+						</div>
 		)
 	}
 }
