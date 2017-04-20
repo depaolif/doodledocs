@@ -284,7 +284,6 @@ class Doodle extends Component {
             this.drawCircle(context, history[i].circle)
             break
           case "line":
-            debugger
             this.drawLine(context, history[i].line)
             break
           case "image":
@@ -355,7 +354,13 @@ class Doodle extends Component {
 					<input type="submit" value="Save" />
 				</form>
 		} else if (this.props.account.token && this.props.images.current && typeof this.props.images.current.id === 'number') {
-			saving = <div> <input onClick={this.handleSave} type="submit" value="Save" /> <label>AutoSave</label> <input type="checkbox" name="autosave" onClick={this.handleAutoSave} /> </div>
+			saving =
+			<div>
+				<h1>{this.props.images.current.title}</h1>
+				<input onClick={this.handleSave} type="submit" value="Save" />
+				<label>AutoSave</label>
+				<input type="checkbox" name="autosave" onClick={this.handleAutoSave} />
+			</div>
 		}
 		return (
 			<div className="doodle">
