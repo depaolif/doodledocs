@@ -1,4 +1,4 @@
-import './Doodle.css'
+import '../css/Doodle.css'
 import React, {Component} from 'react'
 import { setCurrentImage, addImage } from '../actions/image'
 import ConnectedToolBox from './ToolBox'

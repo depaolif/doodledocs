@@ -1,7 +1,0 @@
-#app-canvas { 
-    cursor: pointer;
-}
-
-#app-canvas:active { 
-    cursor: crosshair;
-}
