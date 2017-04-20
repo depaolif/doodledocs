@@ -10,7 +10,7 @@ class Doodle extends Component {
 		super()
 		this.state = {
 			height: 1000,
-			width: window.innerWidth
+			width: 1000
 		}
 		this.canvas = null
 		this.context = null
