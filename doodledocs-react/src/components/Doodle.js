@@ -143,6 +143,15 @@ class Doodle extends Component {
                 })
                 this.props.setSliderValue(this.history.length)
                 break
+              case "free":
+                if (this.history[this.history.length-1].free.lines.length == 0) {
+                  this.history = this.history.slice(0, this.history.length-1)
+                  this.setState({
+                    historyLength: this.history.length
+                  })
+                  this.props.setSliderValue(this.history.length)
+                }
+                break
               default:
                 break
             }
