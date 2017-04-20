@@ -284,7 +284,6 @@ class Doodle extends Component {
             this.drawCircle(context, history[i].circle)
             break 
           case "line":
-            debugger
             this.drawLine(context, history[i].line)
             break
           case "image":
