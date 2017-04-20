@@ -150,7 +150,7 @@ class Doodle extends Component {
 
     componentWillMount() {
       // if currentImage is something, restore it
-      if (this.props.images.current !== 'new')
+      if (this.props.images.current && this.props.images.current !== 'new')
         this.restoreImage()
     }
 

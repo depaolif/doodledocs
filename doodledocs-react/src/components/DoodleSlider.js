@@ -6,29 +6,29 @@ import 'rc-slider/assets/index.css'
 class DoodleSlider extends Component{
   constructor(){
     super()
-    this.state={
+    this.state = {
       sliding: false,
       value: 0
     }
-    this.handleChange=this.handleChange.bind(this)
+    this.handleChange = this.handleChange.bind(this)
   }
 
-  handleChange(value){
+  handleChange(value) {
+    debugger
     this.setState({
       value
     })
   }
 
 
-  render(){
+  render() {
     return(
       <Slider
-      min={0}
-      max={this.props.max}
-      defaultValue={0}
-      value={this.state.value}
-      onChange={this.handleChange}
-       />
+        min={0}
+        max={this.props.max}
+        defaultValue={0}
+        value={this.state.value}
+        onChange={this.handleChange} />
     )
   }
 
