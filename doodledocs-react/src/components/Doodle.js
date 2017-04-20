@@ -273,8 +273,9 @@ class Doodle extends Component {
             break
           case "circle":
             this.drawCircle(context, history[i].circle)
-            break
+            break 
           case "line":
+            debugger
             this.drawLine(context, history[i].line)
             break
           case "image":
@@ -299,27 +300,27 @@ class Doodle extends Component {
     }
 
     drawRect(context, rect) {
-      this.context.beginPath()
-      this.context.fillStyle = rect.color
-      this.context.rect(rect.x1, rect.y1, rect.x2, rect.y2)
-      this.context.fill()
+      context.beginPath()
+      context.fillStyle = rect.color
+      context.rect(rect.x1, rect.y1, rect.x2, rect.y2)
+      context.fill()
     }
 
     drawCircle(context, circle) {
-      this.context.beginPath()
-      this.context.arc(circle.midX, circle.midY, circle.r, 0, 2 * Math.PI)
-      this.context.fillStyle = circle.color
-      this.context.lineWidth = circle.lineWidth
-      this.context.fill()
+      context.beginPath()
+      context.arc(circle.midX, circle.midY, circle.r, 0, 2 * Math.PI)
+      context.fillStyle = circle.color
+      context.lineWidth = circle.lineWidth
+      context.fill()
     }
 
     drawLine(context, line) {
-      this.context.beginPath()
-      this.context.moveTo(line.x1, line.y1)
-      this.context.fillStyle = line.color
-      this.context.lineWidth = line.lineWidth
-      this.context.lineTo(line.x2, line.y2)
-      this.context.stroke()
+      context.beginPath()
+      context.moveTo(line.x1, line.y1)
+      context.strokeStyle = line.color
+      context.lineWidth = line.lineWidth
+      context.lineTo(line.x2, line.y2)
+      context.stroke()
     }
 
     drawAnimatedLine(line1, line2) {
