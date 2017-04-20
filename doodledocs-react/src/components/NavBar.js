@@ -1,4 +1,4 @@
-import '../css/NavBar.css'
+import '../css/NavBar.scss'
 import React, {Component} from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'

@@ -6,6 +6,10 @@
 .nav-links {
   padding-left:1.5em;
   font-size: 22px;
-  color: red;
+  color: #F36204;
   text-decoration: none;
+
+  &:hover {
+    color: red
+  }
 }
