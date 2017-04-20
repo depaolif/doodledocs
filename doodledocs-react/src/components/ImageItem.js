@@ -32,7 +32,7 @@ class ImageItem extends Component {
 		return (
 			<li>
 				<img src={this.props.image.data_url} width='50' height='50'></img>
-				<a href='#' onClick={this.handleClick}>Image {this.props.image.id}</a>
+				<a href='#' onClick={this.handleClick}>{this.props.image.title} -  id:{this.props.image.id}</a>
 				<button onClick={this.handleDelete}>Delete</button>
 			</li>
 		)

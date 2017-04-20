@@ -169,6 +169,9 @@ class Doodle extends Component {
     handleSave(event) {
       event.preventDefault()
       let url = `http://localhost:3001/v1/accounts/${this.props.account.id}/images`
+      let title = 'Test Image'
+      if (event.target[0].name == "title")
+        title = event.target[0].value
       let method = 'POST'
       if (typeof this.props.images.current === 'number') {
         url = url + `/${this.props.images.current}`
@@ -178,13 +181,13 @@ class Doodle extends Component {
       axios({
         method: method,
         url: url,
-        data: JSON.stringify({image: this.history, preview: lowQualityImage})
+        data: JSON.stringify({image: this.history, preview: lowQualityImage, title: title})
       })
       .then(resp => {
           console.log("Saved...")
 					if (this.props.images.current !== resp.data.id) {
 						this.props.setCurrentImage(resp.data.id)
-						this.props.addImage({id: resp.data.id, title: "Test image"})
+						this.props.addImage({id: resp.data.id, title: title, data_url: lowQualityImage})
 					}
       })
     }
@@ -273,7 +276,7 @@ class Doodle extends Component {
 		if (this.props.account.token && typeof this.props.images.current !== 'number') {
 			saving =
 				<form onSubmit={this.handleSave}>
-					<label>Title: </label><input type="text" placeholder="title"/>
+					<label>Title: </label><input type="text" name="title" placeholder="title"/>
 					<input type="submit" value="Save" />
 				</form>
 		} else if (this.props.account.token && typeof this.props.images.current === 'number') {
