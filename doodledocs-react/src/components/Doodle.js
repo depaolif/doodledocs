@@ -1,4 +1,4 @@
-import './Doodle.css'
+import '../css/Doodle.css'
 import React, {Component} from 'react'
 import { setCurrentImage, addImage } from '../actions/image'
 import ConnectedToolBox from './ToolBox'
@@ -10,7 +10,7 @@ class Doodle extends Component {
 		super()
 		this.state = {
 			height: 1000,
-			width: window.innerWidth
+			width: 1000
 		}
 		this.canvas = null
 		this.context = null
