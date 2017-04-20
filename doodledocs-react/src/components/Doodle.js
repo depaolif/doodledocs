@@ -1,6 +1,7 @@
 import '../css/Doodle.css'
 import React, {Component} from 'react'
 import { setCurrentImage, addImage, setAutoSave } from '../actions/image'
+import { setSliderValue } from '../actions/slider'
 import ConnectedToolBox from './ToolBox'
 import { connect } from 'react-redux'
 import axios from 'axios'
@@ -13,7 +14,7 @@ class Doodle extends Component {
 		this.state = {
 			height: 1000,
 			width: window.innerWidth,
-			historyLength:this.history.length
+			historyLength: this.history.length
 		}
 		this.canvas = null
 		this.context = null
@@ -23,7 +24,7 @@ class Doodle extends Component {
     this.image = new Image()
     this.image.src = "http://cdn.bulbagarden.net/upload/thumb/0/0d/025Pikachu.png/250px-025Pikachu.png"
     this.radius = 1
-
+    this.drawing = true
 
     this.autoSave = null
     this.handleAutoSave = this.handleAutoSave.bind(this)
@@ -34,14 +35,14 @@ class Doodle extends Component {
 
   	componentDidMount() {
       this.autoSave = setInterval(() => {
-        if (this.props.images.autoSave)
+        if (this.props.images.autoSave && this.props.slider.value === this.history.length)
           this.save('PATCH', `http://localhost:3001/v1/accounts/${this.props.account.id}/images/${this.props.images.current.id}`, this.props.images.current.title)
       }, 3000)
 
 			this.updateCanvas()
 
     	this.canvas.addEventListener('mousedown', (event) => {
-        if (event.button === 0) {
+        if (event.button === 0 && this.props.slider.value === this.history.length) {
           this.redoHistory = []
       		this.context.strokeStyle = this.props.doodle.color
           this.context.fillStyle = this.props.doodle.color
@@ -73,12 +74,16 @@ class Doodle extends Component {
             default:
               break
           }
+          this.setState({
+            historyLength: this.history.length
+          })
+          this.props.setSliderValue(this.history.length)
           this.isPainting = true
         }
     	}, false)
 
     	this.canvas.addEventListener('mousemove', (event) => {
-      		if (this.isPainting) {
+      		if (this.isPainting && this.props.slider.value === this.history.length) {
  	    		  let mousePos = this.getMousePos(this.canvas, event)
             switch (this.props.doodle.tool) {
               case "free":
@@ -115,6 +120,10 @@ class Doodle extends Component {
               default:
                 break
             }
+            this.setState({
+              historyLength: this.history.length
+            })
+            this.props.setSliderValue(this.history.length)
       		}
     	})
 
@@ -139,6 +148,9 @@ class Doodle extends Component {
             this.redoHistory = this.redoHistory.slice(0, -1)
             this.drawImage(this.context, this.history)
           }
+          this.setState({
+            historyLength: this.history.length
+          })
     	})
   	}
 
@@ -164,6 +176,9 @@ class Doodle extends Component {
 				this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
 				this.history = []
 				this.redoHistory = []
+        this.setState({
+          historyLength: 0
+        })
 				this.props.setCurrentImage('new')
 			}
 		}
@@ -176,8 +191,6 @@ class Doodle extends Component {
       .then(resp => {
         let imageData = resp.data.image_data
         this.history = imageData
-				var self=this
-				debugger
 				this.setState({
 					historyLength:this.history.length
 				})
@@ -221,9 +234,9 @@ class Doodle extends Component {
     }
 
 
-		renderHistory(value){
+		renderHistory(value, sliding) {
 			let tempHistory= this.history.slice(0, value)
-				this.drawImage(this.context, tempHistory)
+			this.drawImage(this.context, tempHistory)
 		}
 
     drawImage(context, history) {
@@ -328,7 +341,8 @@ class Doodle extends Component {
 const mapStateToProps = (state) => ({
 	doodle: state.doodle,
 	account: state.account,
-  images: state.images
+  images: state.images,
+  slider: state.slider
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -340,6 +354,9 @@ const mapDispatchToProps = (dispatch) => ({
 	},
   setAutoSave: (bool) => {
     dispatch(setAutoSave(bool))
+  },
+  setSliderValue: (value) => {
+    dispatch(setSliderValue(value))
   }
 })
 
