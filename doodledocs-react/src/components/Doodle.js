@@ -21,6 +21,8 @@ class Doodle extends Component {
     this.redoHistory = []
     this.image = new Image()
     this.image.src = "http://cdn.bulbagarden.net/upload/thumb/0/0d/025Pikachu.png/250px-025Pikachu.png"
+    this.radius = 1
+
 		this.handleChangeComplete = this.handleChangeComplete.bind(this)
 		this.handleSave = this.handleSave.bind(this)
 		this.updateCanvas = this.updateCanvas.bind(this)
@@ -49,6 +51,8 @@ class Doodle extends Component {
               this.history.push({[this.props.doodle.tool]: {x1: mousePos.x, y1: mousePos.y, x2: 0, y2: 0, color: this.props.doodle.color, lineWidth: this.context.lineWidth}})
               break
             case "circle":
+              this.context.beginPath();
+              this.history.push({[this.props.doodle.tool]: {startX: mousePos.x, startY: mousePos.y, color: this.props.doodle.color, lineWidth: this.context.lineWidth, midX: null, midY: null, r: null}})
               break
             case "image":
               this.image.src = this.props.doodle.imageSrc
@@ -71,17 +75,33 @@ class Doodle extends Component {
               case "free":
                   this.context.lineTo(mousePos.x, mousePos.y)
                   this.context.stroke() //path gets a stroke
+
                   this.history[this.history.length-1].free.lines.push({x: mousePos.x, y: mousePos.y})
                 break
               case "line":
                 break
               case "rectangle":
                   this.context.rect(this.history[this.history.length-1].rectangle.x1, this.history[this.history.length-1].rectangle.y1, mousePos.x - this.history[this.history.length-1].rectangle.x1, mousePos.y - this.history[this.history.length-1].rectangle.y1)
+                  this.context.fill()
+
                   this.history[this.history.length-1].rectangle.x2 = mousePos.x - this.history[this.history.length-1].rectangle.x1
                   this.history[this.history.length-1].rectangle.y2 = mousePos.y - this.history[this.history.length-1].rectangle.y1
-                  this.context.fill()
                 break
               case "circle":
+                  let circleInfo = this.history[this.history.length-1].circle
+                  let dx = Math.abs(circleInfo.startX - mousePos.x);
+                  let dy = Math.abs(circleInfo.startY - mousePos.y);
+                  let midX = (circleInfo.startX + mousePos.x) / 2;
+                  let midY = (circleInfo.startY + mousePos.y) / 2;
+                  let r = Math.sqrt(dx * dx + dy * dy) / 2;
+                  this.context.arc(midX, midY, r, 0, 2 * Math.PI);
+                  this.context.fillStyle = circleInfo.color
+                  this.context.lineWidth = circleInfo.lineWidth
+                  this.context.fill();
+
+                  this.history[this.history.length-1].circle.midX = midX
+                  this.history[this.history.length-1].circle.midY = midY
+                  this.history[this.history.length-1].circle.r = r
                 break
               default:
                 break
@@ -180,6 +200,7 @@ class Doodle extends Component {
             this.drawRect(context, history[i].rectangle)
             break
           case "circle":
+            this.drawCircle(context, history[i].circle)
             break
           case "line":
             break
@@ -209,8 +230,12 @@ class Doodle extends Component {
       this.context.fill()
     }
 
-    drawCircle(context, rect) {
-
+    drawCircle(context, circle) {
+      this.context.beginPath()
+      this.context.arc(circle.midX, circle.midY, circle.r, 0, 2 * Math.PI)
+      this.context.fillStyle = circle.color
+      this.context.lineWidth = circle.lineWidth
+      this.context.fill();
     }
 
     drawLine(context, line) {
@@ -232,7 +257,7 @@ class Doodle extends Component {
   	}
 
   	getMousePos(canvas, evt) {
-    	var rect = this.canvas.getBoundingClientRect()
+    	let rect = this.canvas.getBoundingClientRect()
     	return {
       		x: evt.clientX - rect.left,
       		y: evt.clientY - rect.top
