@@ -167,7 +167,7 @@ class Doodle extends Component {
       event.preventDefault()
       let url = `http://localhost:3001/v1/accounts/${this.props.account.id}/images`
       let title = 'Test Image'
-      if (event.target[0].name == "title")
+      if (event.target[0] && event.target[0].name == "title")
         title = event.target[0].value
       let method = 'POST'
       if (typeof this.props.images.current === 'number') {
