@@ -329,7 +329,7 @@ class Doodle extends Component {
 		}
 		return (
 			<div className="doodle">
-            <ConnectedToolBox />
+            <ConnectedToolBox className="toolbox" />
       			{saving}
 						<DoodleSlider max={this.state.historyLength} handleSlide={this.renderHistory} disabled={this.state.historyLength > 0? false : true}/>
       			<canvas tabIndex='1' id="app-canvas" width={this.state.width} height={this.state.height} />

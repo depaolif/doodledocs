@@ -1,3 +1,7 @@
 #app-canvas {
     cursor: url('../../public/brush-mini.png') 0 30, auto;
 }
+
+.toolbox {
+  background-color: grey;
+}
