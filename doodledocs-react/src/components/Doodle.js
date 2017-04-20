@@ -29,6 +29,7 @@ class Doodle extends Component {
     this.handleAutoSave = this.handleAutoSave.bind(this)
 		this.handleSave = this.handleSave.bind(this)
 		this.updateCanvas = this.updateCanvas.bind(this)
+		this.renderHistory=this.renderHistory.bind(this)
 	}
 
   	componentDidMount() {
@@ -175,6 +176,8 @@ class Doodle extends Component {
       .then(resp => {
         let imageData = resp.data.image_data
         this.history = imageData
+				var self=this
+				debugger
 				this.setState({
 					historyLength:this.history.length
 				})
@@ -216,6 +219,12 @@ class Doodle extends Component {
     handleAutoSave(event) {
       this.props.setAutoSave(event.target.checked)
     }
+
+
+		renderHistory(value){
+			let tempHistory= this.history.slice(0, value)
+				this.drawImage(this.context, tempHistory)
+		}
 
     drawImage(context, history) {
       context.clearRect(0, 0, 1500, 1500)
@@ -309,7 +318,7 @@ class Doodle extends Component {
 			<div className="doodle">
             <ConnectedToolBox />
       			{saving}
-						<DoodleSlider max={this.state.historyLength} />
+						<DoodleSlider max={this.state.historyLength} handleSlide={this.renderHistory} />
       			<canvas tabIndex='1' id="app-canvas" width={this.state.width} height={this.state.height} />
 						</div>
 		)

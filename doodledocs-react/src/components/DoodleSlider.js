@@ -17,6 +17,7 @@ class DoodleSlider extends Component{
     this.setState({
       value
     })
+    this.props.handleSlide(value)
   }
 
 
