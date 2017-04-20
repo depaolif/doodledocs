@@ -61,7 +61,16 @@ class ToolBox extends Component {
 					color={this.props.doodle.color}
 					onChangeComplete={this.handleChangeComplete} /> : false}
 				<button name="color" onClick={this.showOrHideColor}>Color</button>
-				<input type="text" name="width" placeholder="Line Width" onChange={this.handleChange} />
+				<label>Line Width: </label>
+				<select value={this.props.doodle.lineWidth} onChange={this.handleChange}>
+					<option value='1'>1</option>
+					<option value='5'>5</option>
+					<option value='10'>10</option>
+					<option value='20'>20</option>
+					<option value='30'>30</option>
+					<option value='50'>50</option>
+					<option value='100'>100</option>
+				</select>
 				<button name="free" onClick={this.handleClick}>Free</button>
 				<button name="line" onClick={this.handleClick}>Line</button>
 				<button name="circle" onClick={this.handleClick}>Circle</button>
