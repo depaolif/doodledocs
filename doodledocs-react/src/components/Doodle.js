@@ -55,13 +55,16 @@ class Doodle extends Component {
               this.history.push({[this.props.doodle.tool]: {start: {x: mousePos.x, y: mousePos.y, color: this.props.doodle.color, lineWidth: this.context.lineWidth}, lines: new Array()}})
               break
             case "line":
+              this.context.beginPath()
+              this.context.moveTo(mousePos.x, mousePos.y)
+              this.history.push({[this.props.doodle.tool]: {x1: mousePos.x, y1: mousePos.y, x2: 0, y2: 0, color: this.props.doodle.color, lineWidth: this.context.lineWidth}})
               break
             case "rectangle":
               this.context.beginPath()
               this.history.push({[this.props.doodle.tool]: {x1: mousePos.x, y1: mousePos.y, x2: 0, y2: 0, color: this.props.doodle.color, lineWidth: this.context.lineWidth}})
               break
             case "circle":
-              this.context.beginPath();
+              this.context.beginPath()
               this.history.push({[this.props.doodle.tool]: {startX: mousePos.x, startY: mousePos.y, color: this.props.doodle.color, lineWidth: this.context.lineWidth, midX: null, midY: null, r: null}})
               break
             case "image":
@@ -92,8 +95,6 @@ class Doodle extends Component {
 
                   this.history[this.history.length-1].free.lines.push({x: mousePos.x, y: mousePos.y})
                 break
-              case "line":
-                break
               case "rectangle":
                   this.context.rect(this.history[this.history.length-1].rectangle.x1, this.history[this.history.length-1].rectangle.y1, mousePos.x - this.history[this.history.length-1].rectangle.x1, mousePos.y - this.history[this.history.length-1].rectangle.y1)
                   this.context.fill()
@@ -103,15 +104,15 @@ class Doodle extends Component {
                 break
               case "circle":
                   let circleInfo = this.history[this.history.length-1].circle
-                  let dx = Math.abs(circleInfo.startX - mousePos.x);
-                  let dy = Math.abs(circleInfo.startY - mousePos.y);
-                  let midX = (circleInfo.startX + mousePos.x) / 2;
-                  let midY = (circleInfo.startY + mousePos.y) / 2;
-                  let r = Math.sqrt(dx * dx + dy * dy) / 2;
-                  this.context.arc(midX, midY, r, 0, 2 * Math.PI);
+                  let dx = Math.abs(circleInfo.startX - mousePos.x)
+                  let dy = Math.abs(circleInfo.startY - mousePos.y)
+                  let midX = (circleInfo.startX + mousePos.x) / 2
+                  let midY = (circleInfo.startY + mousePos.y) / 2
+                  let r = Math.sqrt(dx * dx + dy * dy) / 2
+                  this.context.arc(midX, midY, r, 0, 2 * Math.PI)
                   this.context.fillStyle = circleInfo.color
                   this.context.lineWidth = circleInfo.lineWidth
-                  this.context.fill();
+                  this.context.fill()
 
                   this.history[this.history.length-1].circle.midX = midX
                   this.history[this.history.length-1].circle.midY = midY
@@ -128,6 +129,24 @@ class Doodle extends Component {
     	})
 
     	this.canvas.addEventListener('mouseup', (event) => {
+          let mousePos = this.getMousePos(this.canvas, event)
+          if (this.props.slider.value === this.history.length) {
+            switch (this.props.doodle.tool) {
+              case "line":
+                this.context.lineTo(mousePos.x, mousePos.y)
+                this.context.stroke()
+
+                this.history[this.history.length-1].line.x2 = mousePos.x
+                this.history[this.history.length-1].line.y2 = mousePos.y
+                this.setState({
+                  historyLength: this.history.length
+                })
+                this.props.setSliderValue(this.history.length)
+                break
+              default:
+                break
+            }
+          }
       		this.isPainting = false
       		console.log(this.history)
       		// console.log(this.history.reduce((sum, val) => { return val.free.lines.length + sum},0))
@@ -135,6 +154,7 @@ class Doodle extends Component {
 
     	// undo feature
     	document.addEventListener('keydown', (event) => {
+        if (this.props.slider.value === this.history.length) {
       		if (event.keyCode === 90 && event.ctrlKey &&
       		    !this.isPainting && this.history.length > 0) {
             this.redoHistory.push(this.history[this.history.length-1])
@@ -151,6 +171,8 @@ class Doodle extends Component {
           this.setState({
             historyLength: this.history.length
           })
+          this.props.setSliderValue(this.history.length)
+        }
     	})
   	}
 
@@ -170,7 +192,7 @@ class Doodle extends Component {
     }
 
 		updateCanvas() {
-			this.canvas = document.getElementById('app-canvas');
+			this.canvas = document.getElementById('app-canvas')
     	this.context = this.canvas.getContext('2d')
 			if (!this.props.images.current) {
 				this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
@@ -253,6 +275,7 @@ class Doodle extends Component {
             this.drawCircle(context, history[i].circle)
             break
           case "line":
+            this.drawLine(context, history[i].line)
             break
           case "image":
             let image = new Image()
@@ -287,11 +310,16 @@ class Doodle extends Component {
       this.context.arc(circle.midX, circle.midY, circle.r, 0, 2 * Math.PI)
       this.context.fillStyle = circle.color
       this.context.lineWidth = circle.lineWidth
-      this.context.fill();
+      this.context.fill()
     }
 
     drawLine(context, line) {
-
+      this.context.beginPath()
+      this.context.moveTo(line.x1, line.y1)
+      this.context.fillStyle = line.color
+      this.context.lineWidth = line.lineWidth
+      this.context.lineTo(line.x2, line.y2)
+      this.context.stroke()
     }
 
     drawAnimatedLine(line1, line2) {
@@ -301,11 +329,11 @@ class Doodle extends Component {
     }
 
   	writeMessage(canvas, message) {
-    	let context = this.canvas.getContext('2d');
-    	context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    	context.font = '18pt Calibri';
-    	context.fillStyle = 'black';
-    	context.fillText(message, 10, 25);
+    	let context = this.canvas.getContext('2d')
+    	context.clearRect(0, 0, this.canvas.width, this.canvas.height)
+    	context.font = '18pt Calibri'
+    	context.fillStyle = 'black'
+    	context.fillText(message, 10, 25)
   	}
 
   	getMousePos(canvas, evt) {
@@ -313,7 +341,7 @@ class Doodle extends Component {
     	return {
       		x: evt.clientX - rect.left,
       		y: evt.clientY - rect.top
-    	};
+    	}
   	}
 
 	render() {
@@ -360,6 +388,6 @@ const mapDispatchToProps = (dispatch) => ({
   }
 })
 
-const ConnectedDoodle = connect(mapStateToProps, mapDispatchToProps)(Doodle);
+const ConnectedDoodle = connect(mapStateToProps, mapDispatchToProps)(Doodle)
 
 export default ConnectedDoodle
