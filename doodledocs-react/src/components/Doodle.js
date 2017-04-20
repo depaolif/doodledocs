@@ -273,7 +273,7 @@ class Doodle extends Component {
             break
           case "circle":
             this.drawCircle(context, history[i].circle)
-            break 
+            break
           case "line":
             debugger
             this.drawLine(context, history[i].line)
@@ -328,14 +328,6 @@ class Doodle extends Component {
 
       }, 10)
     }
-
-  	writeMessage(canvas, message) {
-    	let context = this.canvas.getContext('2d')
-    	context.clearRect(0, 0, this.canvas.width, this.canvas.height)
-    	context.font = '18pt Calibri'
-    	context.fillStyle = 'black'
-    	context.fillText(message, 10, 25)
-  	}
 
   	getMousePos(canvas, evt) {
     	let rect = this.canvas.getBoundingClientRect()
