@@ -2,6 +2,7 @@ import '../css/Doodle.css'
 import React, {Component} from 'react'
 import { setCurrentImage, addImage, setAutoSave, resetImage } from '../actions/image'
 import { setSliderValue } from '../actions/slider'
+import { setTool } from '../actions/doodle'
 import ConnectedToolBox from './ToolBox'
 import { connect } from 'react-redux'
 import axios from 'axios'
@@ -179,8 +180,10 @@ class Doodle extends Component {
 
 	componentWillMount() {
 		// if currentImage is something, restore it
-		if (this.props.images.current && this.props.images.current !== 'new')
-			this.restoreImage()
+    if (this.props.match.params.imageId)
+      this.restoreImage(true) // it comes from the public page
+		else if (this.props.images.current && this.props.images.current !== 'new')
+			this.restoreImage(false) // it comes from the profile page
 	}
 
   	componentDidMount() {
@@ -212,9 +215,9 @@ class Doodle extends Component {
       clearInterval(this.autoSave)
       this.props.setAutoSave(false)
 			this.props.setSliderValue(0)
+      this.props.setTool('free')
 			this.props.resetImage()
     }
-
 
 		// gets canvas element and sets context to it
 		// checks to see if there's a current image, and creates a blank, 'new' image if not
@@ -232,10 +235,15 @@ class Doodle extends Component {
 			}
 		}
 
-    restoreImage() {
+    restoreImage(isPublic) {
+      let url = 'http://localhost:3001/v1/'
+      if (isPublic)
+        url += `images/${this.props.match.params.imageId}`
+      else
+        url += `accounts/${this.props.account.id}/images/${this.props.images.current.id}`
       axios({
         method: 'GET',
-        url: `http://localhost:3001/v1/accounts/${this.props.account.id}/images/${this.props.images.current.id}`,
+        url: url
       })
       .then(resp => {
         let imageData = resp.data.image_data
@@ -243,6 +251,7 @@ class Doodle extends Component {
 				this.setState({
 					historyLength:this.history.length
 				})
+        this.props.setSliderValue(this.history.length)
         this.drawImage(this.context, this.history)
       })
     }
@@ -281,7 +290,6 @@ class Doodle extends Component {
     handleAutoSave(event) {
       this.props.setAutoSave(event.target.checked)
     }
-
 
 		renderHistory(value, sliding) {
 			let tempHistory= this.history.slice(0, value)
@@ -407,6 +415,9 @@ const mapDispatchToProps = (dispatch) => ({
 	},
   setAutoSave: (bool) => {
     dispatch(setAutoSave(bool))
+  },
+  setTool: (tool) => {
+    dispatch(setTool(tool))
   },
   setSliderValue: (value) => {
     dispatch(setSliderValue(value))
