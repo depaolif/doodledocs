@@ -120,7 +120,7 @@ class Doodle extends Component {
 			this.setState({
 				historyLength: this.history.length
 			})
-			this.props.setSliderValue(this.history.length)
+			// old bug? this.props.setSliderValue(this.history.length)
 		}
 	}
 
@@ -279,7 +279,7 @@ class Doodle extends Component {
         data: JSON.stringify({image: this.history, preview: lowQualityImage, title: title})
       })
       .then(resp => {
-          console.log("Saved...")
+          window.alert("Successfully saved!")
           if (this.props.images.current.id !== resp.data.id) {
             this.props.setCurrentImage({id: resp.data.id, title: title})
             this.props.addImage({id: resp.data.id, title: title, data_url: lowQualityImage})

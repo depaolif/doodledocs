@@ -20,6 +20,12 @@ class ToolBox extends Component {
 		this.showOrHideColor = this.showOrHideColor.bind(this)
 	}
 
+	componentDidMount() {
+		this.props.setColor('#000')
+		this.props.setLineWidth(1)
+		this.props.setTool('free')
+	}
+
 	handleChangeComplete(color) {
 		this.props.setColor(color.hex)
 	}
