@@ -6,12 +6,11 @@ import axios from 'axios'
 
 class ImageList extends Component {
 	componentDidMount() {
+		const headers = localStorage.getItem('token') ? {"bearer": localStorage.getItem('token')} : null
 		axios({
 			method: 'GET',
 			url: 'http://localhost:3001/v1/images',
-			headers: {
-				'bearer': localStorage.getItem('token')
-			}
+			headers: headers
 		})
 		.then(resp => {
 			this.props.setPublicImages(resp.data)
