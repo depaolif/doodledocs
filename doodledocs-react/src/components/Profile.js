@@ -1,11 +1,11 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
-import ConnectedImageItem from './ImageItem'
+import ConnectedProfileItem from './ProfileItem'
 
 class Profile extends Component {
 	render() {
 		const images = this.props.images.list.map((image, i) => {
-			return <ConnectedImageItem key={image.id} image={image} account={this.props.account} history={this.props.history}/>
+			return <ConnectedProfileItem key={image.id} image={image} account={this.props.account} history={this.props.history}/>
 		})
 		return (
 			<div className="profile">
@@ -23,5 +23,6 @@ const mapStateToProps = (state) => ({
 	images: state.images
 })
 
-const ConnectedProfile = connect(mapStateToProps)(Profile)
+const ConnectedProfile = connect(mapStateToProps, null)(Profile)
+
 export default ConnectedProfile

@@ -1,53 +1,21 @@
-import React, {Component} from 'react'
-import { connect } from 'react-redux'
-import { setCurrentImage, removeImage } from '../actions/image'
-import axios from 'axios'
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 
 class ImageItem extends Component {
-	constructor(props) {
-		super(props);
-
-		this.handleClick = this.handleClick.bind(this)
-		this.handleDelete = this.handleDelete.bind(this)
-	}
-
-	handleClick(evt) {
-		evt.preventDefault()
-		this.props.setCurrentImage({id: this.props.image.id, title: this.props.image.title})
-		this.props.history.push('/')
-	}
-
-	handleDelete(event) {
-		event.preventDefault()
-		axios({
-			method: "DELETE",
-			url: `http://localhost:3001/v1/accounts/${this.props.account.id}/images/${this.props.image.id}`
-		})
-		.then(resp => {
-			this.props.removeImage(this.props.image.id)
-		})
+	constructor() {
+		super()
 	}
 
 	render() {
+		let {id, title, preview} = this.props
+		let url = `/images/${id}`
 		return (
-			<li>
-				<img alt={this.props.image.title} src={this.props.image.data_url} width='50' height='50'></img>
-				<a href='#' onClick={this.handleClick}>{this.props.image.title} -  id:{this.props.image.id}</a>
-				<button onClick={this.handleDelete}>Delete</button>
-			</li>
+			<div>
+				<Link className="image-item-link" to={url}>{title}</Link>
+				<img alt={title} src={preview} width='300' height='300'></img>
+			</div>
 		)
 	}
 }
 
-const mapDispatchToProps = (dispatch) => ({
-	setCurrentImage: (imageId) => {
-		dispatch(setCurrentImage(imageId))
-	},
-	removeImage: (image) => {
-		dispatch(removeImage(image))
-	}
-})
-
-const ConnectedImageItem = connect(null, mapDispatchToProps)(ImageItem)
-
-export default ConnectedImageItem
+export default ImageItem

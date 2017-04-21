@@ -10,23 +10,21 @@ import DoodleSlider from './DoodleSlider'
 class Doodle extends Component {
 	constructor() {
 		super()
+
 		this.history = []
+    this.redoHistory = []
+
 		this.state = {
 			height: 1000,
 			width: window.innerWidth,
 			historyLength: this.history.length
 		}
+
 		this.canvas = null
 		this.context = null
 		this.isPainting = false
-
-    this.redoHistory = []
-    this.image = new Image()
-    this.image.src = "http://cdn.bulbagarden.net/upload/thumb/0/0d/025Pikachu.png/250px-025Pikachu.png"
-    this.radius = 1
-    this.drawing = true
-
     this.autoSave = null
+
     this.handleAutoSave = this.handleAutoSave.bind(this)
 		this.handleSave = this.handleSave.bind(this)
 		this.updateCanvas = this.updateCanvas.bind(this)
@@ -34,12 +32,12 @@ class Doodle extends Component {
 	}
 
   	componentDidMount() {
+      this.updateCanvas()
+
       this.autoSave = setInterval(() => {
         if (this.props.images.autoSave && this.props.slider.value === this.history.length)
           this.save('PATCH', `http://localhost:3001/v1/accounts/${this.props.account.id}/images/${this.props.images.current.id}`, this.props.images.current.title)
       }, 3000)
-
-			this.updateCanvas()
 
     	this.canvas.addEventListener('mousedown', (event) => {
         if (event.button === 0 && this.props.slider.value === this.history.length) {
@@ -68,10 +66,11 @@ class Doodle extends Component {
               this.history.push({[this.props.doodle.tool]: {startX: mousePos.x, startY: mousePos.y, color: this.props.doodle.color, lineWidth: this.context.lineWidth, midX: null, midY: null, r: null}})
               break
             case "image":
-              this.image.src = this.props.doodle.imageSrc
-              if (this.image.src) {
-                this.context.drawImage(this.image, mousePos.x - this.image.width / 2, mousePos.y - this.image.height / 2)
-                this.history.push({[this.props.doodle.tool]: {x: mousePos.x - this.image.width / 2, y: mousePos.y - this.image.height / 2, src: this.image.src}})
+              let image = new Image()
+              image.src = this.props.doodle.imageSrc
+              if (image.src) {
+                this.context.drawImage(image, mousePos.x - image.width / 2, mousePos.y - image.height / 2)
+                this.history.push({[this.props.doodle.tool]: {x: mousePos.x - image.width / 2, y: mousePos.y - image.height / 2, src: image.src}})
               }
               break
             default:
@@ -186,6 +185,10 @@ class Doodle extends Component {
   	}
 
     componentWillUnmount() {
+      this.canvas.removeEventListener('mousedown')
+      this.canvas.removeEventListener('mousemove')
+      this.canvas.removeEventListener('mouseup')
+      document.removeEventListener('keydown')
       clearInterval(this.autoSave)
       this.props.setAutoSave(false)
     }

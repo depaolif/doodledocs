@@ -8,6 +8,7 @@ import ConnectedRegister from './components/Register'
 import ConnectedDoodle from './components/Doodle'
 import ConnectedProfile from './components/Profile'
 import ConnectedNavBar from './components/NavBar'
+import ConnectedImages from './components/Images'
 import PrivateRoute from './components/PrivateRoute'
 import { setToken, setUsername, setId } from './actions/account'
 import { setImageList } from './actions/image'
@@ -42,6 +43,8 @@ class App extends Component {
                 <Route path="/login" component={ConnectedLogin} />
                 <Route path="/logout" component={ConnectedLogout} />
                 <Route path="/register" component={ConnectedRegister} />
+                <Route exact path="/images" component={ConnectedImages}/>
+                <Route path="/images/:imageId" component={ConnectedDoodle}/>
                 <PrivateRoute path="/profile" component={ConnectedProfile} />
               </Switch>
             </div>

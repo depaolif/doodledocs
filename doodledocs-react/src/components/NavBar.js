@@ -18,6 +18,7 @@ class NavBar extends Component {
 		return (
 			<div className="navbar">
 				<Link id="new-doodle" className="nav-links" to="/" onClick={this.handleClick} >New Doodle</Link>
+				<Link id="public-images" className="nav-links" to="/images">Latest Doodles</Link>
 				{!this.props.token ? <Link id="login" className="nav-links" to="/login">Login</Link> : <Link id="profile" className="nav-links" to="/profile">Profile</Link>}
 				{!this.props.token ? <Link id="register" className="nav-links" to="/register">Register</Link> : <Link id="logout" className="nav-links" to='/logout'>Logout</Link>}
 			</div>

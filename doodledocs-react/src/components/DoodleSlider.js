@@ -25,10 +25,13 @@ class DoodleSlider extends Component {
         className="slider"
         min={0}
         max={this.props.max}
-        disabled={false}
+        disabled={this.props.max === 0}
         defaultValue={0}
         value={this.props.slider.value}
         onChange={this.handleChange}
+        handleStyle={{
+          backgroundColor: 'orange',
+        }}
       />
     )
   }
