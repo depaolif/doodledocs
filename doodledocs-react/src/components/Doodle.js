@@ -18,7 +18,8 @@ class Doodle extends Component {
 			height: 1000,
 			width: window.innerWidth,
 			history: [],
-			redoHistory: []
+			redoHistory: [],
+			imageTitle: ''
 		}
 
 		this.canvas = null
@@ -34,6 +35,7 @@ class Doodle extends Component {
 		this.mouseUpEventListener = this.mouseUpEventListener.bind(this)
 		this.mouseMoveEventListener = this.mouseMoveEventListener.bind(this)
 		this.undoEventListener = this.undoEventListener.bind(this)
+		this.handleInputChange = this.handleInputChange.bind(this)
 	}
 
 	mouseDownEventListener(event) {
@@ -201,7 +203,7 @@ class Doodle extends Component {
 	componentWillMount() {
 		// if currentImage is something, restore it
 	    if (this.props.match.params.imageId)
-	      	this.restoreImage(true) 
+	      	this.restoreImage(true)
 		else if (this.props.images.current && this.props.images.current !== 'new')
 			this.restoreImage(false)
 	}
@@ -380,13 +382,21 @@ class Doodle extends Component {
     	}
   	}
 
+		// handle input change for title of picture before saving
+		handleInputChange(event) {
+			this.setState({
+				imageTitle: event.target.value
+			});
+		}
+
 	render() {
 		let saving = null
 		if (this.props.account.token && this.props.images.current === 'new') {
+			const isDisabled = this.state.imageTitle ? null : 'disabled'
 			saving =
 				<form onSubmit={this.handleSave}>
-					<label>Title: </label><input type="text" name="title" placeholder="title"/>
-					<input type="submit" value="Save" />
+					<label>Title: </label><input type="text" name="title" onChange={this.handleInputChange}/>
+					<input type="submit" value="Save" disabled={isDisabled} />
 				</form>
 		} else if (this.props.account.token && this.props.images.current && typeof this.props.images.current.id === 'number') {
 			saving =
