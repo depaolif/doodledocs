@@ -28,7 +28,153 @@ class Doodle extends Component {
     this.handleAutoSave = this.handleAutoSave.bind(this)
 		this.handleSave = this.handleSave.bind(this)
 		this.updateCanvas = this.updateCanvas.bind(this)
-		this.renderHistory=this.renderHistory.bind(this)
+		this.renderHistory = this.renderHistory.bind(this)
+		this.mouseDownEventListener = this.mouseDownEventListener.bind(this)
+		this.mouseUpEventListener = this.mouseUpEventListener.bind(this)
+		this.mouseMoveEventListener = this.mouseMoveEventListener.bind(this)
+		this.undoEventListener = this.undoEventListener.bind(this)
+	}
+
+	mouseDownEventListener(event) {
+		if (event.button === 0 && this.props.slider.value === this.history.length) {
+			this.redoHistory = []
+			this.context.strokeStyle = this.props.doodle.color
+			this.context.fillStyle = this.props.doodle.color
+			this.context.lineWidth = this.props.doodle.lineWidth
+			let mousePos = this.getMousePos(this.canvas, event)
+			switch (this.props.doodle.tool) {
+				case "free":
+					this.context.beginPath() //begins path
+					this.context.moveTo(mousePos.x, mousePos.y)
+					this.history.push({[this.props.doodle.tool]: {start: {x: mousePos.x, y: mousePos.y, color: this.props.doodle.color, lineWidth: this.context.lineWidth}, lines: new Array()}})
+					break
+				case "line":
+					this.context.beginPath()
+					this.context.moveTo(mousePos.x, mousePos.y)
+					this.history.push({[this.props.doodle.tool]: {x1: mousePos.x, y1: mousePos.y, x2: 0, y2: 0, color: this.props.doodle.color, lineWidth: this.context.lineWidth}})
+					break
+				case "rectangle":
+					this.context.beginPath()
+					this.history.push({[this.props.doodle.tool]: {x1: mousePos.x, y1: mousePos.y, x2: 0, y2: 0, color: this.props.doodle.color, lineWidth: this.context.lineWidth}})
+					break
+				case "circle":
+					this.context.beginPath()
+					this.history.push({[this.props.doodle.tool]: {startX: mousePos.x, startY: mousePos.y, color: this.props.doodle.color, lineWidth: this.context.lineWidth, midX: null, midY: null, r: null}})
+					break
+				case "image":
+					let image = new Image()
+					image.src = this.props.doodle.imageSrc
+					if (image.src) {
+						this.context.drawImage(image, mousePos.x - image.width / 2, mousePos.y - image.height / 2)
+						this.history.push({[this.props.doodle.tool]: {x: mousePos.x - image.width / 2, y: mousePos.y - image.height / 2, src: image.src}})
+					}
+					break
+				default:
+					break
+			}
+			this.setState({
+				historyLength: this.history.length
+			})
+			this.props.setSliderValue(this.history.length)
+			this.isPainting = true
+		}
+	}
+
+	mouseMoveEventListener(event) {
+		if (this.isPainting && this.props.slider.value === this.history.length) {
+			let mousePos = this.getMousePos(this.canvas, event)
+			switch (this.props.doodle.tool) {
+				case "free":
+						this.context.lineTo(mousePos.x, mousePos.y)
+						this.context.stroke() //path gets a stroke
+
+						this.history[this.history.length-1].free.lines.push({x: mousePos.x, y: mousePos.y})
+					break
+				case "rectangle":
+						this.context.rect(this.history[this.history.length-1].rectangle.x1, this.history[this.history.length-1].rectangle.y1, mousePos.x - this.history[this.history.length-1].rectangle.x1, mousePos.y - this.history[this.history.length-1].rectangle.y1)
+						this.context.fill()
+
+						this.history[this.history.length-1].rectangle.x2 = mousePos.x - this.history[this.history.length-1].rectangle.x1
+						this.history[this.history.length-1].rectangle.y2 = mousePos.y - this.history[this.history.length-1].rectangle.y1
+					break
+				case "circle":
+						let circleInfo = this.history[this.history.length-1].circle
+						let dx = Math.abs(circleInfo.startX - mousePos.x)
+						let dy = Math.abs(circleInfo.startY - mousePos.y)
+						let midX = (circleInfo.startX + mousePos.x) / 2
+						let midY = (circleInfo.startY + mousePos.y) / 2
+						let r = Math.sqrt(dx * dx + dy * dy) / 2
+						this.context.arc(midX, midY, r, 0, 2 * Math.PI)
+						this.context.fillStyle = circleInfo.color
+						this.context.lineWidth = circleInfo.lineWidth
+						this.context.fill()
+
+						this.history[this.history.length-1].circle.midX = midX
+						this.history[this.history.length-1].circle.midY = midY
+						this.history[this.history.length-1].circle.r = r
+					break
+				default:
+					break
+			}
+			this.setState({
+				historyLength: this.history.length
+			})
+			this.props.setSliderValue(this.history.length)
+		}
+	}
+
+	mouseUpEventListener(event) {
+		let mousePos = this.getMousePos(this.canvas, event)
+		if (this.props.slider.value === this.history.length) {
+			switch (this.props.doodle.tool) {
+				case "line":
+					this.context.lineTo(mousePos.x, mousePos.y)
+					this.context.stroke()
+
+					this.history[this.history.length-1].line.x2 = mousePos.x
+					this.history[this.history.length-1].line.y2 = mousePos.y
+					this.setState({
+						historyLength: this.history.length
+					})
+					this.props.setSliderValue(this.history.length)
+					break
+				case "free":
+					if (this.history[this.history.length-1].free.lines.length == 0) {
+						this.history = this.history.slice(0, this.history.length-1)
+						this.setState({
+							historyLength: this.history.length
+						})
+						this.props.setSliderValue(this.history.length)
+					}
+					break
+				default:
+					break
+			}
+		}
+		this.isPainting = false
+		console.log(this.history)
+	}
+
+	undoEventListener(event) {
+		if (this.props.slider.value === this.history.length) {
+			if (event.keyCode === 90 && event.ctrlKey &&
+					!this.isPainting && this.history.length > 0) {
+				this.redoHistory.push(this.history[this.history.length-1])
+				console.log(this.redoHistory.length)
+				this.history = this.history.slice(0, -1)
+				this.drawImage(this.context, this.history)
+			} else if (event.keyCode === 82 && event.ctrlKey &&
+					!this.isPainting && this.redoHistory.length > 0) {
+				console.log('redoing')
+				this.history.push(this.redoHistory[this.redoHistory.length-1])
+				this.redoHistory = this.redoHistory.slice(0, -1)
+				this.drawImage(this.context, this.history)
+			}
+			this.setState({
+				historyLength: this.history.length
+			})
+			this.props.setSliderValue(this.history.length)
+		}
 	}
 
   	componentDidMount() {
@@ -39,156 +185,20 @@ class Doodle extends Component {
           this.save('PATCH', `http://localhost:3001/v1/accounts/${this.props.account.id}/images/${this.props.images.current.id}`, this.props.images.current.title)
       }, 3000)
 
-    	this.canvas.addEventListener('mousedown', (event) => {
-        if (event.button === 0 && this.props.slider.value === this.history.length) {
-          this.redoHistory = []
-      		this.context.strokeStyle = this.props.doodle.color
-          this.context.fillStyle = this.props.doodle.color
-          this.context.lineWidth = this.props.doodle.lineWidth
-      		let mousePos = this.getMousePos(this.canvas, event)
-          switch (this.props.doodle.tool) {
-            case "free":
-              this.context.beginPath() //begins path
-              this.context.moveTo(mousePos.x, mousePos.y)
-              this.history.push({[this.props.doodle.tool]: {start: {x: mousePos.x, y: mousePos.y, color: this.props.doodle.color, lineWidth: this.context.lineWidth}, lines: new Array()}})
-              break
-            case "line":
-              this.context.beginPath()
-              this.context.moveTo(mousePos.x, mousePos.y)
-              this.history.push({[this.props.doodle.tool]: {x1: mousePos.x, y1: mousePos.y, x2: 0, y2: 0, color: this.props.doodle.color, lineWidth: this.context.lineWidth}})
-              break
-            case "rectangle":
-              this.context.beginPath()
-              this.history.push({[this.props.doodle.tool]: {x1: mousePos.x, y1: mousePos.y, x2: 0, y2: 0, color: this.props.doodle.color, lineWidth: this.context.lineWidth}})
-              break
-            case "circle":
-              this.context.beginPath()
-              this.history.push({[this.props.doodle.tool]: {startX: mousePos.x, startY: mousePos.y, color: this.props.doodle.color, lineWidth: this.context.lineWidth, midX: null, midY: null, r: null}})
-              break
-            case "image":
-              let image = new Image()
-              image.src = this.props.doodle.imageSrc
-              if (image.src) {
-                this.context.drawImage(image, mousePos.x - image.width / 2, mousePos.y - image.height / 2)
-                this.history.push({[this.props.doodle.tool]: {x: mousePos.x - image.width / 2, y: mousePos.y - image.height / 2, src: image.src}})
-              }
-              break
-            default:
-              break
-          }
-          this.setState({
-            historyLength: this.history.length
-          })
-          this.props.setSliderValue(this.history.length)
-          this.isPainting = true
-        }
-    	}, false)
+			// event listeners for drawing events
+    	this.canvas.addEventListener('mousedown', this.mouseDownEventListener)
+    	this.canvas.addEventListener('mousemove', this.mouseMoveEventListener)
+    	this.canvas.addEventListener('mouseup', this.mouseUpEventListener)
 
-    	this.canvas.addEventListener('mousemove', (event) => {
-      		if (this.isPainting && this.props.slider.value === this.history.length) {
- 	    		  let mousePos = this.getMousePos(this.canvas, event)
-            switch (this.props.doodle.tool) {
-              case "free":
-                  this.context.lineTo(mousePos.x, mousePos.y)
-                  this.context.stroke() //path gets a stroke
-
-                  this.history[this.history.length-1].free.lines.push({x: mousePos.x, y: mousePos.y})
-                break
-              case "rectangle":
-                  this.context.rect(this.history[this.history.length-1].rectangle.x1, this.history[this.history.length-1].rectangle.y1, mousePos.x - this.history[this.history.length-1].rectangle.x1, mousePos.y - this.history[this.history.length-1].rectangle.y1)
-                  this.context.fill()
-
-                  this.history[this.history.length-1].rectangle.x2 = mousePos.x - this.history[this.history.length-1].rectangle.x1
-                  this.history[this.history.length-1].rectangle.y2 = mousePos.y - this.history[this.history.length-1].rectangle.y1
-                break
-              case "circle":
-                  let circleInfo = this.history[this.history.length-1].circle
-                  let dx = Math.abs(circleInfo.startX - mousePos.x)
-                  let dy = Math.abs(circleInfo.startY - mousePos.y)
-                  let midX = (circleInfo.startX + mousePos.x) / 2
-                  let midY = (circleInfo.startY + mousePos.y) / 2
-                  let r = Math.sqrt(dx * dx + dy * dy) / 2
-                  this.context.arc(midX, midY, r, 0, 2 * Math.PI)
-                  this.context.fillStyle = circleInfo.color
-                  this.context.lineWidth = circleInfo.lineWidth
-                  this.context.fill()
-
-                  this.history[this.history.length-1].circle.midX = midX
-                  this.history[this.history.length-1].circle.midY = midY
-                  this.history[this.history.length-1].circle.r = r
-                break
-              default:
-                break
-            }
-            this.setState({
-              historyLength: this.history.length
-            })
-            this.props.setSliderValue(this.history.length)
-      		}
-    	})
-
-    	this.canvas.addEventListener('mouseup', (event) => {
-          let mousePos = this.getMousePos(this.canvas, event)
-          if (this.props.slider.value === this.history.length) {
-            switch (this.props.doodle.tool) {
-              case "line":
-                this.context.lineTo(mousePos.x, mousePos.y)
-                this.context.stroke()
-
-                this.history[this.history.length-1].line.x2 = mousePos.x
-                this.history[this.history.length-1].line.y2 = mousePos.y
-                this.setState({
-                  historyLength: this.history.length
-                })
-                this.props.setSliderValue(this.history.length)
-                break
-              case "free":
-                if (this.history[this.history.length-1].free.lines.length == 0) {
-                  this.history = this.history.slice(0, this.history.length-1)
-                  this.setState({
-                    historyLength: this.history.length
-                  })
-                  this.props.setSliderValue(this.history.length)
-                }
-                break
-              default:
-                break
-            }
-          }
-      		this.isPainting = false
-      		console.log(this.history)
-      		// console.log(this.history.reduce((sum, val) => { return val.free.lines.length + sum},0))
-    	}, false)
-
-    	// undo feature
-    	document.addEventListener('keydown', (event) => {
-        if (this.props.slider.value === this.history.length) {
-      		if (event.keyCode === 90 && event.ctrlKey &&
-      		    !this.isPainting && this.history.length > 0) {
-            this.redoHistory.push(this.history[this.history.length-1])
-            console.log(this.redoHistory.length)
-      			this.history = this.history.slice(0, -1)
-				    this.drawImage(this.context, this.history)
-      		} else if (event.keyCode === 82 && event.ctrlKey &&
-              !this.isPainting && this.redoHistory.length > 0) {
-            console.log('redoing')
-            this.history.push(this.redoHistory[this.redoHistory.length-1])
-            this.redoHistory = this.redoHistory.slice(0, -1)
-            this.drawImage(this.context, this.history)
-          }
-          this.setState({
-            historyLength: this.history.length
-          })
-          this.props.setSliderValue(this.history.length)
-        }
-    	})
+    	// event listener for undo feature
+    	document.addEventListener('keydown', this.undoEventListener)
   	}
 
     componentWillUnmount() {
-      this.canvas.removeEventListener('mousedown')
-      this.canvas.removeEventListener('mousemove')
-      this.canvas.removeEventListener('mouseup')
-      document.removeEventListener('keydown')
+      this.canvas.removeEventListener('mousedown', this.mouseDownEventListener)
+      this.canvas.removeEventListener('mousemove', this.mouseMoveEventListener)
+      this.canvas.removeEventListener('mouseup', this.mouseUpEventListener)
+      document.removeEventListener('keydown', this.undoEventListener)
       clearInterval(this.autoSave)
       this.props.setAutoSave(false)
     }
