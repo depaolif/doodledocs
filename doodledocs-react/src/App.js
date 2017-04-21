@@ -1,7 +1,7 @@
 import './App.css';
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { BrowserRouter as Router, Route, browserHistory, Switch, Redirect } from 'react-router-dom'
+import { BrowserRouter as Router, Route, browserHistory, Switch } from 'react-router-dom'
 import ConnectedLogin from './components/Login'
 import ConnectedLogout from './components/Logout'
 import ConnectedRegister from './components/Register'

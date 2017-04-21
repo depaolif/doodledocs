@@ -18,7 +18,7 @@ class ImageList extends Component {
 	}
 
 	render() {
-		const imageItems = this.props.publicImages.list.map(image =>
+		const imageList = this.props.publicImages.list.map(image =>
 			<ImageItem
 				key={image.id}
 				id={image.id}
@@ -27,7 +27,7 @@ class ImageList extends Component {
 			)
 		return (
 			<div className="image-list">
-				{imageItems}
+				{imageList}
 			</div>
 		)
 	}

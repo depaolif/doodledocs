@@ -47,7 +47,7 @@ class Doodle extends Component {
 				case "free":
 					this.context.beginPath() //begins path
 					this.context.moveTo(mousePos.x, mousePos.y)
-					this.history.push({[this.props.doodle.tool]: {start: {x: mousePos.x, y: mousePos.y, color: this.props.doodle.color, lineWidth: this.context.lineWidth}, lines: new Array()}})
+					this.history.push({[this.props.doodle.tool]: {start: {x: mousePos.x, y: mousePos.y, color: this.props.doodle.color, lineWidth: this.context.lineWidth}, lines: []}})
 					break
 				case "line":
 					this.context.beginPath()
@@ -140,7 +140,7 @@ class Doodle extends Component {
 					this.props.setSliderValue(this.history.length)
 					break
 				case "free":
-					if (this.history[this.history.length-1].free.lines.length == 0) {
+					if (this.history[this.history.length-1].free.lines.length === 0) {
 						this.history = this.history.slice(0, this.history.length-1)
 						this.setState({
 							historyLength: this.history.length
@@ -180,19 +180,19 @@ class Doodle extends Component {
 
 	componentWillMount() {
 		// if currentImage is something, restore it
-    if (this.props.match.params.imageId)
-      this.restoreImage(true) // it comes from the public page
+	    if (this.props.match.params.imageId)
+	      	this.restoreImage(true) 
 		else if (this.props.images.current && this.props.images.current !== 'new')
-			this.restoreImage(false) // it comes from the profile page
+			this.restoreImage(false)
 	}
 
   	componentDidMount() {
-      this.updateCanvas()
+		this.updateCanvas()
 
-      this.autoSave = setInterval(() => {
-        if (this.props.images.autoSave && this.props.slider.value === this.history.length)
-          this.save('PATCH', `http://localhost:3001/v1/accounts/${this.props.account.id}/images/${this.props.images.current.id}`, this.props.images.current.title)
-      }, 3000)
+		this.autoSave = setInterval(() => {
+		if (this.props.images.autoSave && this.props.slider.value === this.history.length)
+		  this.save('PATCH', `http://localhost:3001/v1/accounts/${this.props.account.id}/images/${this.props.images.current.id}`, this.props.images.current.title)
+		}, 3000)
 
 			// event listeners for drawing events
     	this.canvas.addEventListener('mousedown', this.mouseDownEventListener)
@@ -203,44 +203,40 @@ class Doodle extends Component {
     	document.addEventListener('keydown', this.undoEventListener)
   	}
 
-		componentDidUpdate(prevProps, prevState) {
-			this.updateCanvas()
+	componentDidUpdate(prevProps, prevState) {
+		this.updateCanvas()
   	}
 
     componentWillUnmount() {
-      this.canvas.removeEventListener('mousedown', this.mouseDownEventListener)
-      this.canvas.removeEventListener('mousemove', this.mouseMoveEventListener)
-      this.canvas.removeEventListener('mouseup', this.mouseUpEventListener)
-      document.removeEventListener('keydown', this.undoEventListener)
-      clearInterval(this.autoSave)
-      this.props.setAutoSave(false)
-			this.props.setSliderValue(0)
-      this.props.setTool('free')
-			this.props.resetImage()
+		this.canvas.removeEventListener('mousedown', this.mouseDownEventListener)
+		this.canvas.removeEventListener('mousemove', this.mouseMoveEventListener)
+		this.canvas.removeEventListener('mouseup', this.mouseUpEventListener)
+		document.removeEventListener('keydown', this.undoEventListener)
+		clearInterval(this.autoSave)
+		this.props.setAutoSave(false)
+		this.props.setSliderValue(0)
+		this.props.setTool('free')
+		this.props.resetImage()
     }
 
-		// gets canvas element and sets context to it
-		// checks to see if there's a current image, and creates a blank, 'new' image if not
-		updateCanvas() {
-			this.canvas = document.getElementById('app-canvas')
-    	this.context = this.canvas.getContext('2d')
-			if (!this.props.images.current) {
-				this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
-				this.history = []
-				this.redoHistory = []
-        this.setState({
-          historyLength: 0
-        })
-				this.props.setCurrentImage('new')
-			}
+	// gets canvas element and sets context to it
+	// checks to see if there's a current image, and creates a blank, 'new' image if not
+	updateCanvas() {
+		this.canvas = document.getElementById('app-canvas')
+		this.context = this.canvas.getContext('2d')
+		if (!this.props.images.current) {
+			this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
+			this.history = []
+			this.redoHistory = []
+	        this.setState({
+	          historyLength: 0
+	        })
+			this.props.setCurrentImage('new')
 		}
+	}
 
     restoreImage(isPublic) {
-      let url = 'http://localhost:3001/v1/'
-      if (isPublic)
-        url += `images/${this.props.match.params.imageId}`
-      else
-        url += `accounts/${this.props.account.id}/images/${this.props.images.current.id}`
+      let url = `http://localhost:3001/v1/images/${this.props.match.params.imageId}`
       axios({
         method: 'GET',
         url: url
@@ -248,11 +244,13 @@ class Doodle extends Component {
       .then(resp => {
         let imageData = resp.data.image_data
         this.history = imageData
-				this.setState({
-					historyLength:this.history.length
-				})
+		this.setState({
+			historyLength: this.history.length
+		})
         this.props.setSliderValue(this.history.length)
         this.drawImage(this.context, this.history)
+        if (resp.data.account_id === this.props.account.id)
+        	this.props.setCurrentImage({id: resp.data.id, title: resp.data.title})
       })
     }
 
@@ -264,9 +262,9 @@ class Doodle extends Component {
         title = event.target[0].value
       let method = 'POST'
       if (this.props.images.current !== 'new') {
-        url = url + `/${this.props.images.current.id}`
+        url += `/${this.props.images.current.id}`
         method = 'PATCH'
-        title = this.props.images.current.title
+        title = this.props.images.current.Title
       }
       this.save(method, url, title)
     }
@@ -318,6 +316,7 @@ class Doodle extends Component {
             let image = new Image()
             image.src = this.history[i].image.src
             this.context.drawImage(image, history[i].image.x, history[i].image.y)
+            break
           default:
             break
         }
@@ -359,11 +358,11 @@ class Doodle extends Component {
       context.stroke()
     }
 
-    drawAnimatedLine(line1, line2) {
-      let animation = setInterval(() => {
+    // drawAnimatedLine(line1, line2) {
+    //   let animation = setInterval(() => {
 
-      }, 10)
-    }
+    //   }, 10)
+    // }
 
   	getMousePos(canvas, evt) {
     	let rect = this.canvas.getBoundingClientRect()
