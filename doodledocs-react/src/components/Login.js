@@ -65,10 +65,12 @@ class Login extends Component {
 			null
 		return (
 			<div>
-			{failMessage}
 				<form onSubmit={this.handleSubmit} className="login_signup" >
-					<label>Username: </label><input type="text" name="username" value={this.state.username} onChange={this.handleInput} /><br></br>
+					{failMessage}
+					<label>Username: </label><input type="text" name="username" value={this.state.username} onChange={this.handleInput} />
+					<br></br>
 					<label>Password: </label><input type="password" name="password" value={this.state.password} onChange={this.handleInput} />
+					<br></br>
 					<input type="submit" value="Login" id="button"/>
 				</form>
 			</div>

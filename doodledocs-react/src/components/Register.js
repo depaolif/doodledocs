@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { setToken, setUsername, setId } from '../actions/account'
 import { setImageList } from '../actions/image'
 import axios from 'axios'
+import '../css/Login.scss'
 
 class Register extends Component {
 	constructor() {
@@ -10,7 +11,9 @@ class Register extends Component {
 
 		this.state = {
 			username: '',
-			password: ''
+			password: '',
+			usernameValidation: 'empty',
+			passwordValidation: 'empty'
 		}
 
 		this.handleInput = this.handleInput.bind(this)
@@ -21,6 +24,20 @@ class Register extends Component {
 		this.setState({
 			[event.target.name]: event.target.value
 		})
+		this.validateInput(event.target.name, event.target.value)
+	}
+
+	validateInput(input, value) {
+		const stateInput = input === 'username' ? 'usernameValidation' : 'passwordValidation'
+		if (value.length >= 6 && !/\W/.test(value)) {
+			this.setState({
+				[stateInput]: true
+			});
+		} else {
+			this.setState({
+				[stateInput]: false
+			});
+		}
 	}
 
 	handleSubmit(event) {
@@ -51,11 +68,18 @@ class Register extends Component {
 	}
 
 	render() {
+		const usernameValid = this.state.usernameValidation ? null : <div>Your username is invalid.</div>
+		const passwordValid = this.state.passwordValidation ? null : <div>Your password is invalid.</div>
+	const isDisabled = this.state.usernameValidation === true && this.state.passwordValidation === true ? null : 'disabled'
 		return (
-			<form onSubmit={this.handleSubmit}>
-				<input type="text" name="username" value={this.state.username} onChange={this.handleInput} />
-				<input type="password" name="password" value={this.state.password} onChange={this.handleInput} />
-				<input type="submit" value="Register" />
+			<form onSubmit={this.handleSubmit} className="login_signup" >
+				<label>Username: </label><input type="text" name="username" value={this.state.username} onChange={this.handleInput} />
+				<br></br>
+				{usernameValid}
+				<label>Password: </label><input type="password" name="password" value={this.state.password} onChange={this.handleInput} />
+				{passwordValid}
+				<br></br>
+				<input type="submit" value="Register" id="button" disabled={isDisabled}/>
 			</form>
 		)
 	}
