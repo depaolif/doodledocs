@@ -16,7 +16,12 @@ class V1::ImagesController < ApplicationController
       images = account.images
       render json: images, each_serializer: ImageIndexSerializer
     else
-      images = Image.all.order('created_at DESC').limit(10)
+      if request.headers["bearer"]
+        account = Account.find(Auth.decode(request.headers["bearer"])[0]["account_id"])
+        images = Image.where('account_id != ?', account.id).order('created_at DESC').limit(10)
+      else
+        images = Image.all.order('created_at DESC').limit(10)
+      end
       render json: images, each_serializer: ImageIndexSerializer
     end
   end

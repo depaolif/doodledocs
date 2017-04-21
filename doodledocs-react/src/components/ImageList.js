@@ -8,7 +8,10 @@ class ImageList extends Component {
 	componentDidMount() {
 		axios({
 			method: 'GET',
-			url: 'http://localhost:3001/v1/images'
+			url: 'http://localhost:3001/v1/images',
+			headers: {
+				'bearer': localStorage.getItem('token')
+			}
 		})
 		.then(resp => {
 			this.props.setPublicImages(resp.data)
@@ -16,11 +19,11 @@ class ImageList extends Component {
 	}
 
 	render() {
-		const imageItems = this.props.publicImages.list.map(image => 
-			<ImageItem 
+		const imageItems = this.props.publicImages.list.map(image =>
+			<ImageItem
 				key={image.id}
-				id={image.id} 
-				title={image.title} 
+				id={image.id}
+				title={image.title}
 				preview={image.data_url} />
 			)
 		return (
