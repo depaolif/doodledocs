@@ -11,9 +11,14 @@ class V1::ImagesController < ApplicationController
   end
 
   def index
-    account = Account.find(params[:account_id])
-    images = Image.where(account_id: account.id)
-    render json: images, each_serializer: ImageIndexSerializer
+    if (params[:account_id])
+      account = Account.find(params[:account_id])
+      images = account.images
+      render json: images, each_serializer: ImageIndexSerializer
+    else
+      images = Image.all.order('created_at DESC').limit(10)
+      render json: images, each_serializer: ImageIndexSerializer
+    end
   end
 
   def show
