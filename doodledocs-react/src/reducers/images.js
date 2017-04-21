@@ -7,6 +7,10 @@ export default function imagesReducer(state = {}, action) {
    	case "REMOVE_IMAGE":
    	  let filteredImageList = state.list.filter(i => i.id !== action.payload)
       return Object.assign({}, state, {list: filteredImageList})
+    case "UPDATE_PREVIEW_FOR_IMAGE":
+      let tempImageIndex = state.list.find(el => el.id === action.payload.id)
+      state.list[state.list.indexOf(tempImageIndex)].data_url = action.payload.preview
+      return state
    	case "SET_CURRENT_IMAGE":
    	  return Object.assign({}, state, {current: action.payload})
     case "RESET_IMAGE":

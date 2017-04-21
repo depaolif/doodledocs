@@ -10,6 +10,10 @@ export const setCurrentImage = (image) => ({
   type: 'SET_CURRENT_IMAGE', payload: image
 })
 
+export const updatePreviewForImage = (image) => ({
+  type: 'UPDATE_PREVIEW_FOR_IMAGE', payload: image
+})
+
 export const removeImage = (image) => ({
   type: 'REMOVE_IMAGE', payload: image
 })

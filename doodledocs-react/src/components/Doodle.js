@@ -1,6 +1,6 @@
 import '../css/Doodle.css'
 import React, {Component} from 'react'
-import { setCurrentImage, addImage, setAutoSave, resetImage } from '../actions/image'
+import { setCurrentImage, addImage, setAutoSave, resetImage, updatePreviewForImage } from '../actions/image'
 import { setSliderValue } from '../actions/slider'
 import { setTool } from '../actions/doodle'
 import ConnectedToolBox from './ToolBox'
@@ -283,6 +283,8 @@ class Doodle extends Component {
           if (this.props.images.current.id !== resp.data.id) {
             this.props.setCurrentImage({id: resp.data.id, title: title})
             this.props.addImage({id: resp.data.id, title: title, data_url: lowQualityImage})
+          } else if (this.props.images.current.id === resp.data.id) {
+            this.props.updatePreviewForImage({id: resp.data.id, preview: lowQualityImage})
           }
       })
     }
@@ -409,6 +411,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   setCurrentImage: (image) => {
     dispatch(setCurrentImage(image))
+  },
+  updatePreviewForImage: (image) => {
+    dispatch(updatePreviewForImage(image))
   },
 	addImage: (image) => {
 		dispatch(addImage(image))
