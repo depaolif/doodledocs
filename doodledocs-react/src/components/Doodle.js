@@ -177,6 +177,12 @@ class Doodle extends Component {
 		}
 	}
 
+	componentWillMount() {
+		// if currentImage is something, restore it
+		if (this.props.images.current && this.props.images.current !== 'new')
+			this.restoreImage()
+	}
+
   	componentDidMount() {
       this.updateCanvas()
 
@@ -194,6 +200,10 @@ class Doodle extends Component {
     	document.addEventListener('keydown', this.undoEventListener)
   	}
 
+		componentDidUpdate(prevProps, prevState) {
+			this.updateCanvas()
+  	}
+
     componentWillUnmount() {
       this.canvas.removeEventListener('mousedown', this.mouseDownEventListener)
       this.canvas.removeEventListener('mousemove', this.mouseMoveEventListener)
@@ -205,19 +215,9 @@ class Doodle extends Component {
 			this.props.resetImage()
     }
 
-  	componentDidUpdate(prevProps, prevState) {
-			this.updateCanvas()
-  	}
-
-    componentWillMount() {
-      // if currentImage is something, restore it
-      if (this.props.images.current && this.props.images.current !== 'new')
-        this.restoreImage()
-    }
 
 		// gets canvas element and sets context to it
 		// checks to see if there's a current image, and creates a blank, 'new' image if not
-
 		updateCanvas() {
 			this.canvas = document.getElementById('app-canvas')
     	this.context = this.canvas.getContext('2d')
