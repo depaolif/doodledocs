@@ -23,14 +23,16 @@ class Profile extends Component {
 	}
 
 	render() {
-		const imageList = this.props.images.list.map((image, i) => 
-			<ImageItem 
+		const imageList = this.props.images.list ?
+		this.props.images.list.map((image, i) =>
+			<ImageItem
 				key={image.id}
 				id={image.id}
 				title={image.title}
 				preview={image.data_url}
 				onDelete={this.handleDelete} />
-		)
+		) :
+		null
 		return (
 			<div className="profile">
 				<h1>{this.props.account.username}</h1>
