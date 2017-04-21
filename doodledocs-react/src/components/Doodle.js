@@ -1,6 +1,6 @@
 import '../css/Doodle.css'
 import React, {Component} from 'react'
-import { setCurrentImage, addImage, setAutoSave } from '../actions/image'
+import { setCurrentImage, addImage, setAutoSave, resetImage } from '../actions/image'
 import { setSliderValue } from '../actions/slider'
 import ConnectedToolBox from './ToolBox'
 import { connect } from 'react-redux'
@@ -152,7 +152,7 @@ class Doodle extends Component {
 			}
 		}
 		this.isPainting = false
-		console.log(this.history)
+		// console.log(this.history)
 	}
 
 	undoEventListener(event) {
@@ -201,6 +201,8 @@ class Doodle extends Component {
       document.removeEventListener('keydown', this.undoEventListener)
       clearInterval(this.autoSave)
       this.props.setAutoSave(false)
+			this.props.setSliderValue(0)
+			this.props.resetImage()
     }
 
   	componentDidUpdate(prevProps, prevState) {
@@ -212,6 +214,9 @@ class Doodle extends Component {
       if (this.props.images.current && this.props.images.current !== 'new')
         this.restoreImage()
     }
+
+		// gets canvas element and sets context to it
+		// checks to see if there's a current image, and creates a blank, 'new' image if not
 
 		updateCanvas() {
 			this.canvas = document.getElementById('app-canvas')
@@ -405,7 +410,10 @@ const mapDispatchToProps = (dispatch) => ({
   },
   setSliderValue: (value) => {
     dispatch(setSliderValue(value))
-  }
+  },
+	resetImage: () => {
+		dispatch(resetImage())
+	}
 })
 
 const ConnectedDoodle = connect(mapStateToProps, mapDispatchToProps)(Doodle)
