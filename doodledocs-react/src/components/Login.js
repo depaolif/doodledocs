@@ -1,3 +1,4 @@
+import '../css/Login.scss'
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import { setToken, setUsername, setId } from '../actions/account'
@@ -52,10 +53,12 @@ class Login extends Component {
 
 	render() {
 		return (
-			<form onSubmit={this.handleSubmit}>
-				<label>Username: </label><input type="text" name="username" value={this.state.username} onChange={this.handleInput} /><br></br>
+			<form onSubmit={this.handleSubmit} className="login_signup">
+				<div>
+					<label>Username: </label><input type="text" name="username" value={this.state.username} onChange={this.handleInput} /><br></br>
+				</div>
 				<label>Password: </label><input type="password" name="password" value={this.state.password} onChange={this.handleInput} />
-				<input type="submit" value="Login" />
+				<input type="submit" value="Login" id="button"/>
 			</form>
 		)
 	}
