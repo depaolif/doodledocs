@@ -12,13 +12,13 @@ class Doodle extends Component {
 	constructor() {
 		super()
 
-		this.history = []
    		this.redoHistory = []
 
 		this.state = {
 			height: 1000,
 			width: window.innerWidth,
-			historyLength: this.history.length
+			history: [],
+			redoHistory: []
 		}
 
 		this.canvas = null
@@ -37,69 +37,83 @@ class Doodle extends Component {
 	}
 
 	mouseDownEventListener(event) {
-		if (event.button === 0 && this.props.slider.value === this.history.length) {
-			this.redoHistory = []
+		if (event.button === 0 && this.props.slider.value === this.state.history.length) {
+			this.setState({ redoHistory: [] })
 			this.context.strokeStyle = this.props.doodle.color
 			this.context.fillStyle = this.props.doodle.color
 			this.context.lineWidth = this.props.doodle.lineWidth
 			let mousePos = this.getMousePos(this.canvas, event)
+			let tempNewHistory = null
 			switch (this.props.doodle.tool) {
 				case "free":
 					this.context.beginPath() //begins path
 					this.context.moveTo(mousePos.x, mousePos.y)
-					this.history.push({[this.props.doodle.tool]: {start: {x: mousePos.x, y: mousePos.y, color: this.props.doodle.color, lineWidth: this.context.lineWidth}, lines: []}})
+					tempNewHistory = this.state.history
+					tempNewHistory.push({[this.props.doodle.tool]: {start: {x: mousePos.x, y: mousePos.y, color: this.props.doodle.color, lineWidth: this.context.lineWidth}, lines: []}})
+					this.setState({ history: tempNewHistory})
 					break
 				case "line":
 					this.context.beginPath()
 					this.context.moveTo(mousePos.x, mousePos.y)
-					this.history.push({[this.props.doodle.tool]: {x1: mousePos.x, y1: mousePos.y, x2: 0, y2: 0, color: this.props.doodle.color, lineWidth: this.context.lineWidth}})
+					tempNewHistory = this.state.history
+					tempNewHistory.push({[this.props.doodle.tool]: {x1: mousePos.x, y1: mousePos.y, x2: 0, y2: 0, color: this.props.doodle.color, lineWidth: this.context.lineWidth}})
+					this.setState({ history: tempNewHistory})
 					break
 				case "rectangle":
 					this.context.beginPath()
-					this.history.push({[this.props.doodle.tool]: {x1: mousePos.x, y1: mousePos.y, x2: 0, y2: 0, color: this.props.doodle.color, lineWidth: this.context.lineWidth}})
+					tempNewHistory = this.state.history
+					tempNewHistory.push({[this.props.doodle.tool]: {x1: mousePos.x, y1: mousePos.y, x2: 0, y2: 0, color: this.props.doodle.color, lineWidth: this.context.lineWidth}})
+					this.setState({ history: tempNewHistory})
 					break
 				case "circle":
 					this.context.beginPath()
-					this.history.push({[this.props.doodle.tool]: {startX: mousePos.x, startY: mousePos.y, color: this.props.doodle.color, lineWidth: this.context.lineWidth, midX: null, midY: null, r: null}})
+					tempNewHistory = this.state.history
+					tempNewHistory.push({[this.props.doodle.tool]: {startX: mousePos.x, startY: mousePos.y, color: this.props.doodle.color, lineWidth: this.context.lineWidth, midX: null, midY: null, r: null}})
+					this.setState({ history: tempNewHistory})
 					break
 				case "image":
 					let image = new Image()
 					image.src = this.props.doodle.imageSrc
 					if (image.src) {
 						this.context.drawImage(image, mousePos.x - image.width / 2, mousePos.y - image.height / 2)
-						this.history.push({[this.props.doodle.tool]: {x: mousePos.x - image.width / 2, y: mousePos.y - image.height / 2, src: image.src}})
+						tempNewHistory = this.state.history
+						tempNewHistory.push({[this.props.doodle.tool]: {x: mousePos.x - image.width / 2, y: mousePos.y - image.height / 2, src: image.src}})
+						this.setState({ history: tempNewHistory})
 					}
 					break
 				default:
 					break
 			}
 			this.setState({
-				historyLength: this.history.length
+				historyLength: this.state.history.length
 			})
-			this.props.setSliderValue(this.history.length)
+			this.props.setSliderValue(this.state.history.length)
 			this.isPainting = true
 		}
 	}
 
 	mouseMoveEventListener(event) {
-		if (this.isPainting && this.props.slider.value === this.history.length) {
+		if (this.isPainting && this.props.slider.value === this.state.history.length) {
 			let mousePos = this.getMousePos(this.canvas, event)
+			let tempNewHistory = null
 			switch (this.props.doodle.tool) {
 				case "free":
 						this.context.lineTo(mousePos.x, mousePos.y)
 						this.context.stroke() //path gets a stroke
-
-						this.history[this.history.length-1].free.lines.push({x: mousePos.x, y: mousePos.y})
+						tempNewHistory = this.state.history
+						tempNewHistory[tempNewHistory.length-1].free.lines.push({x: mousePos.x, y: mousePos.y})
+						this.setState({ history: tempNewHistory })
 					break
 				case "rectangle":
-						this.context.rect(this.history[this.history.length-1].rectangle.x1, this.history[this.history.length-1].rectangle.y1, mousePos.x - this.history[this.history.length-1].rectangle.x1, mousePos.y - this.history[this.history.length-1].rectangle.y1)
+						this.context.rect(this.state.history[this.state.history.length-1].rectangle.x1, this.state.history[this.state.history.length-1].rectangle.y1, mousePos.x - this.state.history[this.state.history.length-1].rectangle.x1, mousePos.y - this.state.history[this.state.history.length-1].rectangle.y1)
 						this.context.fill()
-
-						this.history[this.history.length-1].rectangle.x2 = mousePos.x - this.history[this.history.length-1].rectangle.x1
-						this.history[this.history.length-1].rectangle.y2 = mousePos.y - this.history[this.history.length-1].rectangle.y1
+						tempNewHistory = this.state.history
+						tempNewHistory[tempNewHistory.length-1].rectangle.x2 = mousePos.x - tempNewHistory[tempNewHistory.length-1].rectangle.x1
+						tempNewHistory[tempNewHistory.length-1].rectangle.y2 = mousePos.y - tempNewHistory[tempNewHistory.length-1].rectangle.y1
+						this.setState({ history: tempNewHistory })
 					break
 				case "circle":
-						let circleInfo = this.history[this.history.length-1].circle
+						let circleInfo = this.state.history[this.state.history.length-1].circle
 						let dx = Math.abs(circleInfo.startX - mousePos.x)
 						let dy = Math.abs(circleInfo.startY - mousePos.y)
 						let midX = (circleInfo.startX + mousePos.x) / 2
@@ -110,15 +124,17 @@ class Doodle extends Component {
 						this.context.lineWidth = circleInfo.lineWidth
 						this.context.fill()
 
-						this.history[this.history.length-1].circle.midX = midX
-						this.history[this.history.length-1].circle.midY = midY
-						this.history[this.history.length-1].circle.r = r
+						tempNewHistory = this.state.history
+						tempNewHistory[tempNewHistory.length-1].circle.midX = midX
+						tempNewHistory[tempNewHistory.length-1].circle.midY = midY
+						tempNewHistory[tempNewHistory.length-1].circle.r = r
+						this.setState({ history: tempNewHistory })
 					break
 				default:
 					break
 			}
 			this.setState({
-				historyLength: this.history.length
+				historyLength: this.state.history.length
 			})
 			// old bug? this.props.setSliderValue(this.history.length)
 		}
@@ -126,26 +142,28 @@ class Doodle extends Component {
 
 	mouseUpEventListener(event) {
 		let mousePos = this.getMousePos(this.canvas, event)
-		if (this.props.slider.value === this.history.length) {
+		let tempNewHistory = null
+		if (this.props.slider.value === this.state.history.length) {
 			switch (this.props.doodle.tool) {
 				case "line":
 					this.context.lineTo(mousePos.x, mousePos.y)
 					this.context.stroke()
 
-					this.history[this.history.length-1].line.x2 = mousePos.x
-					this.history[this.history.length-1].line.y2 = mousePos.y
+					tempNewHistory = this.state.history
+					tempNewHistory[tempNewHistory.length-1].line.x2 = mousePos.x
+					tempNewHistory[tempNewHistory.length-1].line.y2 = mousePos.y
+					this.setState({ history: tempNewHistory })
 					this.setState({
-						historyLength: this.history.length
+						historyLength: this.state.history.length
 					})
-					this.props.setSliderValue(this.history.length)
+					this.props.setSliderValue(this.state.history.length)
 					break
 				case "free":
-					if (this.history[this.history.length-1].free.lines.length === 0) {
-						this.history = this.history.slice(0, this.history.length-1)
-						this.setState({
-							historyLength: this.history.length
-						})
-						this.props.setSliderValue(this.history.length)
+					if (this.state.history[this.state.history.length-1].free.lines.length === 0) {
+						tempNewHistory = this.state.history
+						tempNewHistory = tempNewHistory.slice(0, tempNewHistory.length-1)
+						this.setState({ history: tempNewHistory })
+						this.props.setSliderValue(this.state.history.length)
 					}
 					break
 				default:
@@ -153,28 +171,30 @@ class Doodle extends Component {
 			}
 		}
 		this.isPainting = false
-		// console.log(this.history)
 	}
 
 	undoEventListener(event) {
-		if (this.props.slider.value === this.history.length) {
+		if (this.props.slider.value === this.state.history.length) {
 			if (event.keyCode === 90 && event.ctrlKey &&
-					!this.isPainting && this.history.length > 0) {
-				this.redoHistory.push(this.history[this.history.length-1])
-				console.log(this.redoHistory.length)
-				this.history = this.history.slice(0, -1)
-				this.drawImage(this.context, this.history)
+					!this.isPainting && this.state.history.length > 0) {
+				let tempNewRedoHistory = this.state.redoHistory
+				tempNewRedoHistory.push(this.state.history[this.state.history.length-1])
+				this.setState({ redoHistory: tempNewRedoHistory })
+				console.log(this.state.redoHistory.length)
+				let tempNewHistory = this.state.history.slice(0, -1)
+				this.setState({ history: tempNewHistory })
+				this.drawImage(this.context, tempNewHistory)
 			} else if (event.keyCode === 82 && event.ctrlKey &&
-					!this.isPainting && this.redoHistory.length > 0) {
+					!this.isPainting && this.state.redoHistory.length > 0) {
 				console.log('redoing')
-				this.history.push(this.redoHistory[this.redoHistory.length-1])
-				this.redoHistory = this.redoHistory.slice(0, -1)
-				this.drawImage(this.context, this.history)
+				let tempNewHistory = this.state.history
+				tempNewHistory.push(this.state.redoHistory[this.state.redoHistory.length-1])
+				this.setState({ history: tempNewHistory })
+				let tempNewRedoHistory = this.state.redoHistory.slice(0, -1)
+				this.setState({ redoHistory: tempNewRedoHistory })
+				this.drawImage(this.context, tempNewHistory)
 			}
-			this.setState({
-				historyLength: this.history.length
-			})
-			this.props.setSliderValue(this.history.length)
+			this.props.setSliderValue(this.state.history.length)
 		}
 	}
 
@@ -190,7 +210,7 @@ class Doodle extends Component {
 		this.updateCanvas()
 
 		this.autoSave = setInterval(() => {
-		if (this.props.images.autoSave && this.props.slider.value === this.history.length)
+		if (this.props.images.autoSave && this.props.slider.value === this.state.history.length)
 		  this.save('PATCH', `http://localhost:3001/v1/accounts/${this.props.account.id}/images/${this.props.images.current.id}`, this.props.images.current.title)
 		}, 3000)
 
@@ -226,11 +246,8 @@ class Doodle extends Component {
 		this.context = this.canvas.getContext('2d')
 		if (!this.props.images.current) {
 			this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
-			this.history = []
-			this.redoHistory = []
-	        this.setState({
-	          historyLength: 0
-	        })
+			this.setState({ history: [] })
+			this.setState({ redohistory: [] })
 			this.props.setCurrentImage('new')
 		}
 	}
@@ -243,12 +260,9 @@ class Doodle extends Component {
       })
       .then(resp => {
         let imageData = resp.data.image_data
-        this.history = imageData
-		this.setState({
-			historyLength: this.history.length
-		})
-        this.props.setSliderValue(this.history.length)
-        this.drawImage(this.context, this.history)
+        this.setState({ history: imageData })
+        this.props.setSliderValue(imageData.length)
+        this.drawImage(this.context, imageData)
         if (resp.data.account_id === this.props.account.id)
         	this.props.setCurrentImage({id: resp.data.id, title: resp.data.title})
       })
@@ -274,7 +288,7 @@ class Doodle extends Component {
       axios({
         method: method,
         url: url,
-        data: JSON.stringify({image: this.history, preview: lowQualityImage, title: title})
+        data: JSON.stringify({image: this.state.history, preview: lowQualityImage, title: title})
       })
       .then(resp => {
           window.alert("Successfully saved!")
@@ -292,7 +306,7 @@ class Doodle extends Component {
     }
 
 	renderHistory(value, sliding) {
-		let tempHistory= this.history.slice(0, value)
+		let tempHistory = this.state.history.slice(0, value)
 		this.drawImage(this.context, tempHistory)
 	}
 
@@ -314,7 +328,7 @@ class Doodle extends Component {
             break
           case "image":
             let image = new Image()
-            image.src = this.history[i].image.src
+            image.src = this.state.history[i].image.src
             this.context.drawImage(image, history[i].image.x, history[i].image.y)
             break
           default:
@@ -358,12 +372,6 @@ class Doodle extends Component {
       context.stroke()
     }
 
-    // drawAnimatedLine(line1, line2) {
-    //   let animation = setInterval(() => {
-
-    //   }, 10)
-    // }
-
   	getMousePos(canvas, evt) {
     	let rect = this.canvas.getBoundingClientRect()
     	return {
@@ -393,7 +401,7 @@ class Doodle extends Component {
 			<div className="doodle">
             <ConnectedToolBox className="toolbox" />
       			{saving}
-						<DoodleSlider max={this.state.historyLength} handleSlide={this.renderHistory} disabled={this.state.historyLength > 0? false : true}/>
+						<DoodleSlider max={this.state.history.length} handleSlide={this.renderHistory} disabled={this.state.historyLength > 0? false : true}/>
       			<canvas tabIndex='1' id="app-canvas" width={this.state.width} height={this.state.height} />
 						</div>
 		)
@@ -403,8 +411,8 @@ class Doodle extends Component {
 const mapStateToProps = (state) => ({
 	doodle: state.doodle,
 	account: state.account,
-  images: state.images,
-  slider: state.slider
+	images: state.images,
+	slider: state.slider
 })
 
 const mapDispatchToProps = (dispatch) => ({
