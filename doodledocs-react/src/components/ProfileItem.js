@@ -14,6 +14,7 @@ class ProfileItem extends Component {
 	handleClick(evt) {
 		evt.preventDefault()
 		this.props.setCurrentImage({id: this.props.image.id, title: this.props.image.title})
+		this.props.set
 		this.props.history.push('/')
 	}
 

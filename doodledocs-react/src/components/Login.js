@@ -11,7 +11,8 @@ class Login extends Component {
 
 		this.state = {
 			username: '',
-			password: ''
+			password: '',
+			failed: false
 		}
 
 		this.handleInput = this.handleInput.bind(this)
@@ -49,17 +50,29 @@ class Login extends Component {
 				this.props.history.push('/')
 			})
 		})
+		.catch((error) => {
+			this.setState({
+				failed: true
+			});
+		})
 	}
 
 	render() {
+		let failMessage = this.state.failed ?
+			<div id="failedLogin">
+				<p>Error with username or password. Please try logging in again.</p>
+			</div> :
+			null
 		return (
-			<form onSubmit={this.handleSubmit} className="login_signup">
-				<div>
+			<div>
+			{failMessage}
+				<form onSubmit={this.handleSubmit} className="login_signup" >
 					<label>Username: </label><input type="text" name="username" value={this.state.username} onChange={this.handleInput} /><br></br>
-				</div>
-				<label>Password: </label><input type="password" name="password" value={this.state.password} onChange={this.handleInput} />
-				<input type="submit" value="Login" id="button"/>
-			</form>
+					<label>Password: </label><input type="password" name="password" value={this.state.password} onChange={this.handleInput} />
+					<input type="submit" value="Login" id="button"/>
+				</form>
+			</div>
+
 		)
 	}
 }

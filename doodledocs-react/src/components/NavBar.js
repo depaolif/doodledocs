@@ -3,6 +3,8 @@ import React, {Component} from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { resetImage } from '../actions/image'
+import { setTool } from '../actions/doodle'
+import { setSliderValue } from '../actions/slider'
 
 class NavBar extends Component {
 	constructor(props) {
@@ -12,6 +14,8 @@ class NavBar extends Component {
 
 	handleClick(evt) {
 		this.props.resetImage()
+		this.props.setTool('free')
+		this.props.setSliderValue(0)
 	}
 
 	render() {
@@ -34,6 +38,12 @@ const mapDispatchToProps = (dispatch) => ({
 	resetImage: () => {
 		dispatch(resetImage())
 	},
+	setTool: (tool) => {
+		dispatch(setTool(tool))
+	},
+	setSliderValue: (value) => {
+		dispatch(setSliderValue(value))
+	}
 })
 
 const ConnectedNavBar = connect(mapStateToProps, mapDispatchToProps)(NavBar)
