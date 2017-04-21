@@ -13,7 +13,7 @@ class Doodle extends Component {
 		super()
 
 		this.history = []
-    this.redoHistory = []
+   		this.redoHistory = []
 
 		this.state = {
 			height: 1000,
@@ -24,9 +24,9 @@ class Doodle extends Component {
 		this.canvas = null
 		this.context = null
 		this.isPainting = false
-    this.autoSave = null
+    	this.autoSave = null
 
-    this.handleAutoSave = this.handleAutoSave.bind(this)
+    	this.handleAutoSave = this.handleAutoSave.bind(this)
 		this.handleSave = this.handleSave.bind(this)
 		this.updateCanvas = this.updateCanvas.bind(this)
 		this.renderHistory = this.renderHistory.bind(this)
@@ -291,10 +291,10 @@ class Doodle extends Component {
       this.props.setAutoSave(event.target.checked)
     }
 
-		renderHistory(value, sliding) {
-			let tempHistory= this.history.slice(0, value)
-			this.drawImage(this.context, tempHistory)
-		}
+	renderHistory(value, sliding) {
+		let tempHistory= this.history.slice(0, value)
+		this.drawImage(this.context, tempHistory)
+	}
 
     drawImage(context, history) {
       context.clearRect(0, 0, 1500, 1500)

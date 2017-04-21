@@ -42,8 +42,14 @@ class V1::ImagesController < ApplicationController
   end
 
   def destroy
+    account_id = Auth.decode(request.headers["bearer"])[0]["account_id"]
     image = Image.find(params[:id])
-    Image.destroy(image)
+    if (account_id === image.account_id)
+      Image.destroy(image)
+      render json: "Successfully destroyed image."
+    else
+      render json: "Unable to destroy image.", status: 401
+    end
   end
 
 end
