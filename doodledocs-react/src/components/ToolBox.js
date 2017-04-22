@@ -65,6 +65,7 @@ class ToolBox extends Component {
 	}
 
 	handleWebCam(event) {
+		this.setState({ showWebcam: true })
 		navigator.mediaDevices.getUserMedia({ audio: false, video: { width: 1280, height: 720 } })
 		.then((mediaStream) => {
 			let video = document.getElementById('webcam-video')
@@ -73,7 +74,6 @@ class ToolBox extends Component {
 			video.onloadedmetadata = (e) => {
 				console.log(this.state.showWebcam, 'onload')
 				if (!this.state.showWebcam) {
-					this.setState({ showWebcam: true })
 		    		video.play()
 		    	}
 			}
@@ -119,7 +119,7 @@ class ToolBox extends Component {
 				<button name="rectangle" onClick={this.handleClick}>Rectangle</button>
 				<button name="text" onClick={this.handleClick}>Text</button>
 				<button name="webcam-show" onClick={this.handleWebCam}>Webcam</button>
-				<video type='hidden' name="webcam-video" id="webcam-video" />
+				{this.state.showWebcam ? <video type='hidden' name="webcam-video" id="webcam-video" /> : false}
 				{this.state.showWebcam ? <canvas type='hidden' id='webcam-canvas' /> : false}
 				{this.state.showWebcam ? <button name="webcam" onClick={this.handleWebCamSave}>Take Picture</button> : false}
 				<input onChange={this.handleImageUpload} type="file" name="image" />
