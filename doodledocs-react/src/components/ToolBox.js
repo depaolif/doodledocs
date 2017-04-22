@@ -10,7 +10,9 @@ class ToolBox extends Component {
 
 		this.state = {
 			focusedItem: null,
-			showColor: false
+			showColor: false,
+			webCamStream: null,
+			showWebcam: false
 		}
 
 		this.handleChange = this.handleChange.bind(this)
@@ -18,6 +20,8 @@ class ToolBox extends Component {
 		this.handleImageUpload = this.handleImageUpload.bind(this)
 		this.handleChangeComplete = this.handleChangeComplete.bind(this)
 		this.showOrHideColor = this.showOrHideColor.bind(this)
+		this.handleWebCam = this.handleWebCam.bind(this)
+		this.handleWebCamSave = this.handleWebCamSave.bind(this)
 	}
 
 	componentDidMount() {
@@ -60,7 +64,39 @@ class ToolBox extends Component {
 		});
 	}
 
+	handleWebCam(event) {
+		navigator.mediaDevices.getUserMedia({ audio: false, video: { width: 1280, height: 720 } })
+		.then((mediaStream) => {
+			let video = document.getElementById('webcam-video')
+			video.srcObject = mediaStream
+			this.setState({ webCamStream: mediaStream })
+			video.onloadedmetadata = (e) => {
+				console.log(this.state.showWebcam, 'onload')
+				if (!this.state.showWebcam) {
+					this.setState({ showWebcam: true })
+		    		video.play()
+		    	}
+			}
+		})
+		.catch((err) => { console.log(err.name + ": " + err.message) })
+	}
+
+	handleWebCamSave(event) {
+		let video = document.getElementById('webcam-video')
+		let screenShotCanvas = document.getElementById('webcam-canvas')
+		screenShotCanvas.getContext('2d').drawImage(video, 0, 0, screenShotCanvas.width, screenShotCanvas.height);
+		this.state.webCamStream.getVideoTracks()[0].stop()
+		video.src = ""
+		video.pause()
+		video.onloadedmetadata = (e) => { }
+		this.props.setImageSrc(screenShotCanvas.toDataURL('image/jpeg', 0.1))
+		this.props.setTool('image')
+		this.setState({ showWebcam: false })
+		console.log(this.state.showWebcam, 'save')
+	}
+
 	render() {
+		console.log(this.state.showWebcam, 'render')
 		return (
 			<div className="toolbox">
 				{this.state.showColor ? <SketchPicker
@@ -82,6 +118,10 @@ class ToolBox extends Component {
 				<button name="circle" onClick={this.handleClick}>Circle</button>
 				<button name="rectangle" onClick={this.handleClick}>Rectangle</button>
 				<button name="text" onClick={this.handleClick}>Text</button>
+				<button name="webcam-show" onClick={this.handleWebCam}>Webcam</button>
+				<video type='hidden' name="webcam-video" id="webcam-video" />
+				{this.state.showWebcam ? <canvas type='hidden' id='webcam-canvas' /> : false}
+				{this.state.showWebcam ? <button name="webcam" onClick={this.handleWebCamSave}>Take Picture</button> : false}
 				<input onChange={this.handleImageUpload} type="file" name="image" />
 			</div>
 		)
