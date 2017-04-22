@@ -143,7 +143,6 @@ class Doodle extends Component {
 			this.setState({
 				historyLength: this.state.history.length
 			})
-			// old bug? this.props.setSliderValue(this.history.length)
 		}
 	}
 

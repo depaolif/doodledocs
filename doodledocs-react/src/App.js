@@ -12,8 +12,6 @@ import ConnectedImages from './components/Images'
 import PrivateRoute from './components/PrivateRoute'
 import PrivateAuthRoute from './components/PrivateAuth'
 import { setInfo } from './actions/account'
-import { setImageList } from './actions/image'
-import axios from 'axios'
 
 class App extends Component {
   componentDidMount() {
