@@ -11,7 +11,7 @@ class V1::AccountsController < ApplicationController
   end
 
   def show
-    if (request.headers["bearer"])
+    if (request.headers["bearer"] && ((Auth.decode(request.headers["bearer"])[0]["account_id"]).is_a? Numeric))
       id = Auth.decode(request.headers["bearer"])[0]["account_id"]
       account = Account.find(id)
       render json: account, serializer: AccountSerializer
