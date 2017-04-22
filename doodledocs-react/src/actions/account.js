@@ -1,3 +1,6 @@
+import { setImageList } from './image'
+import axios from 'axios'
+
 export const setToken = (token) => ({
  type: 'SET_TOKEN', payload: token
 })
@@ -13,3 +16,18 @@ export const setId = (id) => ({
 export const logOut = () => ({
   type: 'USER_LOGOUT'
 })
+
+export const setInfo = (token) => {
+	return (dispatch) => {
+		axios({
+			method: 'GET',
+		   	url: 'http://localhost:3001/v1/me',
+			headers: {bearer: token}
+		})
+		.then(resp => {
+			dispatch(setUsername(resp.data.username))
+	    	dispatch(setId(resp.data.id))
+	   		dispatch(setImageList(resp.data.images))
+		})
+  	}
+}

@@ -11,25 +11,14 @@ import ConnectedNavBar from './components/NavBar'
 import ConnectedImages from './components/Images'
 import PrivateRoute from './components/PrivateRoute'
 import PrivateAuthRoute from './components/PrivateAuth'
-import { setToken, setUsername, setId } from './actions/account'
+import { setInfo } from './actions/account'
 import { setImageList } from './actions/image'
 import axios from 'axios'
 
 class App extends Component {
   componentDidMount() {
-    let token = localStorage.getItem('token')
-    if (token) {
-      this.props.setToken(token)
-      axios({
-        method: 'GET',
-        url: 'http://localhost:3001/v1/me',
-        headers: {bearer: token}
-      })
-      .then(resp => {
-        this.props.setUsername(resp.data.username)
-        this.props.setId(resp.data.id)
-        this.props.setImageList(resp.data.images)
-      })
+    if (this.props.account.token) {
+      this.props.setInfo(this.props.account.token)
     }
   }
 
@@ -60,18 +49,9 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  setToken: (token) => {
-    dispatch(setToken(token))
-  },
-  setUsername: (username) => {
-    dispatch(setUsername(username))
-  },
-  setId: (id) => {
-    dispatch(setId(id))
-  },
-  setImageList: (list) => {
-    dispatch(setImageList(list))
-  },
+  setInfo: (token) => {
+    dispatch(setInfo(token))
+  }
 })
 
 const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App)
