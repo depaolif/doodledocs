@@ -19,12 +19,12 @@ class Doodle extends Component {
 			width: window.innerWidth,
 			history: [],
 			redoHistory: [],
-			imageTitle: ''
+			imageTitle: '',
+			isPainting: false
 		}
 
 		this.canvas = null
 		this.context = null
-		this.isPainting = false
     	this.autoSave = null
 
     	this.handleAutoSave = this.handleAutoSave.bind(this)
@@ -34,7 +34,8 @@ class Doodle extends Component {
 		this.mouseDownEventListener = this.mouseDownEventListener.bind(this)
 		this.mouseUpEventListener = this.mouseUpEventListener.bind(this)
 		this.mouseMoveEventListener = this.mouseMoveEventListener.bind(this)
-		this.undoEventListener = this.undoEventListener.bind(this)
+		this.keyDownEventListener = this.keyDownEventListener.bind(this)
+		this.keyPressEventListener = this.keyPressEventListener.bind(this)
 		this.handleInputChange = this.handleInputChange.bind(this)
 	}
 
@@ -83,19 +84,23 @@ class Doodle extends Component {
 						this.setState({ history: tempNewHistory})
 					}
 					break
+				case "text":
+					tempNewHistory = this.state.history
+					tempNewHistory.push({[this.props.doodle.tool]: {x: mousePos.x, y: mousePos.y, text: '', font: '48px serif'}})
+					this.setState({ history: tempNewHistory })
+					break
 				default:
 					break
 			}
 			this.setState({
-				historyLength: this.state.history.length
+				isPainting: true
 			})
 			this.props.setSliderValue(this.state.history.length)
-			this.isPainting = true
 		}
 	}
 
 	mouseMoveEventListener(event) {
-		if (this.isPainting && this.props.slider.value === this.state.history.length) {
+		if (this.state.isPainting && this.props.slider.value === this.state.history.length) {
 			let mousePos = this.getMousePos(this.canvas, event)
 			let tempNewHistory = null
 			switch (this.props.doodle.tool) {
@@ -172,13 +177,13 @@ class Doodle extends Component {
 					break
 			}
 		}
-		this.isPainting = false
+		this.setState({ isPainting: false })
 	}
 
-	undoEventListener(event) {
+	keyDownEventListener(event) {
 		if (this.props.slider.value === this.state.history.length) {
 			if (event.keyCode === 90 && event.ctrlKey &&
-					!this.isPainting && this.state.history.length > 0) {
+					!this.state.isPainting && this.state.history.length > 0) {
 				let tempNewRedoHistory = this.state.redoHistory
 				tempNewRedoHistory.push(this.state.history[this.state.history.length-1])
 				this.setState({ redoHistory: tempNewRedoHistory })
@@ -187,7 +192,7 @@ class Doodle extends Component {
 				this.setState({ history: tempNewHistory })
 				this.drawImage(this.context, tempNewHistory)
 			} else if (event.keyCode === 82 && event.ctrlKey &&
-					!this.isPainting && this.state.redoHistory.length > 0) {
+					!this.state.isPainting && this.state.redoHistory.length > 0) {
 				console.log('redoing')
 				let tempNewHistory = this.state.history
 				tempNewHistory.push(this.state.redoHistory[this.state.redoHistory.length-1])
@@ -197,6 +202,18 @@ class Doodle extends Component {
 				this.drawImage(this.context, tempNewHistory)
 			}
 			this.props.setSliderValue(this.state.history.length)
+		}
+	}
+
+	keyPressEventListener() {
+		if (this.props.doodle.tool === 'text' 
+			&& this.state.history[this.state.history.length-1].text) {
+			let tempNewHistory = this.state.history
+			tempNewHistory[tempNewHistory.length - 1].text.text += event.key
+			this.context.font = tempNewHistory[tempNewHistory.length - 1].text.font
+			this.context.fillText(tempNewHistory[tempNewHistory.length - 1].text.text, tempNewHistory[tempNewHistory.length - 1].text.x, tempNewHistory[tempNewHistory.length - 1].text.y)
+			this.setState({ history: tempNewHistory })
+			console.log(this.state.history)
 		}
 	}
 
@@ -210,6 +227,8 @@ class Doodle extends Component {
 
   	componentDidMount() {
 		this.updateCanvas()
+		this.context.lineCap = 'round'
+		this.context.lineJoin = 'round'
 
 		this.autoSave = setInterval(() => {
 		if (this.props.images.autoSave && this.props.slider.value === this.state.history.length)
@@ -222,7 +241,8 @@ class Doodle extends Component {
     	this.canvas.addEventListener('mouseup', this.mouseUpEventListener)
 
     	// event listener for undo feature
-    	document.addEventListener('keydown', this.undoEventListener)
+    	document.addEventListener('keydown', this.keyDownEventListener)
+    	document.addEventListener('keypress', this.keyPressEventListener)
   	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -233,7 +253,7 @@ class Doodle extends Component {
 		this.canvas.removeEventListener('mousedown', this.mouseDownEventListener)
 		this.canvas.removeEventListener('mousemove', this.mouseMoveEventListener)
 		this.canvas.removeEventListener('mouseup', this.mouseUpEventListener)
-		document.removeEventListener('keydown', this.undoEventListener)
+		document.removeEventListener('keydown', this.keyDownEventListener)
 		clearInterval(this.autoSave)
 		this.props.setAutoSave(false)
 		this.props.setSliderValue(0)
@@ -330,9 +350,13 @@ class Doodle extends Component {
             break
           case "image":
             let image = new Image()
-            image.src = this.state.history[i].image.src
+            image.src = history[i].image.src
             this.context.drawImage(image, history[i].image.x, history[i].image.y)
             break
+          case "text":
+          	this.context.font = history[i].text.font
+			this.context.fillText(history[i].text.text, history[i].text.x, history[i].text.y)
+          	break
           default:
             break
         }

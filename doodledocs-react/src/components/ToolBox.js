@@ -81,6 +81,7 @@ class ToolBox extends Component {
 				<button name="line" onClick={this.handleClick}>Line</button>
 				<button name="circle" onClick={this.handleClick}>Circle</button>
 				<button name="rectangle" onClick={this.handleClick}>Rectangle</button>
+				<button name="text" onClick={this.handleClick}>Text</button>
 				<input onChange={this.handleImageUpload} type="file" name="image" />
 			</div>
 		)
