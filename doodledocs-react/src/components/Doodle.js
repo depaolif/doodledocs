@@ -181,7 +181,7 @@ class Doodle extends Component {
 	}
 
 	keyDownEventListener(event) {
-		if (this.props.slider.value === this.state.history.length) {
+		if (this.props.slider.value === this.state.history.length && this.props.doodle.tool !== 'text') {
 			if (event.keyCode === 90 && event.ctrlKey &&
 					!this.state.isPainting && this.state.history.length > 0) {
 				let tempNewRedoHistory = this.state.redoHistory
@@ -206,7 +206,8 @@ class Doodle extends Component {
 	}
 
 	keyPressEventListener() {
-		if (this.props.doodle.tool === 'text' 
+		if (this.props.slider.value === this.state.history.length
+			&& this.props.doodle.tool === 'text' 
 			&& this.state.history[this.state.history.length-1].text) {
 			let tempNewHistory = this.state.history
 			tempNewHistory[tempNewHistory.length - 1].text.text += event.key
