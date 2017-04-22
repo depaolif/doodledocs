@@ -8,7 +8,7 @@ import '../css/Slider.css'
 class DoodleSlider extends Component {
   constructor(props) {
     super(props)
-    this.state={
+    this.state = {
       sliding: false
     }
     this.handleChange=this.handleChange.bind(this)
