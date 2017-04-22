@@ -10,6 +10,7 @@ import ConnectedProfile from './components/Profile'
 import ConnectedNavBar from './components/NavBar'
 import ConnectedImages from './components/Images'
 import PrivateRoute from './components/PrivateRoute'
+import PrivateAuthRoute from './components/PrivateAuth'
 import { setToken, setUsername, setId } from './actions/account'
 import { setImageList } from './actions/image'
 import axios from 'axios'
@@ -40,9 +41,9 @@ class App extends Component {
               <Route path="/" component={ConnectedNavBar}/>
               <Switch>
                 <Route exact path="/" component={ConnectedDoodle} />
-                <Route path="/login" component={ConnectedLogin} />
-                <Route path="/logout" component={ConnectedLogout} />
-                <Route path="/register" component={ConnectedRegister} />
+                <PrivateAuthRoute path="/login" component={ConnectedLogin} />
+                <PrivateRoute path="/logout" component={ConnectedLogout} />
+                <PrivateAuthRoute path="/register" component={ConnectedRegister} />
                 <Route exact path="/images" component={ConnectedImages}/>
                 <Route path="/images/:imageId" component={ConnectedDoodle}/>
                 <PrivateRoute path="/profile" component={ConnectedProfile} />

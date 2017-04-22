@@ -122,6 +122,7 @@ class ToolBox extends Component {
 				{this.state.showWebcam ? <video type='hidden' name="webcam-video" id="webcam-video" /> : false}
 				{this.state.showWebcam ? <canvas type='hidden' id='webcam-canvas' /> : false}
 				{this.state.showWebcam ? <button name="webcam" onClick={this.handleWebCamSave}>Take Picture</button> : false}
+				<label> Upload Image: </label>
 				<input onChange={this.handleImageUpload} type="file" name="image" />
 			</div>
 		)
