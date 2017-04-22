@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
-import { setCurrentImage, removeImage } from '../actions/image'
+import { removeImage } from '../actions/image'
 import ImageItem from './ImageItem'
 import axios from 'axios'
 
