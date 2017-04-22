@@ -86,7 +86,7 @@ class Doodle extends Component {
 					break
 					case "text":
 					tempNewHistory = this.state.history
-					tempNewHistory.push({[this.props.doodle.tool]: {x: mousePos.x, y: mousePos.y, text: '', font: '48px serif'}})
+					tempNewHistory.push({[this.props.doodle.tool]: {x: mousePos.x, y: mousePos.y, text: '', font: '48px serif', color: '#000'}})
 					this.setState({ history: tempNewHistory })
 					break
 					default:
@@ -354,6 +354,7 @@ class Doodle extends Component {
 				this.context.drawImage(image, history[i].image.x, history[i].image.y)
 				break
 				case "text":
+				this.context.fillStyle = history[i].text.color
 				this.context.font = history[i].text.font
 				this.context.fillText(history[i].text.text, history[i].text.x, history[i].text.y)
 				break
@@ -406,73 +407,73 @@ class Doodle extends Component {
 		}
 	}
 
-		// handle input change for title of picture before saving
-		handleInputChange(event) {
-			this.setState({
-				imageTitle: event.target.value
-			});
-		}
+	// handle input change for title of picture before saving
+	handleInputChange(event) {
+		this.setState({
+			imageTitle: event.target.value
+		});
+	}
 
-		render() {
-			let saving = null
-			if (this.props.account.token && this.props.images.current === 'new') {
-				const isDisabled = this.state.imageTitle ? null : 'disabled'
-				saving =
-				<form onSubmit={this.handleSave}>
-				<label>Title: </label><input type="text" name="title" onChange={this.handleInputChange}/>
-				<input type="submit" value="Save" disabled={isDisabled} />
-				</form>
-			} else if (this.props.account.token && this.props.images.current && typeof this.props.images.current.id === 'number') {
-				saving =
-				<div>
-				<h1>{this.props.images.current.title}</h1>
-				<input onClick={this.handleSave} type="submit" value="Save" />
-				<label>AutoSave</label>
-				<input type="checkbox" name="autosave" onClick={this.handleAutoSave} />
-				</div>
-			}
-			return (
-				<div className="doodle">
+	render() {
+		let saving = null
+		if (this.props.account.token && this.props.images.current === 'new') {
+			const isDisabled = this.state.imageTitle ? null : 'disabled'
+			saving =
+			<form onSubmit={this.handleSave}>
+			<label>Title: </label><input type="text" name="title" onChange={this.handleInputChange}/>
+			<input type="submit" value="Save" disabled={isDisabled} />
+			</form>
+		} else if (this.props.account.token && this.props.images.current && typeof this.props.images.current.id === 'number') {
+			saving =
+			<div>
+			<h1>{this.props.images.current.title}</h1>
+			<input onClick={this.handleSave} type="submit" value="Save" />
+			<label>AutoSave</label>
+			<input type="checkbox" name="autosave" onClick={this.handleAutoSave} />
+			</div>
+		}
+		return (
+			<div className="doodle">
 				<ConnectedToolBox className="toolbox" />
 				{saving}
 				<DoodleSlider max={this.state.history.length} handleSlide={this.renderHistory} disabled={this.state.historyLength > 0? false : true}/>
 				<canvas tabIndex='1' id="app-canvas" width={this.state.width} height={this.state.height} />
-				</div>
-				)
-		}
+			</div>
+		)
 	}
+}
 
-	const mapStateToProps = (state) => ({
-		doodle: state.doodle,
-		account: state.account,
-		images: state.images,
-		slider: state.slider
-	})
+const mapStateToProps = (state) => ({
+	doodle: state.doodle,
+	account: state.account,
+	images: state.images,
+	slider: state.slider
+})
 
-	const mapDispatchToProps = (dispatch) => ({
-		setCurrentImage: (image) => {
-			dispatch(setCurrentImage(image))
-		},
-		updatePreviewForImage: (image) => {
-			dispatch(updatePreviewForImage(image))
-		},
-		addImage: (image) => {
-			dispatch(addImage(image))
-		},
-		setAutoSave: (bool) => {
-			dispatch(setAutoSave(bool))
-		},
-		setTool: (tool) => {
-			dispatch(setTool(tool))
-		},
-		setSliderValue: (value) => {
-			dispatch(setSliderValue(value))
-		},
-		resetImage: () => {
-			dispatch(resetImage())
-		}
-	})
+const mapDispatchToProps = (dispatch) => ({
+	setCurrentImage: (image) => {
+		dispatch(setCurrentImage(image))
+	},
+	updatePreviewForImage: (image) => {
+		dispatch(updatePreviewForImage(image))
+	},
+	addImage: (image) => {
+		dispatch(addImage(image))
+	},
+	setAutoSave: (bool) => {
+		dispatch(setAutoSave(bool))
+	},
+	setTool: (tool) => {
+		dispatch(setTool(tool))
+	},
+	setSliderValue: (value) => {
+		dispatch(setSliderValue(value))
+	},
+	resetImage: () => {
+		dispatch(resetImage())
+	}
+})
 
-	const ConnectedDoodle = connect(mapStateToProps, mapDispatchToProps)(Doodle)
+const ConnectedDoodle = connect(mapStateToProps, mapDispatchToProps)(Doodle)
 
-	export default ConnectedDoodle
+export default ConnectedDoodle

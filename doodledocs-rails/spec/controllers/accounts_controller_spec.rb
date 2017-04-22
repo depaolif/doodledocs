@@ -4,7 +4,7 @@ RSpec.describe V1::AccountsController, :type => :controller do
   describe "GET #show" do
     it "returns an unauthorized status code with an invalid token" do
     	token = Auth.issue({account_id: 'pizza'})
-    	request.headers["bearer"] = token	
+    	request.headers["bearer"] = token
 		get :show, nil, {"bearer": token}
 		expect(response).to have_http_status(401)
     end
