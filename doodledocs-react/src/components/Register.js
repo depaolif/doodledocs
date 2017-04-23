@@ -31,9 +31,13 @@ class Register extends Component {
 
 	validateInput(input, value) {
 		const stateInput = input === 'username' ? 'usernameValidation' : 'passwordValidation'
-		if (value.length >= 6 && !/\W/.test(value)) {
+		if (input === 'username' && value.length >= 4 && !/\W/.test(value)) {
 			this.setState({
-				[stateInput]: true
+				usernameValidation: true
+			});
+		} else if (input === 'password' && value.length >= 8) {
+			this.setState({
+				passwordValidation: true
 			});
 		} else {
 			this.setState({
@@ -81,8 +85,8 @@ class Register extends Component {
 				<p>Someone with that username already exists. Please try a different username.</p>
 			</div> :
 			null
-		const usernameValid = this.state.usernameValidation ? null : <div>Your username must be more than 6 characters.</div>
-		const passwordValid = this.state.passwordValidation ? null : <div>Your password must be more than 6 characters.</div>
+		const usernameValid = this.state.usernameValidation ? null : <div>Your username must be more than 3 characters and contain only alphanumeric characters.</div>
+		const passwordValid = this.state.passwordValidation ? null : <div>Your password must be more than 7 characters.</div>
 		const isDisabled = this.state.usernameValidation === true && this.state.passwordValidation === true ? null : 'disabled'
 		return (
 			<form onSubmit={this.handleSubmit} className="login_signup" >
