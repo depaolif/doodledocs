@@ -17,7 +17,7 @@ export const logOut = () => ({
   type: 'USER_LOGOUT'
 })
 
-export const setInfo = (token) => {
+export const getInfo = (token) => {
 	return (dispatch) => {
 		axios({
 			method: 'GET',
@@ -26,7 +26,6 @@ export const setInfo = (token) => {
 		})
 		.then(resp => {
 			dispatch(setUsername(resp.data.username))
-	    	dispatch(setId(resp.data.id))
 	   		dispatch(setImageList(resp.data.images))
 		})
   	}

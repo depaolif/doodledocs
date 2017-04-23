@@ -11,12 +11,12 @@ import ConnectedNavBar from './components/NavBar'
 import ConnectedImages from './components/Images'
 import PrivateRoute from './components/PrivateRoute'
 import PrivateAuthRoute from './components/PrivateAuth'
-import { setInfo } from './actions/account'
+import { getInfo } from './actions/account'
 
 class App extends Component {
-  componentDidMount() {
+  componentWillMount() {
     if (this.props.account.token) {
-      this.props.setInfo(this.props.account.token)
+      this.props.getInfo(this.props.account.token)
     }
   }
 
@@ -47,8 +47,8 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  setInfo: (token) => {
-    dispatch(setInfo(token))
+  getInfo: (token) => {
+    dispatch(getInfo(token))
   }
 })
 

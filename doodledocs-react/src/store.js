@@ -9,4 +9,6 @@ function configureStore(){
 const store = configureStore()
 const token = localStorage.getItem('token')
 store.dispatch({type: "SET_TOKEN", payload: token})
+const id = localStorage.getItem('id')
+store.dispatch({type: "SET_ID", payload: parseInt(id, 10)})
 export default store

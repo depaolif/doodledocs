@@ -61,6 +61,7 @@ class Register extends Component {
 			.then(resp => {
 				this.props.setUsername(resp.data.username)
 				this.props.setId(resp.data.id)
+				localStorage.setItem('id', resp.data.id)
 				this.props.setImageList(resp.data.images)
 				this.props.history.push('/')
 			})
