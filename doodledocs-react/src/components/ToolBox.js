@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import { setTool, setLineWidth, setImageSrc, setColor } from '../actions/doodle'
 import { SketchPicker } from 'react-color'
+import ColorPicker from './ColorPicker'
 
 
 class ToolBox extends Component {
@@ -63,10 +64,7 @@ class ToolBox extends Component {
 	render() {
 		return (
 			<div className="toolbox">
-				{this.state.showColor ? <SketchPicker
-					color={this.props.doodle.color}
-					onChangeComplete={this.handleChangeComplete} /> : false}
-				<button name="color" onClick={this.showOrHideColor}>Color</button>
+					<ColorPicker onChangeComplete={this.handleChangeComplete}/>
 				<label>Line Width: </label>
 				<select value={this.props.doodle.lineWidth} onChange={this.handleChange}>
 					<option value='1'>1</option>
