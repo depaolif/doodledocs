@@ -6,7 +6,6 @@ import { resetImage } from '../actions/image'
 import { setTool } from '../actions/doodle'
 import { setSliderValue } from '../actions/slider'
 import $ from 'jquery'
-import logo from '../../public/doodledocs.png'
 
 class NavBar extends Component {
 	constructor() {
