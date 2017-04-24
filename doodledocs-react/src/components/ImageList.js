@@ -31,7 +31,7 @@ class ImageList extends Component {
 		return (
 			<div className="image-list">
 				<h1 style={imageListTitle}>Latest Doodles</h1>
-				{imageList}
+				<ul>{imageList}</ul>
 			</div>
 		)
 	}
