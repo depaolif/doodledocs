@@ -123,14 +123,14 @@ class Doodle extends Component {
 	handleSave(event) {
 		event.preventDefault()
 		let url = `http://localhost:3001/v1/accounts/${this.props.account.id}/images`
-		let title = 'Test Image'
+		let title
+		let method = 'POST'
 		if (event.target[0] && event.target[0].name === "title")
 			title = event.target[0].value
-		let method = 'POST'
 		if (this.props.images.current !== 'new') {
 			url += `/${this.props.images.current.id}`
 			method = 'PATCH'
-			title = this.props.images.current.Title
+			title = this.props.images.current.title
 		}
 		this.save(method, url, title)
 	}
