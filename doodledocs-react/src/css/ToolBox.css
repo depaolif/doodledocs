@@ -2,5 +2,11 @@
 .toolbox{
   background-color: #fff;
   border: solid 2px;
+}
 
+.toolbox > * {
+  margin-left: 5px;
+  margin-right: 5px;
+  border-radius: 0.5em;
+  height: 2em;
 }
