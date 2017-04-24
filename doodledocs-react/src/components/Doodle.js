@@ -1,4 +1,4 @@
-import '../css/Doodle.css'
+import '../css/Doodle.scss'
 import React, {Component} from 'react'
 import { setCurrentImage, addImage, setAutoSave, resetImage, updatePreviewForImage } from '../actions/image'
 import { setSliderValue } from '../actions/slider'
@@ -180,17 +180,19 @@ class Doodle extends Component {
 		if (this.props.account.token && this.props.images.current === 'new') {
 			const isDisabled = this.state.imageTitle ? null : 'disabled'
 			saving =
-			<form onSubmit={this.handleSave}>
-			<label className="label">Title: </label><input type="text" name="title" onChange={this.handleInputChange}/>
-			<input type="submit" value="Save" disabled={isDisabled} />
-			</form>
+			<div className="save-box">
+				<form onSubmit={this.handleSave}>
+				<label className="label">Title: </label><input type="text" name="title" onChange={this.handleInputChange}/>
+				<input type="submit" value="Save" disabled={isDisabled} />
+				</form>
+			</div>
 		} else if (this.props.account.token && this.props.images.current && typeof this.props.images.current.id === 'number') {
 			saving =
-			<div>
-			<h1>{this.props.images.current.title}</h1>
-			<input onClick={this.handleSave} type="submit" value="Save" />
-			<label>AutoSave</label>
-			<input type="checkbox" name="autosave" onClick={this.handleAutoSave} />
+			<div className="save-box">
+				{this.props.images.current.title ? <h2>{this.props.images.current.title}</h2> : null}
+				<input type="submit" value="Save" onSubmit={this.handleSave} />
+				<label>AutoSave</label>
+				<input type="checkbox" name="autosave" onClick={this.handleAutoSave} />
 			</div>
 		}
 		return (

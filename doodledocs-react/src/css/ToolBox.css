@@ -10,3 +10,14 @@
   border-radius: 0.5em;
   height: 2em;
 }
+
+#free, #square{
+  border: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 0;
+}
+.icon{
+  width: auto;
+  height:auto
+}

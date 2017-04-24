@@ -29,8 +29,11 @@ class DoodleSlider extends Component {
         defaultValue={0}
         value={this.props.slider.value}
         onChange={this.handleChange}
+        minimumTrackStyle={{
+          backgroundColor: 'black'
+        }}
         handleStyle={{
-          backgroundColor: 'orange',
+          borderColor: 'black'
         }}
       />
     )

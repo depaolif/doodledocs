@@ -117,10 +117,11 @@ class ToolBox extends Component {
 					<ColorPicker onChangeComplete={this.handleChangeComplete}/>
 				{this.props.doodle.tool !== 'text' ? <label>Line Width:</label> : <label>Font Size</label>}
 				{selector}
-				<button name="free" onClick={this.handleClick}>Free</button>
+				<button name="free" onClick={this.handleClick} id="free"><img src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_32/v1493059354/ic_edit_black_24dp_1x_ashvkr.png" alt="free" class="icon"/></button>
+
 				<button name="line" onClick={this.handleClick}>Line</button>
 				<button name="circle" onClick={this.handleClick}>Circle</button>
-				<button name="rectangle" onClick={this.handleClick}>Rectangle</button>
+				<button name="rectangle" onClick={this.handleClick} id="square"><img src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_32/v1493058803/ic_crop_din_black_24dp_1x_tmmokd.png" alt="square" class="icon"/></button>
 				<button name="text" onClick={this.handleClick}>Text</button>
 				<button name="webcam-show" onClick={this.handleWebCam}>Webcam</button>
 				{this.state.showWebcam ? <video type='hidden' name="webcam-video" id="webcam-video" /> : false}
