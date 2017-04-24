@@ -12,6 +12,9 @@
   text-decoration: none;
 
   // &:hover {
-  //   color: red
+  //   $red: random(256)-1;
+  //   $green: random(256)-1;
+  //   $blue: random(256)-1;
+  //   color: unquote("rgb(#{$red}, #{$green}, #{$blue})");
   // }
 }
