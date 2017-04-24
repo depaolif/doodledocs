@@ -13,7 +13,8 @@ class Register extends Component {
 			username: '',
 			password: '',
 			usernameValidation: 'empty',
-			passwordValidation: 'empty'
+			passwordValidation: 'empty',
+			failed: false
 		}
 
 		this.handleInput = this.handleInput.bind(this)
@@ -22,16 +23,21 @@ class Register extends Component {
 
 	handleInput(event) {
 		this.setState({
-			[event.target.name]: event.target.value
+			[event.target.name]: event.target.value,
+			failed: false
 		})
 		this.validateInput(event.target.name, event.target.value)
 	}
 
 	validateInput(input, value) {
 		const stateInput = input === 'username' ? 'usernameValidation' : 'passwordValidation'
-		if (value.length >= 6 && !/\W/.test(value)) {
+		if (input === 'username' && value.length >= 4 && !/\W/.test(value)) {
 			this.setState({
-				[stateInput]: true
+				usernameValidation: true
+			});
+		} else if (input === 'password' && value.length >= 8) {
+			this.setState({
+				passwordValidation: true
 			});
 		} else {
 			this.setState({
@@ -66,14 +72,25 @@ class Register extends Component {
 				this.props.history.push('/')
 			})
 		})
+		.catch((error) => {
+			this.setState({
+				failed: true
+			});
+		})
 	}
 
 	render() {
-		const usernameValid = this.state.usernameValidation ? null : <div>Your username is invalid.</div>
-		const passwordValid = this.state.passwordValidation ? null : <div>Your password is invalid.</div>
-	const isDisabled = this.state.usernameValidation === true && this.state.passwordValidation === true ? null : 'disabled'
+		const failMessage = this.state.failed ?
+			<div id="failedLogin">
+				<p>Someone with that username already exists. Please try a different username.</p>
+			</div> :
+			null
+		const usernameValid = this.state.usernameValidation ? null : <div>Your username must be more than 3 characters and contain only alphanumeric characters.</div>
+		const passwordValid = this.state.passwordValidation ? null : <div>Your password must be more than 7 characters.</div>
+		const isDisabled = this.state.usernameValidation === true && this.state.passwordValidation === true ? null : 'disabled'
 		return (
 			<form onSubmit={this.handleSubmit} className="login_signup" >
+				{failMessage}
 				<label>Username: </label><input type="text" name="username" value={this.state.username} onChange={this.handleInput} />
 				<br></br>
 				{usernameValid}
