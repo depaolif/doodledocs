@@ -1,17 +1,17 @@
 .navbar {
   font-family: 'Montserrat', sans-serif;
-  padding: 1em 0em 1em 0em;
+  padding: 1em 0em 1em 5%;
   border-bottom: #BFD7EB 1px solid;
-  background-color: #D8F3FF
+  background-color: #fff
 }
 
 .nav-links {
   padding-left:1.5em;
   font-size: 22px;
-  color: #F4A745;
+  color: #000;
   text-decoration: none;
 
-  &:hover {
-    color: red
-  }
+  // &:hover {
+  //   color: red
+  // }
 }
