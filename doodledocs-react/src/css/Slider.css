@@ -1,5 +1,5 @@
 .slider{
-  margin: 2em;
+  margin: 2em auto;
   width: 250px;
-  background-color: #fff
+  background-color: #fff;
 }

@@ -99,7 +99,7 @@ class ToolBox extends Component {
 		return (
 			<div className="toolbox">
 					<ColorPicker onChangeComplete={this.handleChangeComplete}/>
-				<label> Line Width: </label>
+				<label>Line Width:</label>
 				<select value={this.props.doodle.lineWidth} onChange={this.handleChange}>
 					<option value='1'>1</option>
 					<option value='5'>5</option>
@@ -118,7 +118,7 @@ class ToolBox extends Component {
 				{this.state.showWebcam ? <video type='hidden' name="webcam-video" id="webcam-video" /> : false}
 				{this.state.showWebcam ? <canvas type='hidden' id='webcam-canvas' /> : false}
 				{this.state.showWebcam ? <button name="webcam" onClick={this.handleWebCamSave}>Take Picture</button> : false}
-				<label> Upload Image:</label>
+				<label>Upload Image:</label>
 				<input onChange={this.handleImageUpload} type="file" name="image" />
 			</div>
 		)
