@@ -121,7 +121,7 @@ class ToolBox extends Component {
 
 				<button name="line" onClick={this.handleClick}>Line</button>
 				<button name="circle" onClick={this.handleClick}>Circle</button>
-				<button name="rectangle" onClick={this.handleClick} id="square"><img src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_32/v1493058803/ic_crop_din_black_24dp_1x_tmmokd.png" alt="square" class="icon"/></button>
+				<button name="rectangle" onClick={this.handleClick} id="square"><img src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_32/v1493058803/ic_crop_din_black_24dp_1x_tmmokd.png" alt="square" className="icon"/></button>
 				<button name="text" onClick={this.handleClick}>Text</button>
 				<button name="webcam-show" onClick={this.handleWebCam}>Webcam</button>
 				{this.state.showWebcam ? <video type='hidden' name="webcam-video" id="webcam-video" /> : false}
