@@ -51,9 +51,9 @@ export function mouseDownEventListener(event) {
       }
       break
       case "text":
-      tempNewHistory = this.state.history
-      tempNewHistory.push({[this.props.doodle.tool]: {x: mousePos.x, y: mousePos.y, text: '', font: '48px serif', color: '#000'}})
-      this.setState({ history: tempNewHistory, isDrawingText: true })
+        tempNewHistory = this.state.history
+        tempNewHistory.push({[this.props.doodle.tool]: {x: mousePos.x, y: mousePos.y, text: '', font: '48px serif', color: '#000'}})
+        this.setState({ history: tempNewHistory, isDrawingText: true })
       break
       default:
       break
@@ -62,14 +62,6 @@ export function mouseDownEventListener(event) {
       isPainting: true
     })
     this.props.setSliderValue(this.state.history.length)
-  } else if (this.props.slider.value === this.state.history.length) {
-    switch (this.props.doodle.tool) {
-      case "text":
-        this.setState({ isDrawingText: false })
-      break
-      default:
-      break
-    }
   }
 }
 
@@ -153,14 +145,13 @@ export function mouseUpEventListener(event) {
   this.setState({ isPainting: false })
 }
 
-export function keyPressEventListener() {
-  if (this.props.slider.value === this.state.history.length
-    && this.props.doodle.tool === 'text'
-    && this.state.history[this.state.history.length-1].text) {
-      let tempNewHistory = this.state.history
-      tempNewHistory[tempNewHistory.length - 1].text.text += event.key
-      this.context.font = tempNewHistory[tempNewHistory.length - 1].text.font
-      this.context.fillText(tempNewHistory[tempNewHistory.length - 1].text.text, tempNewHistory[tempNewHistory.length - 1].text.x, tempNewHistory[tempNewHistory.length - 1].text.y)
-      this.setState({ history: tempNewHistory })
+export function keyPressEventListener(event) {
+  if (this.props.slider.value === this.state.history.length && this.state.isDrawingText) {
+    event.preventDefault()
+    let tempNewHistory = this.state.history
+    tempNewHistory[tempNewHistory.length-1].text.text += event.key
+    this.context.font = tempNewHistory[tempNewHistory.length - 1].text.font
+    this.context.fillText(tempNewHistory[tempNewHistory.length-1].text.text, tempNewHistory[tempNewHistory.length - 1].text.x, tempNewHistory[tempNewHistory.length - 1].text.y)
+    this.setState({ history: tempNewHistory })
   }
 }
