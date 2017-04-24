@@ -24,6 +24,8 @@ export function keyDownEventListener(event) {
       drawImage(this.context, tempNewHistory)
   }
   this.props.setSliderValue(this.state.history.length)
+  } else if (this.props.slider.value === this.state.history.length && this.props.doodle.tool !== 'text') {
+    
   }
 }
 

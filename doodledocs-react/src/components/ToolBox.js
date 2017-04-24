@@ -74,7 +74,6 @@ class ToolBox extends Component {
 			video.srcObject = mediaStream
 			this.setState({ webCamStream: mediaStream })
 			video.onloadedmetadata = (e) => {
-				console.log(this.state.showWebcam, 'onload')
 				if (!this.state.showWebcam) {
 		    		video.play()
 		    	}
@@ -94,11 +93,9 @@ class ToolBox extends Component {
 		this.props.setImageSrc(screenShotCanvas.toDataURL('image/jpeg', 0.1))
 		this.props.setTool('image')
 		this.setState({ showWebcam: false })
-		console.log(this.state.showWebcam, 'save')
 	}
 
 	render() {
-		console.log(this.state.showWebcam, 'render')
 		return (
 			<div className="toolbox">
 					<ColorPicker onChangeComplete={this.handleChangeComplete}/>

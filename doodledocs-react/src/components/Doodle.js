@@ -95,20 +95,22 @@ class Doodle extends Component {
 	}
 
 	restoreImage() {
-		let url = `http://localhost:3001/v1/images/${this.props.match.params.imageId}`
-		axios({
-			method: 'GET',
-			url: url
-		})
-		.then(resp => {
-			let imageData = resp.data.image_data
-			this.setState({ history: imageData })
-			this.props.setSliderValue(imageData.length)
-			drawImage(this.context, imageData)
-			if (resp.data.account_id === this.props.account.id) {
-				this.props.setCurrentImage({id: resp.data.id, title: resp.data.title})
-			}
-		})
+		if (this.props.match.path !== '/') {
+			let url = `http://localhost:3001/v1/images/${this.props.match.params.imageId}`
+			axios({
+				method: 'GET',
+				url: url
+			})
+			.then(resp => {
+				let imageData = resp.data.image_data
+				this.setState({ history: imageData })
+				this.props.setSliderValue(imageData.length)
+				drawImage(this.context, imageData)
+				if (resp.data.account_id === this.props.account.id) {
+					this.props.setCurrentImage({id: resp.data.id, title: resp.data.title})
+				}
+			})
+		}
 	}
 
 	handleSave(event) {

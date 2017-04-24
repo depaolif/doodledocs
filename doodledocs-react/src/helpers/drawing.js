@@ -26,9 +26,9 @@ export function drawImage(context, history) {
       }
       break
       case "text":
-      context.fillStyle = history[i].text.color
-      context.font = history[i].text.font
-      context.fillText(history[i].text.text, history[i].text.x, history[i].text.y)
+        context.fillStyle = history[i].text.color
+        context.font = history[i].text.font
+        context.fillText(history[i].text.text, history[i].text.x, history[i].text.y)
       break
       default:
       break

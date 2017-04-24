@@ -162,6 +162,5 @@ export function keyPressEventListener() {
       this.context.font = tempNewHistory[tempNewHistory.length - 1].text.font
       this.context.fillText(tempNewHistory[tempNewHistory.length - 1].text.text, tempNewHistory[tempNewHistory.length - 1].text.x, tempNewHistory[tempNewHistory.length - 1].text.y)
       this.setState({ history: tempNewHistory })
-      console.log(this.state.history)
   }
 }
