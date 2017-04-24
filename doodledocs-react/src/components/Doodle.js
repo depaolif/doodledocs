@@ -9,7 +9,7 @@ import axios from 'axios'
 import DoodleSlider from './DoodleSlider'
 import { mouseDownEventListener, mouseMoveEventListener, mouseUpEventListener, keyPressEventListener } from '../helpers/mouseListeners'
 import { keyDownEventListener, renderHistory } from '../helpers/history'
-import { drawImage, drawFree, drawRect, drawCircle, drawLine } from '../helpers/drawing'
+import { drawImage } from '../helpers/drawing'
 
 class Doodle extends Component {
 	constructor() {
