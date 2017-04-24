@@ -1,4 +1,4 @@
-export default function doodleReducer(state = {tool: 'free', color: '#000', lineWidth: '', imageSrc: ''}, action) {
+export default function doodleReducer(state = {tool: 'free', color: '#000', lineWidth: 1, imageSrc: '', fontSize: 12}, action) {
   switch (action.type) {
     case "SET_COLOR":
       return Object.assign({}, state, {color: action.payload})
@@ -8,6 +8,8 @@ export default function doodleReducer(state = {tool: 'free', color: '#000', line
       return Object.assign({}, state, {lineWidth: action.payload})
     case "SET_IMAGE_SRC":
       return Object.assign({}, state, {imageSrc: action.payload})
+    case "SET_FONT_SIZE":
+      return Object.assign({}, state, {fontSize: action.payload})
     default:
       return state
   }

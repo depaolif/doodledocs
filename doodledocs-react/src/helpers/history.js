@@ -1,7 +1,7 @@
 import { drawImage } from './drawing'
 
 export function keyDownEventListener(event) {
-  if (this.props.slider.value === this.state.history.length) {
+  if (this.props.slider.value === this.state.history.length && event.target.nodeName !== 'INPUT') {
     if (this.props.doodle.tool !== 'text') {
       this.setState({ isDrawingText: false })
       if (event.keyCode === 90 && event.ctrlKey &&

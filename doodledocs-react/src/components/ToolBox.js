@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
-import { setTool, setLineWidth, setImageSrc, setColor } from '../actions/doodle'
+import { setTool, setLineWidth, setImageSrc, setColor, setFontSize } from '../actions/doodle'
 import ColorPicker from './ColorPicker'
 import '../css/ToolBox.css'
 
@@ -37,7 +37,10 @@ class ToolBox extends Component {
 	}
 
 	handleChange(event) {
-		this.props.setLineWidth(parseInt(event.target.value, 10))
+		if (this.props.doodle.tool === 'text')
+			this.props.setFontSize(parseInt(event.target.value, 10))
+		else
+			this.props.setLineWidth(parseInt(event.target.value, 10))
 	}
 
 	handleClick(event) {
@@ -96,11 +99,8 @@ class ToolBox extends Component {
 	}
 
 	render() {
-		return (
-			<div className="toolbox">
-					<ColorPicker onChangeComplete={this.handleChangeComplete}/>
-				<label>Line Width:</label>
-				<select value={this.props.doodle.lineWidth} onChange={this.handleChange}>
+		let selector = (
+				this.props.doodle.tool !== 'text' ? <select value={this.props.doodle.lineWidth} onChange={this.handleChange}>
 					<option value='1'>1</option>
 					<option value='5'>5</option>
 					<option value='10'>10</option>
@@ -109,6 +109,14 @@ class ToolBox extends Component {
 					<option value='50'>50</option>
 					<option value='100'>100</option>
 				</select>
+				: 
+					<input type="number" value={this.props.doodle.fontSize} onChange={this.handleChange} />
+				)
+		return (
+			<div className="toolbox">
+					<ColorPicker onChangeComplete={this.handleChangeComplete}/>
+				{this.props.doodle.tool !== 'text' ? <label>Line Width:</label> : <label>Font Size</label>}
+				{selector}
 				<button name="free" onClick={this.handleClick}>Free</button>
 				<button name="line" onClick={this.handleClick}>Line</button>
 				<button name="circle" onClick={this.handleClick}>Circle</button>
@@ -141,6 +149,9 @@ const mapDispatchToProps = (dispatch) => ({
 	},
 	setColor: (color) => {
 		dispatch(setColor(color))
+	},
+	setFontSize: (num) => {
+		dispatch(setFontSize(num))
 	},
 })
 

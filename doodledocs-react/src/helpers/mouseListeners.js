@@ -52,7 +52,7 @@ export function mouseDownEventListener(event) {
       break
       case "text":
         tempNewHistory = this.state.history
-        tempNewHistory.push({[this.props.doodle.tool]: {x: mousePos.x, y: mousePos.y, text: '', font: '48px serif', color: '#000'}})
+        tempNewHistory.push({[this.props.doodle.tool]: {x: mousePos.x, y: mousePos.y, text: '', font: `${this.props.doodle.fontSize}px serif`, color: '#000'}})
         this.setState({ history: tempNewHistory, isDrawingText: true })
       break
       default:
@@ -146,7 +146,7 @@ export function mouseUpEventListener(event) {
 }
 
 export function keyPressEventListener(event) {
-  if (this.props.slider.value === this.state.history.length && this.state.isDrawingText) {
+  if (this.props.slider.value === this.state.history.length && this.state.isDrawingText && event.target.nodeName !== 'INPUT') {
     event.preventDefault()
     let tempNewHistory = this.state.history
     tempNewHistory[tempNewHistory.length-1].text.text += event.key

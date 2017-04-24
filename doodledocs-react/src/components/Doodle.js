@@ -38,6 +38,7 @@ class Doodle extends Component {
 		this.mouseMoveEventListener = mouseMoveEventListener.bind(this)
 		this.keyDownEventListener = keyDownEventListener.bind(this)
 		this.keyPressEventListener = keyPressEventListener.bind(this)
+		this.onBlurEventListener = this.onBlurEventListener.bind(this)
 		this.handleInputChange = this.handleInputChange.bind(this)
 	}
 
@@ -74,11 +75,17 @@ class Doodle extends Component {
     	this.canvas.removeEventListener('mousemove', this.mouseMoveEventListener)
     	this.canvas.removeEventListener('mouseup', this.mouseUpEventListener)
     	document.removeEventListener('keydown', this.keyDownEventListener)
+    	document.removeEventListener('keypress', this.keyDownEventListener)
     	clearInterval(this.autoSave)
     	this.props.setAutoSave(false)
     	this.props.setSliderValue(0)
     	this.props.setTool('free')
     	this.props.resetImage()
+    }
+
+    onBlurEventListener(event) {
+    	debugger
+    	this.setState({ isDrawingText: false })
     }
 
 	// gets canvas element and sets context to it
