@@ -1,21 +1,21 @@
 
 .login-signup {
   font-family: 'Montserrat', sans-serif;
-  width: 20%;
   padding-top: 3em;
   padding-left: 5em;
-}
 
-input{
-  padding: 2%;
-  margin: 1em;
-  border: 1px solid black;
-  border-radius: .5em;
-  text-decoration: none;
-  outline: none;
+  input{
+    padding: 0.5em;
+    margin: 1em;
+    border: 1px solid black;
+    border-radius: .5em;
+    text-decoration: none;
+    outline: none;
+  }
 }
 
 .failed-message {
   font-size: 0.75em;
   color: grey;
+  margin-bottom: 1.5em;
 }
