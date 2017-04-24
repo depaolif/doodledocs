@@ -117,7 +117,7 @@ class ToolBox extends Component {
 					<ColorPicker onChangeComplete={this.handleChangeComplete}/>
 				{this.props.doodle.tool !== 'text' ? <label>Line Width:</label> : <label>Font Size</label>}
 				{selector}
-				<button name="free" onClick={this.handleClick} id="free"><img src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_32/v1493059354/ic_edit_black_24dp_1x_ashvkr.png" alt="free" class="icon"/></button>
+				<button name="free" onClick={this.handleClick} id="free"><img src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_32/v1493059354/ic_edit_black_24dp_1x_ashvkr.png" alt="free" className="icon"/></button>
 
 				<button name="line" onClick={this.handleClick}>Line</button>
 				<button name="circle" onClick={this.handleClick}>Circle</button>
