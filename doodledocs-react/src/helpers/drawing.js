@@ -17,7 +17,13 @@ export function drawImage(context, history) {
       case "image":
       let image = new Image()
       image.src = history[i].image.src
-      context.drawImage(image, history[i].image.x, history[i].image.y)
+      if (image.complete) {
+          context.drawImage(image, history[i].image.x, history[i].image.y)
+      } else {
+          image.onload = () => {
+              context.drawImage(image, history[i].image.x, history[i].image.y)
+          }
+      }
       break
       case "text":
       context.fillStyle = history[i].text.color
