@@ -20,21 +20,22 @@ class NavBar extends Component {
 	}
 
 	render() {
-		$('#new').hover(()=>{
+		$('.nav-links').hover(function(){
+			let $this = $(this)
 			let r=Math.floor(Math.random() * 255)
 			let g=Math.floor(Math.random() * 255)
 			let b=Math.floor(Math.random() * 255)
 			let color= `rgb(${r},${g},${b})`
-			$('#new').css("color", color)
-		}, ()=>{
-			$('#new').css("color", "#000")
+			$this.css("color", color)
+		}, function(){
+			$(this).css("color", "#000")
 		})
 
 
 		return (
 			<div className="navbar">
-				<Link id="new" className="nav-links" to="/" onClick={this.handleClick}>New Doodle</Link>
-				<Link id="latest" className="nav-links" to="/images">Latest Doodles</Link>
+				<Link className="nav-links" to="/" onClick={this.handleClick}>New Doodle</Link>
+				<Link className="nav-links" to="/images">Latest Doodles</Link>
 				{!this.props.token ? <Link id="login" className="nav-links" to="/login">Login</Link> : <Link id="profile" className="nav-links" to="/profile">Profile</Link>}
 				{!this.props.token ? <Link id="register" className="nav-links" to="/register">Register</Link> : <Link id="logout" className="nav-links" to='/logout'>Logout</Link>}
 			</div>
