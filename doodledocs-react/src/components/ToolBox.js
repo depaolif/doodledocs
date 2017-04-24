@@ -52,7 +52,7 @@ class ToolBox extends Component {
 			focusedItem: event.target.name
 		})
 		this.props.setTool(event.target.name)
-	    let reader = new FileReader();
+	    let reader = new FileReader()
 	    reader.onload = (event) => {
 	    	this.props.setImageSrc(event.target.result)
 	    }
@@ -63,7 +63,7 @@ class ToolBox extends Component {
 		const show = this.state.showColor ? false : true
 		this.setState({
 			showColor: show
-		});
+		})
 	}
 
 	handleWebCam(event) {
