@@ -25,8 +25,12 @@ class ImageList extends Component {
 				title={image.title}
 				preview={image.data_url} />
 			)
+			const imageListTitle = {
+				marginLeft: '2.5%',
+			}
 		return (
 			<div className="image-list">
+				<h1 style={imageListTitle}>Latest Doodles</h1>
 				{imageList}
 			</div>
 		)

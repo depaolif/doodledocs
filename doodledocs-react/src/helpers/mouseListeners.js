@@ -55,7 +55,7 @@ export function mouseDownEventListener(event) {
       isPainting: true
     })
     this.props.setSliderValue(this.state.history.length)
-  } else if (event.button === 1 && this.props.slider.value === this.state.history.length) {
+  } else if (this.props.slider.value === this.state.history.length) {
     switch (this.props.doodle.tool) {
       case "text":
         this.setState({ isDrawingText: false })
