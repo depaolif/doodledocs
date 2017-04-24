@@ -190,7 +190,7 @@ class Doodle extends Component {
 			saving =
 			<div className="save-box">
 				{this.props.images.current.title ? <h2>{this.props.images.current.title}</h2> : null}
-				<input type="submit" value="Save" onSubmit={this.handleSave} />
+				<input type="submit" value="Save" onClick={this.handleSave} />
 				<label>AutoSave</label>
 				<input type="checkbox" name="autosave" onClick={this.handleAutoSave} />
 			</div>
