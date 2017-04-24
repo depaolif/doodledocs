@@ -169,7 +169,7 @@ class Doodle extends Component {
 			const isDisabled = this.state.imageTitle ? null : 'disabled'
 			saving =
 			<form onSubmit={this.handleSave}>
-			<label>Title: </label><input type="text" name="title" onChange={this.handleInputChange}/>
+			<label className="label">Title: </label><input type="text" name="title" onChange={this.handleInputChange}/>
 			<input type="submit" value="Save" disabled={isDisabled} />
 			</form>
 		} else if (this.props.account.token && this.props.images.current && typeof this.props.images.current.id === 'number') {

@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import { setTool, setLineWidth, setImageSrc, setColor } from '../actions/doodle'
 import { SketchPicker } from 'react-color'
 import ColorPicker from './ColorPicker'
+import '../css/ToolBox.css'
+
 
 
 class ToolBox extends Component {
