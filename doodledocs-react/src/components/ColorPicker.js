@@ -69,7 +69,7 @@ export default class ColorPicker extends Component {
     });
 
     return (
-      <div>
+      <span>
         <div style={ styles.swatch } onClick={ this.handleClick }>
           <div style={ styles.color } />
         </div>
@@ -78,7 +78,7 @@ export default class ColorPicker extends Component {
           <SketchPicker color={ this.state.color } onChange={ this.handleChange } />
         </div> : null }
 
-      </div>
+      </span>
     )
   }
 }

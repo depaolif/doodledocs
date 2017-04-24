@@ -1,4 +1,4 @@
-*{
+* {
   font-family: 'Montserrat', sans-serif;
 }
 
@@ -13,14 +13,12 @@
 
 button,
 input[type="submit"],
-select{
+select {
   background-color: #fff;
   border: solid #000 1.5px;
   border-radius: none;
-
 }
 
-.label{
+.label {
   padding-left:5%;
-
 }

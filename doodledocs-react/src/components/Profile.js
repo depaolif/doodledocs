@@ -34,9 +34,12 @@ class Profile extends Component {
 				onDelete={this.handleDelete} />
 		) :
 		null
+		const imageListTitle = {
+			marginLeft: '2.5%',
+		}
 		return (
 			<div className="profile">
-				<h1>{this.props.account.username}</h1>
+				<h1 style={imageListTitle}>{this.props.account.username}</h1>
 				<ul>
 					{imageList}
 				</ul>

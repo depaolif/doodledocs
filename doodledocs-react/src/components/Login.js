@@ -60,17 +60,17 @@ class Login extends Component {
 
 	render() {
 		let failMessage = this.state.failed ?
-			<div id="failedLogin">
+			<div className="failed-message">
 				<p>Error with username or password. Please try logging in again.</p>
 			</div> :
 			null
 		return (
-			<div>
-				<form onSubmit={this.handleSubmit} className="login_signup" >
+			<div className="login-signup">
+				<form onSubmit={this.handleSubmit} >
 					{failMessage}
-					<label>Username: </label><input type="text" name="username" value={this.state.username} onChange={this.handleInput} />
+					<label>Username:</label><input type="text" name="username" value={this.state.username} onChange={this.handleInput} />
 					<br></br>
-					<label>Password: </label><input type="password" name="password" value={this.state.password} onChange={this.handleInput} />
+					<label>Password:</label><input type="password" name="password" value={this.state.password} onChange={this.handleInput} />
 					<br></br>
 					<input type="submit" value="Login" id="button"/>
 				</form>

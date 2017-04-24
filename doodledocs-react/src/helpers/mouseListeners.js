@@ -36,11 +36,18 @@ export function mouseDownEventListener(event) {
       case "image":
       let image = new Image()
       image.src = this.props.doodle.imageSrc
-      if (image.src) {
-        this.context.drawImage(image, mousePos.x - image.width / 2, mousePos.y - image.height / 2)
-        tempNewHistory = this.state.history
-        tempNewHistory.push({[this.props.doodle.tool]: {x: mousePos.x - image.width / 2, y: mousePos.y - image.height / 2, src: image.src}})
-        this.setState({ history: tempNewHistory})
+      tempNewHistory = this.state.history
+      if (image.complete) {
+          this.context.drawImage(image, mousePos.x - image.width / 2, mousePos.y - image.height / 2)
+          tempNewHistory.push({[this.props.doodle.tool]: {x: mousePos.x - image.width / 2, y: mousePos.y - image.height / 2, src: image.src}})
+          this.setState({ history: tempNewHistory})
+      } else {
+          image.onload = () => {
+              this.context.drawImage(image, mousePos.x - image.width / 2, mousePos.y - image.height / 2) 
+              tempNewHistory.push({[this.props.doodle.tool]: {x: mousePos.x - image.width / 2, y: mousePos.y - image.height / 2, src: image.src}})
+              this.setState({ history: tempNewHistory})
+              this.props.setSliderValue(this.state.history.length)
+          }
       }
       break
       case "text":
@@ -55,7 +62,7 @@ export function mouseDownEventListener(event) {
       isPainting: true
     })
     this.props.setSliderValue(this.state.history.length)
-  } else if (event.button === 1 && this.props.slider.value === this.state.history.length) {
+  } else if (this.props.slider.value === this.state.history.length) {
     switch (this.props.doodle.tool) {
       case "text":
         this.setState({ isDrawingText: false })
