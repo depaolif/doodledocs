@@ -1,23 +1,32 @@
 
-.toolbox{
+div.toolbox{
   background-color: #fff;
   border: solid 2px;
+  height: 27px;
+  position: relative
+
 }
 
 .toolbox > * {
   margin-left: 5px;
   margin-right: 5px;
-  border-radius: 0.5em;
-  height: 2em;
+  /*border-radius: 0.5em;*/
+  /*height: 2em;*/
+  width: auto;
+  display: inline-block;
+  height: 25px;
+  display: inline;
+  margin-top:0;
+  margin-bottom: 0;
+  position:relative;
+  z-index: 0;
 }
 
-#free, #square{
-  border: none;
-  width: 42px;
-  height: 42px;
-  border-radius: 0;
-}
-.icon{
-  width: auto;
-  height:auto
-}
+
+/*select.icon{
+  position: absolute;
+  top: 0;
+  left: 71px;
+  overflow: hidden;
+  z-index: 0
+}*/

@@ -100,7 +100,7 @@ class ToolBox extends Component {
 
 	render() {
 		let selector = (
-				this.props.doodle.tool !== 'text' ? <select value={this.props.doodle.lineWidth} onChange={this.handleChange}>
+				this.props.doodle.tool !== 'text' ? <select value={this.props.doodle.lineWidth} onChange={this.handleChange} className="icon">
 					<option value='1'>1</option>
 					<option value='5'>5</option>
 					<option value='10'>10</option>
@@ -110,7 +110,7 @@ class ToolBox extends Component {
 					<option value='100'>100</option>
 				</select>
 				:
-					<input type="number" value={this.props.doodle.fontSize} onChange={this.handleChange} />
+					<input type="number" value={this.props.doodle.fontSize} onChange={this.handleChange} className="icon"/>
 				)
 		return (
 			<div className="toolbox">
@@ -133,7 +133,7 @@ class ToolBox extends Component {
 				{this.state.showWebcam ? <canvas type='hidden' id='webcam-canvas' /> : false}
 				{this.state.showWebcam ? <button name="webcam" onClick={this.handleWebCamSave}>Take Picture</button> : false}
 				<img src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493063788/ic_attach_file_black_24dp_1x_fsd4du.png" alt="upload_image" className="icon"/>
-				<input onChange={this.handleImageUpload} type="file" name="image"  />
+				<input onChange={this.handleImageUpload} type="file" name="image" className="icon" />
 			</div>
 		)
 	}

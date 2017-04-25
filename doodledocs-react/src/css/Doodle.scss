@@ -12,9 +12,7 @@
     outline: none;
 }
 
-button,
-input,
-select {
+button {
   background-color: #fff;
   border: 1px solid black;
   border-radius: .5em;
@@ -29,3 +27,7 @@ select {
     padding: 0.5em;
   }
 }
+
+// .label {
+//   padding-left:5%;
+// }
