@@ -182,7 +182,7 @@ class Doodle extends Component {
 			saving =
 			<div className="save-box">
 				<form onSubmit={this.handleSave}>
-				<label className="label">Title: </label><input type="text" name="title" onChange={this.handleInputChange}/>
+				<label className="label">Title:</label><input type="text" name="title" onChange={this.handleInputChange}/>
 				<input type="submit" value="Save" disabled={isDisabled} />
 				</form>
 			</div>
@@ -191,7 +191,7 @@ class Doodle extends Component {
 			<div className="save-box">
 				{this.props.images.current.title ? <h2>{this.props.images.current.title}</h2> : null}
 				<input type="submit" value="Save" onClick={this.handleSave} />
-				<label>AutoSave</label>
+				<label> AutoSave</label>
 				<input type="checkbox" name="autosave" onClick={this.handleAutoSave} />
 			</div>
 		}

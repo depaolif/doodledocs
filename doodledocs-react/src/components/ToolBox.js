@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import { setTool, setLineWidth, setImageSrc, setColor, setFontSize } from '../actions/doodle'
 import ColorPicker from './ColorPicker'
-import '../css/ToolBox.css'
+import '../css/ToolBox.scss'
 
 
 

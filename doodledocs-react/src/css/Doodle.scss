@@ -22,12 +22,14 @@ button {
 }
 
 .save-box {
-  padding-left: 2em;
+  margin-top: 2em;
+  margin-left: 2em;
   input {
     padding: 0.5em;
+    margin: 1em;
+    border: 1px solid black;
+    border-radius: .5em;
+    text-decoration: none;
+    outline: none;
   }
 }
-
-// .label {
-//   padding-left:5%;
-// }

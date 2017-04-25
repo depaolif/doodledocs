@@ -1,0 +1,22 @@
+
+div.toolbox{
+  // background-color: #fff;
+  border: solid 2px;
+  height: 30px;
+  position: relative;
+}
+
+.toolbox > img {
+  margin-left: 15px;
+  margin-right: 5px;
+  /*border-radius: 0.5em;*/
+  /*height: 2em;*/
+  width: auto;
+  // display: inline-block;
+  height: 25px;
+  // display: inline;
+  margin-top:0;
+  margin-bottom: 0;
+  position:relative;
+  // z-index: 0;
+}
