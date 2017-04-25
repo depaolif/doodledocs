@@ -13,8 +13,6 @@ class ToolBox extends Component {
 		this.state = {
 			focusedItem: null,
 			showColor: false,
-			webCamStream: null,
-			showWebcam: false
 		}
 
 		this.handleChange = this.handleChange.bind(this)
@@ -22,8 +20,6 @@ class ToolBox extends Component {
 		this.handleImageUpload = this.handleImageUpload.bind(this)
 		this.handleChangeComplete = this.handleChangeComplete.bind(this)
 		this.showOrHideColor = this.showOrHideColor.bind(this)
-		this.handleWebCam = this.handleWebCam.bind(this)
-		this.handleWebCamSave = this.handleWebCamSave.bind(this)
 	}
 
 	componentDidMount() {
@@ -69,35 +65,6 @@ class ToolBox extends Component {
 		})
 	}
 
-	handleWebCam(event) {
-		this.setState({ showWebcam: true })
-		navigator.mediaDevices.getUserMedia({ audio: false, video: { width: 1280, height: 720 } })
-		.then((mediaStream) => {
-			let video = document.getElementById('webcam-video')
-			video.srcObject = mediaStream
-			this.setState({ webCamStream: mediaStream })
-			video.onloadedmetadata = (e) => {
-				if (!this.state.showWebcam) {
-		    		video.play()
-		    	}
-			}
-		})
-		.catch((err) => { console.log(err.name + ": " + err.message) })
-	}
-
-	handleWebCamSave(event) {
-		let video = document.getElementById('webcam-video')
-		let screenShotCanvas = document.getElementById('webcam-canvas')
-		screenShotCanvas.getContext('2d').drawImage(video, 0, 0, screenShotCanvas.width, screenShotCanvas.height);
-		this.state.webCamStream.getVideoTracks()[0].stop()
-		video.src = ""
-		video.pause()
-		video.onloadedmetadata = (e) => { }
-		this.props.setImageSrc(screenShotCanvas.toDataURL('image/jpeg', 0.1))
-		this.props.setTool('image')
-		this.setState({ showWebcam: false })
-	}
-
 	render() {
 		let selector = (
 				this.props.doodle.tool !== 'text' ? <select value={this.props.doodle.lineWidth} onChange={this.handleChange} className="icon">
@@ -127,11 +94,6 @@ class ToolBox extends Component {
 				<img name="rectangle" src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493058803/ic_crop_din_black_24dp_1x_tmmokd.png" alt="square" className="icon" onClick={this.handleClick} />
 				<img name="text"
 				src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493061813/ic_text_format_black_24dp_1x_jdkbyd.png" alt="text" className="icon" onClick={this.handleClick}/>
-				<img name="webcam-show"
-				 src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493063205/ic_photo_camera_black_24dp_1x_yy0ca0.png" alt="webcam" className="icon" onClick={this.handleWebCam} />
-				{this.state.showWebcam ? <video type='hidden' name="webcam-video" id="webcam-video" /> : false}
-				{this.state.showWebcam ? <canvas type='hidden' id='webcam-canvas' /> : false}
-				{this.state.showWebcam ? <button name="webcam" onClick={this.handleWebCamSave}>Take Picture</button> : false}
 				<img src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493063788/ic_attach_file_black_24dp_1x_fsd4du.png" alt="upload_image" className="icon"/>
 				<input onChange={this.handleImageUpload} type="file" name="image" className="icon" />
 			</div>
