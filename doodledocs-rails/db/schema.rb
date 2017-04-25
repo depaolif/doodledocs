@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170419130517) do
+ActiveRecord::Schema.define(version: 20170418151659) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,14 +22,6 @@ ActiveRecord::Schema.define(version: 20170419130517) do
     t.datetime "updated_at",      null: false
   end
 
-  create_table "comments", force: :cascade do |t|
-    t.string   "text"
-    t.integer  "account_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["account_id"], name: "index_comments_on_account_id", using: :btree
-  end
-
   create_table "images", force: :cascade do |t|
     t.string   "title"
     t.string   "data_url"
@@ -39,5 +31,4 @@ ActiveRecord::Schema.define(version: 20170419130517) do
     t.json     "image_data"
   end
 
-  add_foreign_key "comments", "accounts"
 end
