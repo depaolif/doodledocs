@@ -10,7 +10,6 @@ export function keyDownEventListener(event) {
         let tempNewRedoHistory = this.state.redoHistory
         tempNewRedoHistory.push(this.state.history[this.state.history.length-1])
         this.setState({ redoHistory: tempNewRedoHistory })
-        console.log(this.state.redoHistory.length)
         let tempNewHistory = this.state.history.slice(0, -1)
         this.setState({ history: tempNewHistory })
         drawImage(this.context, tempNewHistory)
@@ -18,7 +17,6 @@ export function keyDownEventListener(event) {
       !this.state.isPainting && this.state.redoHistory.length > 0) {
         // redoing
         let tempNewHistory = this.state.history
-        console.log(tempNewHistory)
         tempNewHistory.push(this.state.redoHistory[this.state.redoHistory.length-1])
         this.setState({ history: tempNewHistory })
         let tempNewRedoHistory = this.state.redoHistory.slice(0, -1)
@@ -30,7 +28,6 @@ export function keyDownEventListener(event) {
       let tempNewHistory = this.state.history
       if (event.keyCode === 8 && tempNewHistory[tempNewHistory.length-1].text.text.length > 0) {
         tempNewHistory[tempNewHistory.length-1].text.text = tempNewHistory[tempNewHistory.length-1].text.text.slice(0, -1)
-        console.log(tempNewHistory[tempNewHistory.length-1])
         if (tempNewHistory[tempNewHistory.length-1].text.text.length === 0) {
           tempNewHistory.pop()
           this.setState({ isDrawingText: false })
