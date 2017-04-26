@@ -67,7 +67,7 @@ class ToolBox extends Component {
 
 	render() {
 		let selector = (
-				this.props.doodle.tool !== 'text' ? <select value={this.props.doodle.lineWidth} onChange={this.handleChange} className="icon">
+				this.props.doodle.tool !== 'text' ? <select value={this.props.doodle.lineWidth} onChange={this.handleChange} className="tool">
 					<option value='1'>1</option>
 					<option value='5'>5</option>
 					<option value='10'>10</option>
@@ -80,22 +80,41 @@ class ToolBox extends Component {
 					<input type="number" value={this.props.doodle.fontSize} onChange={this.handleChange} className="icon"/>
 				)
 		return (
-			<div className="toolbox">
-					<ColorPicker onChangeComplete={this.handleChangeComplete}/>
-				{this.props.doodle.tool !== 'text' ? <img src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493061658/ic_line_weight_black_24dp_1x_a1dquz.png" alt="line width" className="icon" /> : <label>Font Size</label>}
-				{selector}
-				<img name="free" src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493061803/ic_gesture_black_24dp_1x_ui9sy3.png" alt="free" className="icon" onClick={this.handleClick} />
-				<img name="line"
-				src="http://res.cloudinary.com/dletp3dah/image/upload/a_90/v1493062257/ic_remove_black_24dp_1x_m1b9yy.png" alt="line" className="icon" onClick={this.handleClick}
-				/>
-				<img name="circle"
-				src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493060454/ic_radio_button_unchecked_black_24dp_1x_hekiro.png" alt="circle" className="icon" onClick={this.handleClick}
-				/>
-				<img name="rectangle" src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493058803/ic_crop_din_black_24dp_1x_tmmokd.png" alt="square" className="icon" onClick={this.handleClick} />
-				<img name="text"
-				src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493061813/ic_text_format_black_24dp_1x_jdkbyd.png" alt="text" className="icon" onClick={this.handleClick}/>
-				<img src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493063788/ic_attach_file_black_24dp_1x_fsd4du.png" alt="upload_image" className="icon"/>
-				<input onChange={this.handleImageUpload} type="file" name="image" className="icon" />
+			<div id="toolbar">
+				<ul className="tools">
+					<li  className="tool">
+						<ColorPicker onChangeComplete={this.handleChangeComplete}/>
+					</li>
+					<li className="tool">
+						{this.props.doodle.tool !== 'text' ? <img src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493061658/ic_line_weight_black_24dp_1x_a1dquz.png" alt="line width" className="icon" /> : <label>Font Size</label>}</li>
+					<li className="tool">
+						{selector}
+					</li>
+					<li className="tool">
+						<img name="free" src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493061803/ic_gesture_black_24dp_1x_ui9sy3.png" alt="free" className="icon" onClick={this.handleClick} />
+					</li>
+					<li className="tool">
+						<img name="line"
+						src="http://res.cloudinary.com/dletp3dah/image/upload/a_90/v1493062257/ic_remove_black_24dp_1x_m1b9yy.png" alt="line" className="icon" onClick={this.handleClick}/>
+					</li>
+					<li className="tool">
+						<img name="circle"
+						src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493060454/ic_radio_button_unchecked_black_24dp_1x_hekiro.png" alt="circle" className="icon" onClick={this.handleClick}/>
+					</li>
+					<li className="tool">
+						<img name="rectangle" src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493058803/ic_crop_din_black_24dp_1x_tmmokd.png" alt="square" className="icon" onClick={this.handleClick} />
+					</li>
+					<li className="tool">
+						<img name="text"
+						src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493061813/ic_text_format_black_24dp_1x_jdkbyd.png" alt="text" className="icon" onClick={this.handleClick}/>
+					</li>
+					<li className="tool">
+						<img src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493063788/ic_attach_file_black_24dp_1x_fsd4du.png" alt="upload_image" className="icon"/>
+					</li>
+					<li className="tool">
+						<input onChange={this.handleImageUpload} type="file" name="image" className="icon" />
+					</li>
+				</ul>
 			</div>
 		)
 	}

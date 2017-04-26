@@ -191,15 +191,17 @@ class Doodle extends Component {
 			<div className="save-box">
 				{this.props.images.current.title ? <h2>{this.props.images.current.title}</h2> : null}
 				<input type="submit" value="Save" onClick={this.handleSave} />
-				<label> AutoSave</label>
-				<input type="checkbox" name="autosave" onClick={this.handleAutoSave} />
+				<div id="auto">
+					<label > AutoSave</label>
+					<input type="checkbox" name="autosave" onClick={this.handleAutoSave} />
+				</div>	
 			</div>
 		}
 		return (
 			<div className="doodle">
-				<ConnectedToolBox className="toolbox" />
 				{saving}
 				<DoodleSlider max={this.state.history.length} handleSlide={this.renderHistory} disabled={this.state.historyLength > 0? false : true}/>
+				<ConnectedToolBox className="toolbox" />
 				<canvas tabIndex='1' id="app-canvas" width={this.state.width} height={this.state.height} />
 			</div>
 		)

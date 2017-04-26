@@ -12,24 +12,35 @@
     outline: none;
 }
 
-button {
-  background-color: #fff;
-  border: 1px solid black;
-  border-radius: .5em;
-  text-decoration: none;
-  outline: none;
-  margin: 1em;
-}
 
 .save-box {
   margin-top: 2em;
-  margin-left: 2em;
+  margin-left: 5%;
   input {
     padding: 0.5em;
-    margin: 1em;
     border: 1px solid black;
     border-radius: .5em;
     text-decoration: none;
     outline: none;
+  }
+  label{
+    vertical-align: bottom;
+    font-size: 1.4em;
+    margin-right: 5px
+  }
+}
+
+input[type='submit']{
+  background-color: #000;
+  color: #fff;
+  width: 50px
+}
+
+#auto{
+  margin-top: 1em;
+  vertical-align:top;
+  label{
+    font-size: 1em;
+    color: #555;
   }
 }
