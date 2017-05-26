@@ -33,10 +33,13 @@ class ToolBox extends Component {
 	}
 
 	handleChange(event) {
-		if (this.props.doodle.tool === 'text')
+		if (this.props.doodle.tool === 'text') {
 			this.props.setFontSize(parseInt(event.target.value, 10))
-		else
+		}
+		else {
 			this.props.setLineWidth(parseInt(event.target.value, 10))
+		}
+		
 	}
 
 	handleClick(event) {

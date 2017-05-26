@@ -20,7 +20,7 @@ class ImageItem extends Component {
 		const titleLink = title ? title : "Untitled"
 		return (
 			<div className='image-item'>
-				<img className="image" alt={title} src={preview} width='300' height='300' />
+				<Link to={url}><img className="image" alt={title} src={preview} width='300' height='300' /></Link>
 				<Link className="image-item-link" to={url}>{titleLink}</Link>
 				<br></br>
 				{this.props.onDelete ? <img src="http://res.cloudinary.com/dletp3dah/image/upload/v1493061698/ic_delete_black_24dp_1x_qsiksm.png"
