@@ -11,7 +11,6 @@ class ToolBox extends Component {
 		super()
 
 		this.state = {
-			focusedItem: null,
 			showColor: false,
 		}
 
@@ -33,26 +32,14 @@ class ToolBox extends Component {
 	}
 
 	handleChange(event) {
-		if (this.props.doodle.tool === 'text') {
-			this.props.setFontSize(parseInt(event.target.value, 10))
-		}
-		else {
-			this.props.setLineWidth(parseInt(event.target.value, 10))
-		}
-		
+		this.props.setLineWidth(parseInt(event.target.value, 10))
 	}
 
 	handleClick(event) {
-		this.setState({
-			focusedItem: event.target.name
-		})
 		this.props.setTool(event.target.name)
 	}
 
 	handleImageUpload(event) {
-		this.setState({
-			focusedItem: event.target.name
-		})
 		this.props.setTool(event.target.name)
 	    let reader = new FileReader()
 	    reader.onload = (event) => {
