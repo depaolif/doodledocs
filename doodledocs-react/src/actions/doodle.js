@@ -13,7 +13,3 @@ export const setLineWidth = (width) => ({
 export const setImageSrc = (src) => ({
 	type: 'SET_IMAGE_SRC', payload: src
 })
-
-export const setFontSize = (num) => ({
-	type: 'SET_FONT_SIZE', payload: num
-})

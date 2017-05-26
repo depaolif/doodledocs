@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
-import { setTool, setLineWidth, setImageSrc, setColor, setFontSize } from '../actions/doodle'
+import { setTool, setLineWidth, setImageSrc, setColor } from '../actions/doodle'
 import ColorPicker from './ColorPicker'
 import '../css/ToolBox.scss'
 
@@ -56,19 +56,6 @@ class ToolBox extends Component {
 	}
 
 	render() {
-		let selector = (
-				this.props.doodle.tool !== 'text' ? <select value={this.props.doodle.lineWidth} onChange={this.handleChange} className="tool">
-					<option value='1'>1</option>
-					<option value='5'>5</option>
-					<option value='10'>10</option>
-					<option value='20'>20</option>
-					<option value='30'>30</option>
-					<option value='50'>50</option>
-					<option value='100'>100</option>
-				</select>
-				:
-					<input type="number" value={this.props.doodle.fontSize} onChange={this.handleChange} className="icon"/>
-				)
 		return (
 			<div id="toolbar">
 				<ul className="tools">
@@ -76,9 +63,18 @@ class ToolBox extends Component {
 						<ColorPicker onChangeComplete={this.handleChangeComplete}/>
 					</li>
 					<li className="tool">
-						{this.props.doodle.tool !== 'text' ? <img src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493061658/ic_line_weight_black_24dp_1x_a1dquz.png" alt="line width" className="icon" /> : <label>Font Size</label>}</li>
+						<img src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493061658/ic_line_weight_black_24dp_1x_a1dquz.png" alt="line width" className="icon" />
+					</li>
 					<li className="tool">
-						{selector}
+						<select value={this.props.doodle.lineWidth} onChange={this.handleChange} className="tool">
+							<option value='1'>1</option>
+							<option value='5'>5</option>
+							<option value='10'>10</option>
+							<option value='20'>20</option>
+							<option value='30'>30</option>
+							<option value='50'>50</option>
+							<option value='100'>100</option>
+						</select>
 					</li>
 					<li className="tool">
 						<img name="free" src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493061803/ic_gesture_black_24dp_1x_ui9sy3.png" alt="free" className="icon" onClick={this.handleClick} />
@@ -93,10 +89,6 @@ class ToolBox extends Component {
 					</li>
 					<li className="tool">
 						<img name="rectangle" src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493058803/ic_crop_din_black_24dp_1x_tmmokd.png" alt="square" className="icon" onClick={this.handleClick} />
-					</li>
-					<li className="tool">
-						<img name="text"
-						src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493061813/ic_text_format_black_24dp_1x_jdkbyd.png" alt="text" className="icon" onClick={this.handleClick}/>
 					</li>
 					<li className="tool">
 						<img src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493063788/ic_attach_file_black_24dp_1x_fsd4du.png" alt="upload_image" className="icon"/>
@@ -126,9 +118,6 @@ const mapDispatchToProps = (dispatch) => ({
 	},
 	setColor: (color) => {
 		dispatch(setColor(color))
-	},
-	setFontSize: (num) => {
-		dispatch(setFontSize(num))
 	},
 })
 
