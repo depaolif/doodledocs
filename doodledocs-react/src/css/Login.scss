@@ -3,7 +3,7 @@
   padding-top: 3em;
   padding-left: 5em;
 
-  input{
+  input {
     padding: 0.5em;
     margin: 1em;
     border: 1px solid black;
@@ -11,6 +11,16 @@
     text-decoration: none;
     outline: none;
   }
+
+  input[type='submit'] {
+    background-color: #000;
+    color: #fff;
+  }
+
+  input[type='submit'][disabled] {
+    background-color: lightgrey;
+  }
+
 }
 
 .failed-message {

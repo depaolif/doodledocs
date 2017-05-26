@@ -95,8 +95,8 @@ class Register extends Component {
 				<br></br>
 				{usernameValid}
 				<label>Password:</label><input type="password" name="password" value={this.state.password} onChange={this.handleInput} />
-				{passwordValid}
 				<br></br>
+				{passwordValid}
 				<input type="submit" value="Register" id="button" disabled={isDisabled}/>
 			</form>
 		)
