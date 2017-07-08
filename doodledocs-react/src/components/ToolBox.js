@@ -55,17 +55,21 @@ class ToolBox extends Component {
 		})
 	}
 
+	isSelected(name) {
+		return name === this.props.doodle.tool ? 'selected' : ''
+	}
+
 	render() {
 		return (
 			<div id="toolbar">
 				<ul className="tools">
-					<li  className="tool">
+					<li>
 						<ColorPicker onChangeComplete={this.handleChangeComplete}/>
 					</li>
-					<li className="tool">
+					<li>
 						<img src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493061658/ic_line_weight_black_24dp_1x_a1dquz.png" alt="line width" className="icon" />
 					</li>
-					<li className="tool">
+					<li>
 						<select value={this.props.doodle.lineWidth} onChange={this.handleChange} className="tool">
 							<option value='1'>1</option>
 							<option value='5'>5</option>
@@ -76,24 +80,24 @@ class ToolBox extends Component {
 							<option value='100'>100</option>
 						</select>
 					</li>
-					<li className="tool">
+					<li className={this.isSelected('free')}>
 						<img name="free" src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493061803/ic_gesture_black_24dp_1x_ui9sy3.png" alt="free" className="icon" onClick={this.handleClick} />
 					</li>
-					<li className="tool">
+					<li className={this.isSelected('line')}>
 						<img name="line"
 						src="http://res.cloudinary.com/dletp3dah/image/upload/a_90/v1493062257/ic_remove_black_24dp_1x_m1b9yy.png" alt="line" className="icon" onClick={this.handleClick}/>
 					</li>
-					<li className="tool">
+					<li className={this.isSelected('circle')}>
 						<img name="circle"
 						src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493060454/ic_radio_button_unchecked_black_24dp_1x_hekiro.png" alt="circle" className="icon" onClick={this.handleClick}/>
 					</li>
-					<li className="tool">
+					<li className={this.isSelected('rectangle')}>
 						<img name="rectangle" src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493058803/ic_crop_din_black_24dp_1x_tmmokd.png" alt="square" className="icon" onClick={this.handleClick} />
 					</li>
-					<li className="tool">
-						<img src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493063788/ic_attach_file_black_24dp_1x_fsd4du.png" alt="upload_image" className="icon"/>
+					<li className={this.isSelected('image')}>
+						<img src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493063788/ic_attach_file_black_24dp_1x_fsd4du.png" alt="upload icon" className="icon"/>
 					</li>
-					<li className="tool">
+					<li>
 						<input onChange={this.handleImageUpload} type="file" name="image" className="icon" />
 					</li>
 				</ul>

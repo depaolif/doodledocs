@@ -7,6 +7,11 @@
 		li {
 			display: inline;
 			padding: 0 7px;
+
+		}
+
+		li.selected {
+			border-bottom: 2px solid black;
 		}
 
 		select, input {
@@ -18,5 +23,5 @@
 		input {
 			height: 25px;
 		}
-	}	
+	}
 }

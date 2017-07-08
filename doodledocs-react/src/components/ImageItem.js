@@ -24,7 +24,7 @@ class ImageItem extends Component {
 				<Link className="image-item-link" to={url}>{titleLink}</Link>
 				<br></br>
 				{this.props.onDelete ? <img src="http://res.cloudinary.com/dletp3dah/image/upload/v1493061698/ic_delete_black_24dp_1x_qsiksm.png"
-				onClick={this.handleDelete} className="delete"/> : false}
+				onClick={this.handleDelete} className="delete" alt="trash button"/> : false}
 			</div>
 		)
 	}
