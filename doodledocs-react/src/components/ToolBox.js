@@ -66,7 +66,7 @@ class ToolBox extends Component {
 					<li>
 						<ColorPicker onChangeComplete={this.handleChangeComplete}/>
 					</li>
-					<li>
+					<li className="coupled">
 						<img src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493061658/ic_line_weight_black_24dp_1x_a1dquz.png" alt="line width" className="icon" />
 					</li>
 					<li>
@@ -94,7 +94,7 @@ class ToolBox extends Component {
 					<li className={this.isSelected('rectangle')}>
 						<img name="rectangle" src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493058803/ic_crop_din_black_24dp_1x_tmmokd.png" alt="square" className="icon" onClick={this.handleClick} />
 					</li>
-					<li className={this.isSelected('image')}>
+					<li className={"coupled " + this.isSelected('image')}>
 						<img src="http://res.cloudinary.com/dletp3dah/image/upload/c_scale,w_25/v1493063788/ic_attach_file_black_24dp_1x_fsd4du.png" alt="upload icon" className="icon"/>
 					</li>
 					<li>
